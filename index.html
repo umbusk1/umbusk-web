@@ -57,7 +57,6 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:all;z-i
 h1{font-size:20px;font-weight:300;line-height:1.35;margin-bottom:10px;}
 h1 strong{font-weight:700;color:#fff;}
 .copy{font-size:12.5px;color:#555;line-height:1.75;}
-/* PRODUCTS */
 .pcard{display:block;border:1px solid #2a2a2a;border-radius:8px;padding:12px 14px;margin-bottom:8px;text-decoration:none;transition:border-color .2s,background .2s;cursor:default;}
 .pcard:hover{border-color:#e07818;background:#1e1e1e;}
 .pname{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e0e0e0;margin-bottom:3px;}
@@ -68,7 +67,6 @@ h1 strong{font-weight:700;color:#fff;}
 .pcard.open .plong{display:block;}
 .pmore{display:inline-block;margin-top:6px;font-size:10px;color:#e07818;letter-spacing:1px;cursor:pointer;border:1px solid #2a1a08;border-radius:3px;padding:1px 7px;background:#1a1008;transition:background .2s;}
 .pmore:hover{background:#2a1808;}
-/* SERVICES expand */
 .slabel{font-style:italic;}
 .sshort{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .slong{display:none;margin-top:4px;}
@@ -84,7 +82,6 @@ h1 strong{font-weight:700;color:#fff;}
 .srow:last-child{border:none;}
 .sname{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:2px;}
 .sdesc{font-size:11.5px;color:#444;line-height:1.5;}
-/* CONTACT */
 .field{margin-bottom:9px;}
 .flabel{display:block;font-size:9.5px;color:#444;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
 .finput{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:7px;color:#fff;font-size:12.5px;padding:9px 11px;outline:none;font-family:'Segoe UI',sans-serif;transition:border-color .2s;resize:none;}
@@ -93,7 +90,6 @@ h1 strong{font-weight:700;color:#fff;}
 .btn-send{width:100%;background:linear-gradient(135deg,#7a3a00,#e07818);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:600;padding:12px;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;margin-top:2px;}
 .btn-send:hover{opacity:.88;}
 .c-info{font-size:10px;color:#2a2a2a;text-align:center;margin-top:12px;line-height:2;}
-/* INFO */
 .info-item{padding:10px 0;border-bottom:1px solid #1f1f1f;}
 .info-item:last-child{border:none;}
 .info-key{font-size:9px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
@@ -313,10 +309,10 @@ h1 strong{font-weight:700;color:#fff;}
 
 <script>
 const EF={
-  intuicion:  {es:'En nuestro enfoque usamos la intuición, ese <em>feeling</em> que precede a la razón. Es como saber antes de poder explicar.',          en:'Our approach draws on intuition — that <em>feeling</em> that precedes reason. Knowing before being able to explain.'},
-  imaginacion:{es:'Usando la imaginación, esa capacidad de ver lo que aún no existe, nos movemos con fluidez en el espacio-tiempo donde nacen los prototipos.',           en:'Using imagination — the ability to see what doesn\'t yet exist — we move fluidly through the space-time where prototypes are born.'},
-  emocion:    {es:'La energía del entusiasmo convierte cada idea en compromiso. Las emociones nutren nuestros procesos creativos para poder aterrizarlos en productos o servicios reales.',  en:'The energy of enthusiasm turns every idea into commitment. Emotions fuel our creative processes so we can land them as real products or services.'},
-  sentido:    {es:'¿Para qué tener sentido común? Para salir de callejones sin salida o <em>loops</em> desgastantes. Es lo que nos orienta en el trabajo y le da dirección al proceso hasta alcanzar las metas.',          en:'What\'s common sense for? To escape dead ends and exhausting <em>loops</em>. It\'s what guides our work and gives direction to the process until we reach our goals.'}
+  intuicion:  {es:'En nuestro enfoque usamos la intuición, ese <em>feeling</em> que precede a la razón. Es como saber antes de poder explicar.',en:'Our approach draws on intuition — that <em>feeling</em> that precedes reason. Knowing before being able to explain.'},
+  imaginacion:{es:'Usando la imaginación, esa capacidad de ver lo que aún no existe, nos movemos con fluidez en el espacio-tiempo donde nacen los prototipos.',en:'Using imagination — the ability to see what doesn\'t yet exist — we move fluidly through the space-time where prototypes are born.'},
+  emocion:    {es:'La energía del entusiasmo convierte cada idea en compromiso. Las emociones nutren nuestros procesos creativos para poder aterrizarlos en productos o servicios reales.',en:'The energy of enthusiasm turns every idea into commitment. Emotions fuel our creative processes so we can land them as real products or services.'},
+  sentido:    {es:'¿Para qué tener sentido común? Para salir de callejones sin salida o <em>loops</em> desgastantes. Es lo que nos orienta en el trabajo y le da dirección al proceso hasta alcanzar las metas.',en:'What\'s common sense for? To escape dead ends and exhausting <em>loops</em>. It\'s what guides our work and gives direction to the process until we reach our goals.'}
 };
 const SVG_LABELS={
   es:{idea:'Idea',diseno:'Diseño',innova:'Innovación',proto:'PROTOTIPO',innovaLabel:'innova'},
@@ -355,200 +351,242 @@ function setTab(id,btn){
 
 function setF(f,btn){
   curF=f;
-  if(f==='intuicion'){lx=.1;ly=0;lz=0;lpts=[];}
-  if(f==='imaginacion'){sD=0;sT=0;}
-  if(f==='emocion'){liD=0;liT=0;}
-  if(f==='sentido'){fD=0;fT=0;}
+  if(f==='intuicion') initIntuicion();
+  if(f==='imaginacion') initImaginacion();
+  if(f==='emocion') initEmocion();
+  if(f==='sentido') initSentido();
   document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('eText').innerHTML=EF[curF][lang];
 }
 
 function togSrow(e,btn){
-  e.preventDefault(); e.stopPropagation();
+  e.preventDefault();e.stopPropagation();
   const row=btn.closest('.srow');
   const open=row.classList.toggle('open');
   btn.textContent=open?'−':'+';
 }
 function togCard(e,btn){
-  e.preventDefault(); e.stopPropagation();
+  e.preventDefault();e.stopPropagation();
   const card=btn.closest('.pcard');
   const open=card.classList.toggle('open');
   btn.textContent=open?'−':'+';
 }
-
 function togL(){document.getElementById('lpanel').classList.toggle('open');}
 function closeL(){document.getElementById('lpanel').classList.remove('open');}
 function togR(){document.getElementById('rpanel').classList.toggle('open');}
 function closeR(){document.getElementById('rpanel').classList.remove('open');}
 
-// ── CANVAS & MOUSE
+// ── CANVAS
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
-let W,H,mx=null,my=null,mdown=false;
+let W,H,mx=null,my=null;
 
 cv.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 cv.addEventListener('mouseleave',()=>{mx=null;my=null;});
-cv.addEventListener('mousedown',e=>{mdown=true;spawnClick(e.clientX,e.clientY);});
-cv.addEventListener('mouseup',()=>mdown=false);
+cv.addEventListener('mousedown',e=>spawnClick(e.clientX,e.clientY));
 cv.addEventListener('touchmove',e=>{const t=e.touches[0];mx=t.clientX;my=t.clientY;},{passive:true});
 cv.addEventListener('touchend',()=>{mx=null;my=null;});
 
 function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;initAll();}
 window.addEventListener('resize',resize);
 
-// ── INTUICIÓN: magnetic particles
-let iParticles=[];
+// ══════════════════════════════════════════════════════
+// INTUICIÓN — Atractor de Lorenz (naranja)
+// Mouse X → sigma (5–20)  Mouse Y → rho (24–38)
+// Clic → resetea trayectoria
+// ══════════════════════════════════════════════════════
+let lx,ly,lz,lpts,lSigma=10,lRho=28;
+const lBeta=8/3, lDT=0.006, lMAX=6000;
+
+function lorenzStep(n){
+  for(let i=0;i<n;i++){
+    const dx=lSigma*(ly-lx)*lDT;
+    const dy=(lx*(lRho-lz)-ly)*lDT;
+    const dz=(lx*ly-lBeta*lz)*lDT;
+    lx+=dx;ly+=dy;lz+=dz;
+    lpts.push(lx,lz); // flat array: x,z pairs
+    if(lpts.length>lMAX*2) lpts.splice(0,12);
+  }
+}
+
 function initIntuicion(){
-  iParticles=[];
-  for(let i=0;i<180;i++) iParticles.push({
-    x:Math.random()*W, y:Math.random()*H,
-    vx:(Math.random()-.5)*1.2, vy:(Math.random()-.5)*1.2,
-    r:Math.random()*2.5+.8, a:Math.random()
-  });
+  lx=0.1;ly=0;lz=1;lpts=[];
+  // warm-up so butterfly appears immediately
+  for(let i=0;i<3000;i++){
+    const dx=lSigma*(ly-lx)*lDT;
+    const dy=(lx*(lRho-lz)-ly)*lDT;
+    const dz=(lx*ly-lBeta*lz)*lDT;
+    lx+=dx;ly+=dy;lz+=dz;
+  }
 }
+
 function drawIntuicion(){
-  ctx.fillStyle='rgba(17,17,17,0.18)';ctx.fillRect(0,0,W,H);
-  iParticles.forEach(p=>{
-    if(mx!==null){
-      const dx=mx-p.x,dy=my-p.y,d=Math.sqrt(dx*dx+dy*dy)||1;
-      const force=Math.min(120/d,4);
-      p.vx+=dx/d*force*.04; p.vy+=dy/d*force*.04;
-    }
-    p.vx*=.96; p.vy*=.96;
-    p.x+=p.vx; p.y+=p.vy;
-    if(p.x<0)p.x=W; if(p.x>W)p.x=0;
-    if(p.y<0)p.y=H; if(p.y>H)p.y=0;
-    // connect nearby
-    iParticles.forEach(q=>{
-      const dx=q.x-p.x,dy=q.y-p.y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<90&&d>0){
-        ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);
-        ctx.strokeStyle=`rgba(224,120,24,${.25*(1-d/90)})`;ctx.lineWidth=.6;ctx.stroke();
-      }
-    });
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(224,120,24,${.5+p.a*.4})`;ctx.fill();
-  });
+  if(mx!==null){lSigma=5+(mx/W)*15;lRho=24+(my/H)*14;}
+  lorenzStep(7);
+  ctx.fillStyle='rgba(17,17,17,0.13)';ctx.fillRect(0,0,W,H);
+  if(lpts.length<4) return;
+  const sc=Math.min(W,H)/52, cx=W/2, cy=H/2;
+  const n=lpts.length/2;
+  ctx.beginPath();
+  for(let i=0;i<n;i++){
+    const sx=cx+lpts[i*2]*sc, sy=cy+(lpts[i*2+1]-27)*sc;
+    i===0?ctx.moveTo(sx,sy):ctx.lineTo(sx,sy);
+  }
+  ctx.strokeStyle='rgba(224,120,24,0.5)';ctx.lineWidth=0.85;ctx.stroke();
+  // current point glow
+  const px=cx+lx*sc, py=cy+(lz-27)*sc;
+  const g=ctx.createRadialGradient(px,py,0,px,py,6);
+  g.addColorStop(0,'rgba(255,180,80,0.9)');g.addColorStop(1,'rgba(255,180,80,0)');
+  ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
 }
 
-// ── IMAGINACIÓN: bubbles born & dissolved
-let bubbles=[];
-function initImaginacion(){bubbles=[];for(let i=0;i<22;i++) spawnBubble();}
-function spawnBubble(x,y){
-  bubbles.push({
-    x:x??Math.random()*W, y:y??Math.random()*H,
-    r:0, maxR:Math.random()*60+20,
-    vx:(Math.random()-.5)*.6, vy:-(Math.random()*.5+.2),
-    life:1, decay:Math.random()*.004+.002,
-    hue:Math.random()*60+260
-  });
+// ══════════════════════════════════════════════════════
+// IMAGINACIÓN — Espirógrafo (violeta/púrpura)
+// Mouse X → radio interno r  Mouse Y → distancia d
+// Clic → guarda capa actual (hasta 10 capas)
+// ══════════════════════════════════════════════════════
+let spiroLayers=[];
+let spR=40,spD=60;
+const spROuter=110;
+
+function gcd2(a,b){a=Math.round(Math.abs(a));b=Math.round(Math.abs(b));while(b>0){let t=b;b=a%b;a=t;}return a||1;}
+
+function spiroPoints(R,r,d,cx,cy,steps){
+  const g=gcd2(R,r), period=Math.PI*2*(r/g);
+  const pts=[];
+  for(let i=0;i<=steps;i++){
+    const t=(i/steps)*period;
+    pts.push(cx+(R-r)*Math.cos(t)+d*Math.cos((R-r)/r*t),
+             cy+(R-r)*Math.sin(t)-d*Math.sin((R-r)/r*t));
+  }
+  return pts;
 }
+
+function initImaginacion(){spiroLayers=[];}
+
 function drawImaginacion(){
-  ctx.fillStyle='rgba(17,17,17,0.15)';ctx.fillRect(0,0,W,H);
-  if(mx!==null&&Math.random()<.04) spawnBubble(mx+( Math.random()-.5)*40,my+(Math.random()-.5)*40);
-  if(Math.random()<.015) spawnBubble();
-  bubbles=bubbles.filter(b=>b.life>0);
-  bubbles.forEach(b=>{
-    b.r=Math.min(b.r+1.2,b.maxR);
-    b.x+=b.vx; b.y+=b.vy;
-    b.life-=b.decay;
-    const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
-    g.addColorStop(0,`hsla(${b.hue},70%,65%,${b.life*.18})`);
-    g.addColorStop(.7,`hsla(${b.hue},60%,55%,${b.life*.12})`);
-    g.addColorStop(1,`hsla(${b.hue},50%,50%,0)`);
-    ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-    ctx.fillStyle=g;ctx.fill();
-    ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-    ctx.strokeStyle=`hsla(${b.hue},70%,75%,${b.life*.35})`;ctx.lineWidth=.8;ctx.stroke();
-  });
-}
-
-// ── EMOCIÓN: ripples from clicks + ambient pulse
-let ripples=[];
-function initEmocion(){ripples=[];}
-function spawnRipple(x,y){
-  for(let i=0;i<3;i++) ripples.push({x,y,r:0,maxR:Math.random()*180+80,life:1,delay:i*8});
-}
-let eT=0;
-function drawEmocion(){
-  ctx.fillStyle='rgba(17,17,17,0.14)';ctx.fillRect(0,0,W,H);
-  eT++;
-  // ambient sine waves
-  for(let k=0;k<3;k++){
+  if(mx!==null){spR=8+(mx/W)*72;spD=8+(my/H)*105;}
+  ctx.fillStyle='rgba(17,17,17,0.09)';ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2;
+  // saved layers
+  spiroLayers.forEach(l=>{
     ctx.beginPath();
-    for(let x=0;x<=W;x+=3){
-      const y=H/2+Math.sin(x*.008+eT*.03+k*2)*( H*.18+k*30);
-      x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    for(let i=0;i<l.pts.length;i+=2){
+      i===0?ctx.moveTo(l.pts[i],l.pts[i+1]):ctx.lineTo(l.pts[i],l.pts[i+1]);
     }
-    ctx.strokeStyle=`rgba(200,50,70,${.08+k*.04})`;ctx.lineWidth=1+k*.5;ctx.stroke();
-  }
-  // ripples
-  ripples=ripples.filter(r=>r.life>0);
-  ripples.forEach(r=>{
-    if(r.delay>0){r.delay--;return;}
-    r.r+=3.5; r.life=Math.max(0,1-r.r/r.maxR);
-    ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(220,80,90,${r.life*.6})`;ctx.lineWidth=1.5*r.life;ctx.stroke();
+    ctx.strokeStyle=l.color;ctx.lineWidth=0.75;ctx.stroke();
   });
-  // pulse on mouse
-  if(mx!==null){
-    const pulse=Math.sin(eT*.08)*8;
-    ctx.beginPath();ctx.arc(mx,my,20+pulse,0,Math.PI*2);
-    ctx.strokeStyle='rgba(220,80,90,.3)';ctx.lineWidth=1;ctx.stroke();
+  // live curve
+  const pts=spiroPoints(spROuter,spR,spD,cx,cy,900);
+  ctx.beginPath();
+  for(let i=0;i<pts.length;i+=2){
+    i===0?ctx.moveTo(pts[i],pts[i+1]):ctx.lineTo(pts[i],pts[i+1]);
   }
+  ctx.strokeStyle='rgba(160,90,230,0.55)';ctx.lineWidth=0.9;ctx.stroke();
 }
 
-// ── SENTIDO: network nodes seeking shortest path
-let sNodes=[],sEdges=[];
-function initSentido(){
-  sNodes=[];sEdges=[];
-  for(let i=0;i<55;i++) sNodes.push({
-    x:Math.random()*W,y:Math.random()*H,
-    vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,
-    r:Math.random()*2.5+1, active:false
-  });
+function saveSpiroLayer(){
+  const cx=W/2,cy=H/2;
+  const pts=spiroPoints(spROuter,spR,spD,cx,cy,900);
+  const hue=240+Math.random()*90;
+  spiroLayers.push({pts,color:`hsla(${hue},65%,65%,0.35)`});
+  if(spiroLayers.length>10) spiroLayers.shift();
 }
-let sT=0;
-function drawSentido(){
-  ctx.fillStyle='rgba(17,17,17,0.16)';ctx.fillRect(0,0,W,H);
-  sT++;
-  sNodes.forEach(n=>{
-    // gentle drift
-    n.x+=n.vx; n.y+=n.vy;
-    if(n.x<0||n.x>W) n.vx*=-1;
-    if(n.y<0||n.y>H) n.vy*=-1;
-    // attracted to mouse lightly
-    if(mx!==null){const dx=mx-n.x,dy=my-n.y,d=Math.sqrt(dx*dx+dy*dy)||1;if(d<200){n.vx+=dx/d*.03;n.vy+=dy/d*.03;}}
-    n.vx*=.98;n.vy*=.98;
-    n.active=mx!==null&&Math.sqrt((mx-n.x)**2+(my-n.y)**2)<150;
-  });
-  // draw edges
-  for(let i=0;i<sNodes.length;i++){
-    for(let j=i+1;j<sNodes.length;j++){
-      const a=sNodes[i],b=sNodes[j];
-      const d=Math.sqrt((a.x-b.x)**2+(a.y-b.y)**2);
-      if(d<120){
-        const isPath=a.active||b.active;
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle=isPath?`rgba(40,200,110,${.5*(1-d/120)})`:`rgba(40,180,100,${.15*(1-d/120)})`;
-        ctx.lineWidth=isPath?.9:.4;ctx.stroke();
+
+// ══════════════════════════════════════════════════════
+// EMOCIÓN — Interferencia de ondas (rojo)
+// Mouse → fuente móvil  Clic → añade fuente fija (max 6)
+// ══════════════════════════════════════════════════════
+let wSources=[],wT=0;
+
+function initEmocion(){
+  wT=0;
+  wSources=[{x:null,y:null},{x:null,y:null}]; // positions set on first draw
+  // will be initialized to screen thirds on first resize
+}
+
+function drawEmocion(){
+  // lazy-init source positions
+  if(wSources[0].x===null){wSources[0]={x:W*.33,y:H*.5};wSources[1]={x:W*.67,y:H*.5};}
+  wT++;
+  const step=7, k=0.048, speed=1.8, wl=Math.PI*2/k;
+  const imgData=ctx.createImageData(W,H);
+  const d=imgData.data;
+  const srcs=[...wSources];
+  if(mx!==null) srcs.push({x:mx,y:my});
+  const ns=srcs.length;
+
+  for(let py=0;py<H;py+=step){
+    for(let px=0;px<W;px+=step){
+      let amp=0;
+      for(let s=0;s<ns;s++){
+        const dist=Math.sqrt((px-srcs[s].x)**2+(py-srcs[s].y)**2)||0.1;
+        amp+=Math.sin(k*dist-wT*speed*.05)/Math.max(1,dist*.012);
+      }
+      const norm=Math.max(0,Math.min(1,(amp*.55+1)/2));
+      const r=Math.round(norm*210+20),g_=Math.round(norm*35),b_=Math.round(norm*45);
+      for(let dy=0;dy<step&&py+dy<H;dy++){
+        const row=(py+dy)*W;
+        for(let dx=0;dx<step&&px+dx<W;dx++){
+          const idx=(row+px+dx)*4;
+          d[idx]=r;d[idx+1]=g_;d[idx+2]=b_;d[idx+3]=200;
+        }
       }
     }
   }
-  // draw nodes
-  sNodes.forEach(n=>{
-    ctx.beginPath();ctx.arc(n.x,n.y,n.r+(n.active?.8:0),0,Math.PI*2);
-    ctx.fillStyle=n.active?'rgba(40,220,110,.9)':'rgba(40,180,100,.45)';ctx.fill();
-  });
+  ctx.putImageData(imgData,0,0);
 }
 
+// ══════════════════════════════════════════════════════
+// SENTIDO — Figuras de Lissajous (verde)
+// Mouse X → frecuencia a (1–6)  Mouse Y → fase δ (0–π)
+// Clic → incrementa frecuencia b
+// ══════════════════════════════════════════════════════
+let lisA=3,lisB=2,lisDelta=Math.PI/4,lisT=0;
+
+function initSentido(){lisA=3;lisB=2;lisDelta=Math.PI/4;lisT=0;}
+
+function drawSentido(){
+  if(mx!==null){
+    lisA=Math.max(1,Math.round(1+(mx/W)*5));
+    lisDelta=(my/H)*Math.PI;
+  }
+  ctx.fillStyle='rgba(17,17,17,0.11)';ctx.fillRect(0,0,W,H);
+  lisT+=0.016;
+  const cx=W/2,cy=H/2,rx=Math.min(W,H)*.36,ry=Math.min(W,H)*.36;
+  const steps=1400;
+
+  // static figure (full period)
+  ctx.beginPath();
+  for(let i=0;i<=steps;i++){
+    const t=(i/steps)*Math.PI*2;
+    const x=cx+rx*Math.sin(lisA*t+lisDelta), y=cy+ry*Math.sin(lisB*t);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.strokeStyle='rgba(40,180,100,0.4)';ctx.lineWidth=0.9;ctx.stroke();
+
+  // animated dot tracing the curve
+  const at=lisT%(Math.PI*2);
+  const ax=cx+rx*Math.sin(lisA*at+lisDelta), ay=cy+ry*Math.sin(lisB*at);
+  const gd=ctx.createRadialGradient(ax,ay,0,ax,ay,7);
+  gd.addColorStop(0,'rgba(80,240,140,0.95)');gd.addColorStop(1,'rgba(80,240,140,0)');
+  ctx.beginPath();ctx.arc(ax,ay,7,0,Math.PI*2);ctx.fillStyle=gd;ctx.fill();
+
+  // label: a:b ratio
+  ctx.font='10px Segoe UI';ctx.fillStyle='rgba(40,180,100,0.35)';
+  ctx.fillText(`${lisA} : ${lisB}`,12,H-14);
+}
+
+// ── Clic actions
 function spawnClick(x,y){
-  if(curF==='emocion') spawnRipple(x,y);
-  if(curF==='imaginacion') {for(let i=0;i<4;i++) spawnBubble(x+(Math.random()-.5)*30,y+(Math.random()-.5)*30);}
+  if(curF==='intuicion'){initIntuicion();}
+  if(curF==='imaginacion'){saveSpiroLayer();}
+  if(curF==='emocion'&&wSources.length<6){wSources.push({x,y});}
+  if(curF==='sentido'){lisB=lisB%5+1;}
 }
 
 function initAll(){
-  initIntuicion(); initImaginacion(); initEmocion(); initSentido();
+  initIntuicion();initImaginacion();initEmocion();initSentido();
 }
 
 function animate(){
@@ -556,25 +594,18 @@ function animate(){
     case'intuicion':   drawIntuicion();   break;
     case'imaginacion': drawImaginacion(); break;
     case'emocion':     drawEmocion();     break;
-    case'sentido':     drawSentido(); break;
+    case'sentido':     drawSentido();     break;
     default: ctx.clearRect(0,0,W,H);
   }
   requestAnimationFrame(animate);
 }
-
-
 
 resize();
 const fKeys=['intuicion','imaginacion','emocion','sentido'];
 const ri=Math.floor(Math.random()*4);
 curF=fKeys[ri];
 document.querySelectorAll('.btm-tab')[ri].classList.add('active');
-window.addEventListener('DOMContentLoaded',function(){
-  document.getElementById('eText').textContent=EF[curF][lang];
-});
-if(document.readyState!=='loading'){
-  document.getElementById('eText').textContent=EF[curF][lang];
-}
+document.getElementById('eText').innerHTML=EF[curF][lang];
 requestAnimationFrame(animate);
 </script>
 </body>
