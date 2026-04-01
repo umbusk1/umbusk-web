@@ -9,68 +9,30 @@
 html,body{height:100%;}
 body{background:#111;color:#e0e0e0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;overflow:hidden;}
 canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
-
 .page{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;align-items:center;padding-top:20px;}
-
-/* LANG */
 .lang-row{flex-shrink:0;width:380px;display:flex;justify-content:flex-end;margin-bottom:8px;}
 .lang-toggle{display:flex;gap:4px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:3px;}
 .lang-btn{padding:5px 12px;border:none;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:1px;background:transparent;color:#444;font-family:'Segoe UI',sans-serif;transition:all .15s;}
 .lang-btn.active{background:#e07818;color:#fff;}
-
-/* CARD AREA */
 .card-area{flex:1;min-height:0;display:flex;align-items:flex-start;justify-content:center;width:100%;overflow:hidden;}
-
-/* CONTAINER: 34 top + 615 card + 30 btm = 679 + enfoque 90 = 769 */
 .card-container{position:relative;width:380px;height:769px;flex-shrink:0;display:flex;flex-direction:column;padding-top:34px;padding-bottom:120px;}
-
-/* TOP TABS */
 .top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;z-index:10;}
-.top-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;
-  background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;
-  border-radius:8px 8px 0 0;color:#252525;cursor:pointer;
-  font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  transition:background .18s,color .18s;user-select:none;}
+.top-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;border-radius:8px 8px 0 0;color:#252525;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
 .top-tab+.top-tab{margin-left:-1px;}
-.top-tab:hover{background:#161616;}
+.top-tab:hover{background:#161616;color:#bbb;}
 .top-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;z-index:1;}
-
-/* BOTTOM TABS */
 .btm-tabs{position:absolute;bottom:90px;left:0;right:0;height:30px;display:flex;z-index:10;}
-.btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;
-  background:#111;border:1px solid #1e1e1e;border-top:1px solid #2a2a2a;
-  border-radius:0 0 8px 8px;color:#252525;cursor:pointer;
-  font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  transition:background .18s,color .18s;user-select:none;}
+.btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-top:1px solid #2a2a2a;border-radius:0 0 8px 8px;color:#252525;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
 .btm-tab+.btm-tab{margin-left:-1px;}
-.btm-tab:hover{background:#161616;}
+.btm-tab:hover{background:#161616;color:#bbb;}
 .btm-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-top-color:#1a1a1a;color:#e07818;z-index:1;}
-
-/* ENFOQUE AREA — 90px, attached below btm-tabs */
-.enfoque-area{
-  position:absolute;bottom:0;left:0;right:0;height:90px;
-  background:#141414;border:1px solid #2a2a2a;border-top:none;
-  border-radius:0 0 10px 10px;
-  padding:12px 20px;
-  display:flex;align-items:center;
-  overflow:hidden;
-}
+.enfoque-area{position:absolute;bottom:0;left:0;right:0;height:90px;background:#141414;border:1px solid #2a2a2a;border-top:none;border-radius:0 0 10px 10px;padding:12px 20px;display:flex;align-items:center;}
 .e-text{font-size:12px;color:#555;line-height:1.65;}
-
-/* SIDE TABS */
-.side-tab{position:absolute;top:50%;transform:translateY(-60%);
-  background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;
-  padding:20px 8px;font-size:9px;letter-spacing:2px;writing-mode:vertical-rl;
-  transition:background .2s,color .2s;user-select:none;z-index:3;}
+.side-tab{position:absolute;top:50%;transform:translateY(-60%);background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;padding:20px 8px;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;writing-mode:vertical-rl;transition:background .2s,color .2s;user-select:none;z-index:3;}
 .side-tab:hover{background:#2a2a2a;color:#bbb;}
 .left-tab{right:100%;margin-right:-1px;border-right:none;border-radius:8px 0 0 8px;}
 .right-tab{left:100%;margin-left:-1px;border-left:none;border-radius:0 8px 8px 0;}
-
-/* SIDE PANELS */
-.side-panel{position:absolute;top:34px;bottom:120px;width:270px;
-  background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;
-  display:flex;flex-direction:column;overflow:hidden;
-  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:2;}
+.side-panel{position:absolute;top:34px;bottom:120px;width:270px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:2;}
 .side-panel.open{opacity:1;pointer-events:all;transform:translateX(0) !important;}
 .left-panel{right:calc(100% + 25px);transform:translateX(14px);}
 .right-panel{left:calc(100% + 25px);transform:translateX(-14px);}
@@ -81,36 +43,47 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-
 .panel-body{flex:1;overflow-y:auto;padding:14px;}
 .panel-body::-webkit-scrollbar{width:3px;}
 .panel-body::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
-
-/* MAIN CARD */
-.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:0;
-  flex:1;min-height:0;display:flex;flex-direction:column;
-  box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;z-index:2;overflow:hidden;}
-
+.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:0;flex:1;min-height:0;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;z-index:2;overflow:hidden;}
 .logo-area{text-align:center;padding:18px 24px 12px;flex-shrink:0;}
 .logo-area img{height:76px;object-fit:contain;}
 .brand-name{font-size:20px;color:#e0e0e0;letter-spacing:4px;text-transform:uppercase;margin-top:2px;}
-
 .panels-wrap{flex:1;min-height:0;overflow:hidden;padding:0 24px;}
 .panel{display:none;height:100%;overflow-y:auto;padding-bottom:6px;animation:fadeIn .22s ease;}
 .panel.on{display:block;}
 .panel::-webkit-scrollbar{width:3px;}
 .panel::-webkit-scrollbar-thumb{background:#252525;border-radius:2px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-
 .p-label{font-size:9.5px;letter-spacing:.2em;color:#e07818;text-transform:uppercase;margin-bottom:9px;}
 h1{font-size:20px;font-weight:300;line-height:1.35;margin-bottom:10px;}
 h1 strong{font-weight:700;color:#fff;}
 .copy{font-size:12.5px;color:#555;line-height:1.75;}
-.pcard{display:block;border:1px solid #2a2a2a;border-radius:8px;padding:12px 14px;margin-bottom:8px;text-decoration:none;transition:border-color .2s,background .2s;}
+/* PRODUCTS */
+.pcard{display:block;border:1px solid #2a2a2a;border-radius:8px;padding:12px 14px;margin-bottom:8px;text-decoration:none;transition:border-color .2s,background .2s;cursor:default;}
 .pcard:hover{border-color:#e07818;background:#1e1e1e;}
 .pname{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e0e0e0;margin-bottom:3px;}
-.pdesc{font-size:11.5px;color:#444;line-height:1.5;}
+.plabel{font-size:11px;color:#555;line-height:1.5;margin-bottom:6px;font-style:italic;}
+.pshort{font-size:11.5px;color:#444;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.plong{font-size:11.5px;color:#444;line-height:1.55;display:none;margin-top:4px;}
+.pcard.open .pshort{display:none;}
+.pcard.open .plong{display:block;}
+.pmore{display:inline-block;margin-top:6px;font-size:10px;color:#e07818;letter-spacing:1px;cursor:pointer;border:1px solid #2a1a08;border-radius:3px;padding:1px 7px;background:#1a1008;transition:background .2s;}
+.pmore:hover{background:#2a1808;}
+/* SERVICES expand */
+.slabel{font-style:italic;}
+.sshort{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.slong{display:none;margin-top:4px;}
+.srow.open .sshort{display:none;}
+.srow.open .slong{display:block;}
+.srow.open .sclients{display:block!important;}
+.sclients{font-size:10.5px;color:#333;margin-top:6px;line-height:2;}
+.sclients a{color:#555;text-decoration:none;margin-left:4px;}
+.sclients a:hover{color:#e07818;}
+.smore{display:inline-block;margin-top:6px;font-size:10px;color:#e07818;letter-spacing:1px;cursor:pointer;border:1px solid #2a1a08;border-radius:3px;padding:1px 7px;background:#1a1008;transition:background .2s;}
+.smore:hover{background:#2a1808;}
 .srow{padding:9px 0;border-bottom:1px solid #1f1f1f;}
 .srow:last-child{border:none;}
 .sname{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:2px;}
 .sdesc{font-size:11.5px;color:#444;line-height:1.5;}
-
 /* CONTACT */
 .field{margin-bottom:9px;}
 .flabel{display:block;font-size:9.5px;color:#444;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
@@ -120,7 +93,6 @@ h1 strong{font-weight:700;color:#fff;}
 .btn-send{width:100%;background:linear-gradient(135deg,#7a3a00,#e07818);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:600;padding:12px;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;margin-top:2px;}
 .btn-send:hover{opacity:.88;}
 .c-info{font-size:10px;color:#2a2a2a;text-align:center;margin-top:12px;line-height:2;}
-
 /* INFO */
 .info-item{padding:10px 0;border-bottom:1px solid #1f1f1f;}
 .info-item:last-child{border:none;}
@@ -172,6 +144,8 @@ h1 strong{font-weight:700;color:#fff;}
           <div class="brand-name">UMBUSK</div>
         </div>
         <div class="panels-wrap">
+
+          <!-- HOME -->
           <div class="panel on" id="tab-home">
             <div class="p-label" data-es="Fábrica de Prototipos" data-en="Prototype Factory">Fábrica de Prototipos</div>
             <h1 data-es="De la idea al artefacto.<br>En semanas, no en meses." data-en="From idea to artifact.<br>In weeks, not months.">De la idea al artefacto.<br>En semanas, no en meses.</h1>
@@ -187,8 +161,6 @@ h1 strong{font-weight:700;color:#fff;}
                 .sk-barrier{stroke:#252525;stroke-width:1;stroke-dasharray:2.5,2.5;}
                 .sk-bridge{stroke:#333;stroke-width:1;fill:none;stroke-linecap:round;stroke-linejoin:round;}
               </style>
-
-              <!-- ══ IDEA ══ centered at x=38 -->
               <g transform="translate(18,12)">
                 <path class="sk-line" d="M20,26 Q10,17 10,10 A10,10 0 0,1 30,10 Q30,17 20,26Z"/>
                 <line class="sk-line" x1="14.5" y1="27.5" x2="25.5" y2="27.5"/>
@@ -199,47 +171,30 @@ h1 strong{font-weight:700;color:#fff;}
                 <line class="sk-accent" x1="35" y1="10" x2="38" y2="10" opacity=".35"/>
                 <line class="sk-accent" x1="5"  y1="10" x2="2"  y2="10" opacity=".35"/>
               </g>
-              <text class="sk-label" x="38" y="76" text-anchor="middle">Idea</text>
-
-              <!-- ══ BARRIER 1 at x=80 ══ -->
+              <text class="sk-label" id="svgIdea" x="38" y="76" text-anchor="middle">Idea</text>
               <line class="sk-barrier" x1="80" y1="8" x2="80" y2="56"/>
-              <!-- wide gentle arrow bridging barrier 1: x=58 → x=102 -->
               <path class="sk-bridge" d="M58,32 C65,16 95,16 102,32"/>
               <polyline class="sk-bridge" points="98,27 102,32 97,33"/>
-
-              <!-- ══ DISEÑO / KANBAN ══ centered at x=160, "PROTOTIPO" above -->
-              <text class="sk-proto" x="160" y="10" text-anchor="middle" data-es="PROTOTIPO" data-en="PROTOTYPE">PROTOTIPO</text>
-              <!-- Kanban board: 3 columns, x=112 to x=208, y=13 to y=55 -->
+              <text class="sk-proto" id="svgProto" x="160" y="10" text-anchor="middle">PROTOTIPO</text>
               <g transform="translate(112,13)">
-                <!-- outer board -->
                 <rect class="sk-line" x="0" y="0" width="96" height="42" rx="2"/>
-                <!-- column dividers -->
                 <line class="sk-line" x1="32" y1="0" x2="32" y2="42" opacity=".5"/>
                 <line class="sk-line" x1="64" y1="0" x2="64" y2="42" opacity=".5"/>
-                <!-- col headers -->
                 <rect class="sk-accent" x="3"  y="3" width="26" height="5" rx="1" opacity=".35"/>
                 <rect class="sk-accent" x="35" y="3" width="26" height="5" rx="1" opacity=".35"/>
                 <rect class="sk-accent" x="67" y="3" width="26" height="5" rx="1" opacity=".35"/>
-                <!-- col 1 cards -->
                 <rect class="sk-line" x="3"  y="11" width="26" height="7" rx="1" opacity=".55"/>
                 <rect class="sk-line" x="3"  y="21" width="26" height="7" rx="1" opacity=".45"/>
                 <rect class="sk-line" x="3"  y="31" width="26" height="7" rx="1" opacity=".3"/>
-                <!-- col 2 cards -->
                 <rect class="sk-line" x="35" y="11" width="26" height="7" rx="1" opacity=".55"/>
                 <rect class="sk-line" x="35" y="21" width="26" height="7" rx="1" opacity=".35"/>
-                <!-- col 3 cards -->
                 <rect class="sk-accent" x="67" y="11" width="26" height="7" rx="1" opacity=".45"/>
                 <rect class="sk-accent" x="67" y="21" width="26" height="7" rx="1" opacity=".3"/>
               </g>
-              <text class="sk-label" x="160" y="76" text-anchor="middle">Diseño</text>
-
-              <!-- ══ BARRIER 2 at x=240 ══ -->
+              <text class="sk-label" id="svgDiseno" x="160" y="76" text-anchor="middle">Diseño</text>
               <line class="sk-barrier" x1="240" y1="8" x2="240" y2="56"/>
-              <!-- wide gentle arrow bridging barrier 2: x=218 → x=262 -->
               <path class="sk-bridge" d="M218,32 C225,16 255,16 262,32"/>
               <polyline class="sk-bridge" points="258,27 262,32 257,33"/>
-
-              <!-- ══ INNOVACIÓN ══ centered at x=285 -->
               <g transform="translate(268,10)">
                 <circle class="sk-line" cx="17" cy="17" r="15"/>
                 <line class="sk-accent" x1="17" y1="0"  x2="17" y2="4"  opacity=".6"/>
@@ -250,24 +205,76 @@ h1 strong{font-weight:700;color:#fff;}
                 <line class="sk-accent" x1="31" y1="3"  x2="28" y2="6"  opacity=".4"/>
                 <line class="sk-accent" x1="3"  y1="31" x2="6"  y2="28" opacity=".4"/>
                 <line class="sk-accent" x1="31" y1="31" x2="28" y2="28" opacity=".4"/>
-                <text style="font-family:'Segoe UI',sans-serif;font-size:5.5px;fill:#e07818;letter-spacing:.8px;text-transform:uppercase;" x="17" y="19" text-anchor="middle" data-es="innova" data-en="innova">innova</text>
+                <text style="font-family:'Segoe UI',sans-serif;font-size:5.5px;fill:#e07818;letter-spacing:.8px;text-transform:uppercase;" x="17" y="19" text-anchor="middle" id="svgInnovaLabel">innova</text>
               </g>
-              <text class="sk-label" x="285" y="76" text-anchor="middle">Innovación</text>
+              <text class="sk-label" id="svgInnova" x="285" y="76" text-anchor="middle">Innovación</text>
             </svg>
           </div>
+
+          <!-- PRODUCTOS -->
           <div class="panel" id="tab-productos">
-            <div class="p-label" data-es="Productos" data-en="Products">Productos</div>
-            <a class="pcard" href="https://compita.umbusk.com" target="_blank"><div class="pname">Compita</div><div class="pdesc" data-es="Inteligencia de licitaciones para República Dominicana. Análisis con IA." data-en="Procurement intelligence for the Dominican Republic. AI-powered analysis.">Inteligencia de licitaciones para República Dominicana. Análisis con IA.</div></a>
-            <a class="pcard" href="https://kanban.umbusk.com" target="_blank"><div class="pname">KanbanBonsai</div><div class="pdesc" data-es="Gestión de proyectos Kanban con filosofía japonesa." data-en="Kanban project management with Japanese philosophy.">Gestión de proyectos Kanban con filosofía japonesa.</div></a>
-            <a class="pcard" href="https://dialer.umbusk.com" target="_blank"><div class="pname">Umbusk Dialer</div><div class="pdesc" data-es="Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU." data-en="Corporate dialer for campaigns in DR, Venezuela, Panama and the US.">Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU.</div></a>
+            <a class="pcard" href="https://compita.umbusk.com" target="_blank">
+              <div class="pname">Compita</div>
+              <div class="plabel" data-es="Inteligencia de licitaciones para República Dominicana. Análisis con IA." data-en="Procurement intelligence for the Dominican Republic. AI-powered analysis.">Inteligencia de licitaciones para República Dominicana. Análisis con IA.</div>
+              <div class="pshort" data-es="La falta de información clara y oportuna deja fuera a miles de PYMES que podrían ganar contratos públicos." data-en="The lack of clear and timely information keeps thousands of SMEs from winning public contracts they could otherwise secure.">La falta de información clara y oportuna deja fuera a miles de PYMES que podrían ganar contratos públicos.</div>
+              <div class="plong" data-es="La falta de información clara y oportuna deja fuera a miles de PYMES que podrían ganar contratos públicos. Compita captura, organiza y presenta las oportunidades de licitación del gobierno dominicano según el perfil de cada empresa, y apoya con agentes de IA la preparación de ofertas. Porque competir bien es, ante todo, un asunto de diseño de información." data-en="The lack of clear and timely information keeps thousands of SMEs from winning public contracts they could otherwise secure. Compita captures, organizes and presents Dominican government procurement opportunities according to each company's profile, and supports offer preparation with AI agents. Because competing well is, above all, a matter of information design.">La falta de información clara y oportuna deja fuera a miles de PYMES que podrían ganar contratos públicos. Compita captura, organiza y presenta las oportunidades de licitación del gobierno dominicano según el perfil de cada empresa, y apoya con agentes de IA la preparación de ofertas. Porque competir bien es, ante todo, un asunto de diseño de información.</div>
+              <span class="pmore" onclick="togCard(event,this)">+</span>
+            </a>
+            <a class="pcard" href="https://kanban.umbusk.com" target="_blank">
+              <div class="pname">KanbanBonsai</div>
+              <div class="plabel" data-es="Gestión de proyectos con filosofía japonesa." data-en="Project management with Japanese philosophy.">Gestión de proyectos con filosofía japonesa.</div>
+              <div class="pshort" data-es="Todo prototipo es un proyecto. Y todo proyecto necesita orden. Los japoneses llevan décadas usando el Kanban para mantenerse competitivos." data-en="Every prototype is a project. And every project needs order. The Japanese have spent decades using Kanban to stay competitive.">Todo prototipo es un proyecto. Y todo proyecto necesita orden. Los japoneses llevan décadas usando el Kanban para mantenerse competitivos.</div>
+              <div class="plong" data-es="Todo prototipo es un proyecto. Y todo proyecto necesita orden. Los japoneses llevan décadas usando el Kanban, una pizarra de seguimiento, para mantenerse competitivos fabricando productos complejos de forma simple. KanbanBonsai toma esa filosofía y la adapta a nuestra cotidianidad: esa que está llena de ideas que queremos convertir en realidad y que como proyectos necesitan ser gerenciados. Sencillo, porque no estamos construyendo represas. Efectivo, porque el orden es lo primero para comenzar a fabricar nuestros prototipos, siempre conservando el vibe que los hará innovadores." data-en="Every prototype is a project. And every project needs order. The Japanese have spent decades using Kanban — a tracking board — to stay competitive manufacturing complex products simply. KanbanBonsai takes that philosophy and adapts it to our everyday lives: lives full of ideas we want to turn into reality that, as projects, need to be managed. Simple, because we're not building dams. Effective, because order is the first step toward building our prototypes — always preserving the vibe that will make them innovative.">Todo prototipo es un proyecto. Y todo proyecto necesita orden. Los japoneses llevan décadas usando el Kanban, una pizarra de seguimiento, para mantenerse competitivos fabricando productos complejos de forma simple. KanbanBonsai toma esa filosofía y la adapta a nuestra cotidianidad: esa que está llena de ideas que queremos convertir en realidad y que como proyectos necesitan ser gerenciados. Sencillo, porque no estamos construyendo represas. Efectivo, porque el orden es lo primero para comenzar a fabricar nuestros prototipos, siempre conservando el vibe que los hará innovadores.</div>
+              <span class="pmore" onclick="togCard(event,this)">+</span>
+            </a>
+            <a class="pcard" href="https://dialer.umbusk.com" target="_blank">
+              <div class="pname">Umbusk Dialer</div>
+              <div class="plabel" data-es="Llamadas y SMS para campañas de marketing." data-en="Calls and SMS for marketing campaigns.">Llamadas y SMS para campañas de marketing.</div>
+              <div class="pshort" data-es="El mercadeo digital abre oportunidades de ventas, pero las cierra la voz humana. Cuando WhatsApp no alcanza y un CRM sofisticado es demasiado." data-en="Digital marketing opens sales opportunities, but the human voice closes them. When WhatsApp falls short and a sophisticated CRM is too much.">El mercadeo digital abre oportunidades de ventas, pero las cierra la voz humana. Cuando WhatsApp no alcanza y un CRM sofisticado es demasiado.</div>
+              <div class="plong" data-es="El mercadeo digital abre oportunidades de ventas, pero las cierra la voz humana. Cuando WhatsApp no alcanza y un CRM sofisticado es demasiado, hace falta una herramienta simple y directa para llamar a la persona indicada en el momento justo. Umbusk Dialer es esa herramienta: un dialer corporativo diseñado para PYMES que quieren crecer e internacionalizarse. Configurable para comunicaciones focalizadas (por ejemplo en República Dominicana, Venezuela, Panamá y Estados Unidos), no requiere instalaciones y se usa desde el browser, con control total sobre tus números y tus campañas." data-en="Digital marketing opens sales opportunities, but the human voice closes them. When WhatsApp falls short and a sophisticated CRM is too much, you need a simple, direct tool to call the right person at the right moment. Umbusk Dialer is that tool: a corporate dialer designed for SMEs that want to grow and go international. Configurable for focused communications (for example in the Dominican Republic, Venezuela, Panama and the United States), it requires no installation and runs from the browser, with full control over your numbers and campaigns.">El mercadeo digital abre oportunidades de ventas, pero las cierra la voz humana. Cuando WhatsApp no alcanza y un CRM sofisticado es demasiado, hace falta una herramienta simple y directa para llamar a la persona indicada en el momento justo. Umbusk Dialer es esa herramienta: un dialer corporativo diseñado para PYMES que quieren crecer e internacionalizarse. Configurable para comunicaciones focalizadas (por ejemplo en República Dominicana, Venezuela, Panamá y Estados Unidos), no requiere instalaciones y se usa desde el browser, con control total sobre tus números y tus campañas.</div>
+              <span class="pmore" onclick="togCard(event,this)">+</span>
+            </a>
           </div>
+
+          <!-- SERVICIOS -->
           <div class="panel" id="tab-servicios">
-            <div class="p-label" data-es="Servicios" data-en="Services">Servicios</div>
-            <div class="srow"><div class="sname" data-es="Chatbot Funcional" data-en="Functional Chatbot">Chatbot Funcional</div><div class="sdesc" data-es="Agente de IA con tu información. Listo en 4–6 semanas." data-en="AI agent with your information. Ready in 4–6 weeks.">Agente de IA con tu información. Listo en 4–6 semanas.</div></div>
-            <div class="srow"><div class="sname" data-es="Integración Multicanal" data-en="Multi-Channel">Integración Multicanal</div><div class="sdesc" data-es="Extiende tu chatbot a WhatsApp, Instagram y correo." data-en="Extend your chatbot to WhatsApp, Instagram y correo.">Extiende tu chatbot a WhatsApp, Instagram y correo.</div></div>
-            <div class="srow"><div class="sname" data-es="Chatbot + Base de Datos" data-en="Chatbot + Database">Chatbot + Base de Datos</div><div class="sdesc" data-es="Respuestas en tiempo real conectadas a tus datos." data-en="Real-time answers connected to your data.">Respuestas en tiempo real conectadas a tus datos.</div></div>
-            <div class="srow"><div class="sname" data-es="Prototipo a Medida" data-en="Custom Prototype">Prototipo a Medida</div><div class="sdesc" data-es="Tienes una idea. La exploramos y construimos juntos." data-en="You have an idea. We explore and build it together.">Tienes una idea. La exploramos y construimos juntos.</div></div>
+            <div class="srow">
+              <div class="sname" data-es="Chatbot Funcional" data-en="Functional Chatbot">Chatbot Funcional</div>
+              <div class="sdesc slabel" data-es="Agente de IA para tu sitio web. Listo en 4–6 semanas." data-en="AI agent for your website. Ready in 4–6 weeks."><em>Agente de IA para tu sitio web. Listo en 4–6 semanas.</em></div>
+              <div class="sdesc sshort" data-es="Configuramos un agente de IA entrenado con la información específica de tu negocio: productos, servicios, preguntas frecuentes, políticas." data-en="We configure an AI agent trained with your business-specific information: products, services, FAQs, policies.">Configuramos un agente de IA entrenado con la información específica de tu negocio: productos, servicios, preguntas frecuentes, políticas.</div>
+              <div class="sdesc slong" data-es="Configuramos un agente de IA entrenado con la información específica de tu negocio: productos, servicios, preguntas frecuentes, políticas. El resultado es un chatbot que conversa con naturalidad, responde con precisión y aprende de cada interacción. Incluye validación, iteración y capacitación completa para tu equipo. En 4 a 6 semanas tienes un prototipo funcional desplegado." data-en="We configure an AI agent trained with your business-specific information: products, services, FAQs, policies. The result is a chatbot that converses naturally, responds precisely, and learns from each interaction. Includes validation, iteration and full team training. In 4 to 6 weeks you have a deployed functional prototype.">Configuramos un agente de IA entrenado con la información específica de tu negocio: productos, servicios, preguntas frecuentes, políticas. El resultado es un chatbot que conversa con naturalidad, responde con precisión y aprende de cada interacción. Incluye validación, iteración y capacitación completa para tu equipo. En 4 a 6 semanas tienes un prototipo funcional desplegado.</div>
+              <div class="sclients" style="display:none;">
+                <span data-es="Clientes:" data-en="Clients:">Clientes:</span>
+                <a href="https://www.formacionsmart.com" target="_blank">Formación Smart</a>
+                <a href="https://www.venturaglobal.com/en/" target="_blank">Ventura Global</a>
+                <a href="https://bibliofep.fundacionempresaspolar.org" target="_blank">BiblioFEP</a>
+                <span data-es="Dic. Historia de Venezuela (en proceso)" data-en="Dict. of Venezuelan History (in progress)">Dic. Historia de Venezuela (en proceso)</span>
+              </div>
+              <span class="smore" onclick="togSrow(event,this)">+</span>
+            </div>
+            <div class="srow">
+              <div class="sname" data-es="Integración Multicanal" data-en="Multi-Channel Integration">Integración Multicanal</div>
+              <div class="sdesc slabel" data-es="Más allá del sitio web. Un canal adicional por semana." data-en="Beyond the website. One additional channel per week."><em>Más allá del sitio web. Un canal adicional por semana.</em></div>
+              <div class="sdesc sshort" data-es="Responde también por WhatsApp, Instagram y correo, canales donde ya están tus clientes." data-en="Also respond via WhatsApp, Instagram and email — channels where your clients already are.">Responde también por WhatsApp, Instagram y correo, canales donde ya están tus clientes.</div>
+              <div class="sdesc slong" data-es="Responde también por WhatsApp, Instagram y correo, canales donde ya están tus clientes. Extender el alcance de tu información a otros canales es un paso natural. Cada canal adicional toma aproximadamente una semana configurarlo e incluye integración, pruebas evaluativas y un sistema de reportes de actividad conversacional. Tú eliges con cuál empezar." data-en="Also respond via WhatsApp, Instagram and email — channels where your clients already are. Extending your information's reach to other channels is a natural next step. Each additional channel takes approximately one week to configure and includes integration, evaluative testing and a conversational activity reporting system. You choose which one to start with.">Responde también por WhatsApp, Instagram y correo, canales donde ya están tus clientes. Extender el alcance de tu información a otros canales es un paso natural. Cada canal adicional toma aproximadamente una semana configurarlo e incluye integración, pruebas evaluativas y un sistema de reportes de actividad conversacional. Tú eliges con cuál empezar.</div>
+              <span class="smore" onclick="togSrow(event,this)">+</span>
+            </div>
+            <div class="srow">
+              <div class="sname" data-es="Chatbot + Base de Datos" data-en="Chatbot + Database">Chatbot + Base de Datos</div>
+              <div class="sdesc slabel" data-es="Respuestas en tiempo real desde tus datos." data-en="Real-time answers from your data."><em>Respuestas en tiempo real desde tus datos.</em></div>
+              <div class="sdesc sshort" data-es="Cuando la información cambia constantemente, el chatbot necesita conectarse directamente a tu base de datos para responder con precisión." data-en="When information changes constantly, the chatbot needs to connect directly to your database to respond accurately.">Cuando la información cambia constantemente, el chatbot necesita conectarse directamente a tu base de datos para responder con precisión.</div>
+              <div class="sdesc slong" data-es="Cuando la información cambia constantemente, el chatbot necesita conectarse directamente a tu base de datos para responder con precisión. Algunos negocios manejan información que se actualiza continuamente (precios, inventarios, disponibilidad, registros). Para esos casos, configuramos una conexión vía API entre el agente de IA y tu base de datos (MySQL, PostgreSQL u otras). El agente consulta en tiempo real y devuelve datos precisos y actualizados en cada conversación. El tiempo de desarrollo y el costo se estiman según cada caso." data-en="When information changes constantly, the chatbot needs to connect directly to your database to respond accurately. Some businesses handle continuously updated information (prices, inventory, availability, records). For those cases, we configure an API connection between the AI agent and your database (MySQL, PostgreSQL or others). The agent queries in real time and returns precise, up-to-date data in every conversation. Development time and cost are estimated per case.">Cuando la información cambia constantemente, el chatbot necesita conectarse directamente a tu base de datos para responder con precisión. Algunos negocios manejan información que se actualiza continuamente (precios, inventarios, disponibilidad, registros). Para esos casos, configuramos una conexión vía API entre el agente de IA y tu base de datos (MySQL, PostgreSQL u otras). El agente consulta en tiempo real y devuelve datos precisos y actualizados en cada conversación. El tiempo de desarrollo y el costo se estiman según cada caso.</div>
+              <span class="smore" onclick="togSrow(event,this)">+</span>
+            </div>
+            <div class="srow">
+              <div class="sname" data-es="Prototipo a la Medida" data-en="Custom Prototype">Prototipo a la Medida</div>
+              <div class="sdesc slabel" data-es="Tienes una idea. Nosotros la hacemos tocar tierra." data-en="You have an idea. We make it land."><em>Tienes una idea. Nosotros la hacemos tocar tierra.</em></div>
+              <div class="sdesc sshort" data-es="No todo cabe en una categoría. Si tienes una idea que no encaja en ningún servicio estándar, es probable que sea la más interesante." data-en="Not everything fits a category. If you have an idea that doesn't fit any standard service, it's probably the most interesting one.">No todo cabe en una categoría. Si tienes una idea que no encaja en ningún servicio estándar, es probable que sea la más interesante.</div>
+              <div class="sdesc slong" data-es="No todo cabe en una categoría. Si tienes una idea que no encaja en ningún servicio estándar, es probable que sea la más interesante. Las mejores ideas son las que no tienen nombre todavía. Si tienes una visión de producto, una hipótesis de negocio, un proceso que quieres automatizar o una experiencia que quieres diseñar (y no sabes exactamente cómo hacerlo realidad), ese es exactamente nuestro <em>playground</em>. Exploramos contigo, definimos el alcance, diseñamos el prototipo y lo construimos con IA. Sin metodologías rígidas. Con intuición, imaginación, emoción y sentido. Y con el <em>vibe</em> que convierte una idea en algo que se pueda tocar." data-en="Not everything fits a category. If you have an idea that doesn't fit any standard service, it's probably the most interesting one. The best ideas are the ones that don't have a name yet. If you have a product vision, a business hypothesis, a process you want to automate or an experience you want to design (and you don't know exactly how to make it real), that is exactly our <em>playground</em>. We explore with you, define the scope, design the prototype and build it with AI. No rigid methodologies. With intuition, imagination, emotion and sense. And with the <em>vibe</em> that turns an idea into something you can touch.">No todo cabe en una categoría. Si tienes una idea que no encaja en ningún servicio estándar, es probable que sea la más interesante. Las mejores ideas son las que no tienen nombre todavía. Si tienes una visión de producto, una hipótesis de negocio, un proceso que quieres automatizar o una experiencia que quieres diseñar (y no sabes exactamente cómo hacerlo realidad), ese es exactamente nuestro <em>playground</em>. Exploramos contigo, definimos el alcance, diseñamos el prototipo y lo construimos con IA. Sin metodologías rígidas. Con intuición, imaginación, emoción y sentido. Y con el <em>vibe</em> que convierte una idea en algo que se pueda tocar.</div>
+              <span class="smore" onclick="togSrow(event,this)">+</span>
+            </div>
           </div>
+
         </div>
       </div><!-- /card -->
 
@@ -302,15 +309,18 @@ h1 strong{font-weight:700;color:#fff;}
 
     </div>
   </div>
-
-</div><!-- /page -->
+</div>
 
 <script>
 const EF={
-  intuicion:  {es:'El conocimiento que precede a la razón. Saber antes de poder explicar.',         en:'Knowledge that precedes reason. Knowing before being able to explain.'},
-  imaginacion:{es:'La capacidad de ver lo que aún no existe. El origen de todo prototipo.',          en:'The ability to see what does not yet exist. The origin of every prototype.'},
-  emocion:    {es:'La energía que convierte una idea en compromiso. El motor del proceso creativo.', en:'The energy that turns an idea into commitment. The engine of the creative process.'},
-  sentido:    {es:'¿Para qué? La pregunta que orienta el trabajo y da dirección al proceso.',         en:'What for? The question that guides the work and gives direction to the process.'}
+  intuicion:  {es:'En nuestro enfoque usamos la intuición, ese <em>feeling</em> que precede a la razón. Es como saber antes de poder explicar.',          en:'Our approach draws on intuition — that <em>feeling</em> that precedes reason. Knowing before being able to explain.'},
+  imaginacion:{es:'Usando la imaginación, esa capacidad de ver lo que aún no existe, nos movemos con fluidez en el espacio-tiempo donde nacen los prototipos.',           en:'Using imagination — the ability to see what doesn\'t yet exist — we move fluidly through the space-time where prototypes are born.'},
+  emocion:    {es:'La energía del entusiasmo convierte cada idea en compromiso. Las emociones nutren nuestros procesos creativos para poder aterrizarlos en productos o servicios reales.',  en:'The energy of enthusiasm turns every idea into commitment. Emotions fuel our creative processes so we can land them as real products or services.'},
+  sentido:    {es:'¿Para qué tener sentido común? Para salir de callejones sin salida o <em>loops</em> desgastantes. Es lo que nos orienta en el trabajo y le da dirección al proceso hasta alcanzar las metas.',          en:'What\'s common sense for? To escape dead ends and exhausting <em>loops</em>. It\'s what guides our work and gives direction to the process until we reach our goals.'}
+};
+const SVG_LABELS={
+  es:{idea:'Idea',diseno:'Diseño',innova:'Innovación',proto:'PROTOTIPO',innovaLabel:'innova'},
+  en:{idea:'Idea',diseno:'Design',innova:'Innovation',proto:'PROTOTYPE',innovaLabel:'innova'}
 };
 let lang='es', curF='intuicion';
 
@@ -319,12 +329,19 @@ function setL(l,btn){
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('[data-es]').forEach(el=>{
-    const v=el.getAttribute('data-'+l); if(!v)return;
+    const v=el.getAttribute('data-'+l);
+    if(!v) return;
     if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v;
     else if(/<[a-z]/i.test(v)) el.innerHTML=v;
     else el.textContent=v;
   });
-  document.getElementById('eText').textContent = EF[curF][lang];
+  const s=SVG_LABELS[l];
+  document.getElementById('svgIdea').textContent=s.idea;
+  document.getElementById('svgDiseno').textContent=s.diseno;
+  document.getElementById('svgInnova').textContent=s.innova;
+  document.getElementById('svgProto').textContent=s.proto;
+  document.getElementById('svgInnovaLabel').textContent=s.innovaLabel;
+  document.getElementById('eText').innerHTML=EF[curF][l];
 }
 
 function setTab(id,btn){
@@ -332,16 +349,32 @@ function setTab(id,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   if(btn) btn.classList.add('active');
   else document.querySelectorAll('[data-tab="'+id+'"]').forEach(b=>b.classList.add('active'));
-  const p=document.getElementById('tab-'+id); if(p) p.classList.add('on');
+  const p=document.getElementById('tab-'+id);
+  if(p) p.classList.add('on');
 }
 
-function setF(f, btn){
-  curF = f;
-  // reset lorenz on switch
+function setF(f,btn){
+  curF=f;
   if(f==='intuicion'){lx=.1;ly=0;lz=0;lpts=[];}
+  if(f==='imaginacion'){sD=0;sT=0;}
+  if(f==='emocion'){liD=0;liT=0;}
+  if(f==='sentido'){fD=0;fT=0;}
   document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('eText').textContent = EF[curF][lang];
+  document.getElementById('eText').innerHTML=EF[curF][lang];
+}
+
+function togSrow(e,btn){
+  e.preventDefault(); e.stopPropagation();
+  const row=btn.closest('.srow');
+  const open=row.classList.toggle('open');
+  btn.textContent=open?'−':'+';
+}
+function togCard(e,btn){
+  e.preventDefault(); e.stopPropagation();
+  const card=btn.closest('.pcard');
+  const open=card.classList.toggle('open');
+  btn.textContent=open?'−':'+';
 }
 
 function togL(){document.getElementById('lpanel').classList.toggle('open');}
@@ -349,132 +382,50 @@ function closeL(){document.getElementById('lpanel').classList.remove('open');}
 function togR(){document.getElementById('rpanel').classList.toggle('open');}
 function closeR(){document.getElementById('rpanel').classList.remove('open');}
 
-// ── CANVAS ──────────────────────────────────────────────────
-const cv = document.getElementById('cv');
-const ctx = cv.getContext('2d');
-let W, H;
+// ── CANVAS
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+let W,H;
+function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;buildFib();}
+window.addEventListener('resize',resize);
 
-function resize(){
-  W = cv.width  = window.innerWidth;
-  H = cv.height = window.innerHeight;
-  buildFib();
-}
-window.addEventListener('resize', resize);
+const FC={intuicion:'rgba(224,120,24,',imaginacion:'rgba(155,89,182,',emocion:'rgba(200,50,70,',sentido:'rgba(40,180,100,'};
 
-const FC = {
-  intuicion:   'rgba(224,120,24,',
-  imaginacion: 'rgba(155,89,182,',
-  emocion:     'rgba(200,50,70,',
-  sentido:     'rgba(40,180,100,'
-};
+let lx=.1,ly=0,lz=0,lpts=[],lD=0;
+function stepLorenz(){const dt=.005,s=10,r=28,b=8/3;lx+=s*(ly-lx)*dt;ly+=(lx*(r-lz)-ly)*dt;lz+=(lx*ly-b*lz)*dt;lpts.push([lx,ly,lz]);if(lpts.length>3200)lpts.shift();}
+function drawLorenz(){ctx.clearRect(0,0,W,H);for(let i=0;i<10;i++)stepLorenz();lD=(lD+0.55)%W;const sc=Math.min(W,H)/46;for(const dx of[lD,lD-W]){ctx.beginPath();lpts.forEach((p,i)=>{const px=W/2+dx+p[0]*sc,py=H/2+(p[2]-25)*-sc;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);});ctx.strokeStyle=FC.intuicion+'.85)';ctx.lineWidth=1.2;ctx.stroke();}}
 
-// — Lorenz (left → right)
-let lx=.1, ly=0, lz=0, lpts=[], lD=0;
-function stepLorenz(){
-  const dt=.005,s=10,r=28,b=8/3;
-  lx+=s*(ly-lx)*dt; ly+=(lx*(r-lz)-ly)*dt; lz+=(lx*ly-b*lz)*dt;
-  lpts.push([lx,ly,lz]); if(lpts.length>3200) lpts.shift();
-}
-function drawLorenz(){
-  ctx.clearRect(0,0,W,H);
-  for(let i=0;i<10;i++) stepLorenz();
-  lD=(lD+0.55)%W;
-  const sc=Math.min(W,H)/46;
-  for(const dx of [lD, lD-W]){
-    ctx.beginPath();
-    lpts.forEach((p,i)=>{
-      const px=W/2+dx+p[0]*sc, py=H/2+(p[2]-25)*-sc;
-      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
-    });
-    ctx.strokeStyle=FC.intuicion+'.85)'; ctx.lineWidth=1.2; ctx.stroke();
-  }
-}
+let sD=0,sT=0;
+function drawSpiro(){ctx.clearRect(0,0,W,H);sD=(sD+0.42)%W;const R=Math.min(W,H)*.38,r=R*.382,d=r*.72;for(const dx of[sD,sD-W]){const ox=W/2+dx,oy=H/2;ctx.beginPath();for(let i=0;i<=4200;i++){const a=(i/4200)*Math.PI*2*13+sT*.00012;const x=ox+(R-r)*Math.cos(a)+d*Math.cos(((R-r)/r)*a),y=oy+(R-r)*Math.sin(a)-d*Math.sin(((R-r)/r)*a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=FC.imaginacion+'.68)';ctx.lineWidth=0.9;ctx.stroke();}sT++;}
 
-// — Spirograph (left → right)
-let sD=0, sT=0;
-function drawSpiro(){
-  ctx.clearRect(0,0,W,H);
-  sD=(sD+0.42)%W;
-  const R=Math.min(W,H)*.38, r=R*.382, d=r*.72;
-  for(const dx of [sD, sD-W]){
-    const ox=W/2+dx, oy=H/2;
-    ctx.beginPath();
-    for(let i=0;i<=4200;i++){
-      const a=(i/4200)*Math.PI*2*13+sT*.00012;
-      const x=ox+(R-r)*Math.cos(a)+d*Math.cos(((R-r)/r)*a);
-      const y=oy+(R-r)*Math.sin(a)-d*Math.sin(((R-r)/r)*a);
-      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle=FC.imaginacion+'.68)'; ctx.lineWidth=0.9; ctx.stroke();
-  }
-  sT++;
-}
+let liD=0,liT=0;
+function drawLissajous(){ctx.clearRect(0,0,W,H);liD=(liD+0.46)%H;const amp=Math.min(W,H)*.42,delta=liT*.0004;for(const dy of[H-liD,-liD]){const ox=W/2,oy=H/2+dy;ctx.beginPath();for(let i=0;i<=3200;i++){const a=(i/3200)*Math.PI*2;const x=ox+amp*Math.sin(3*a+delta),y=oy+amp*Math.sin(4*a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=FC.emocion+'.72)';ctx.lineWidth=1.1;ctx.stroke();}liT++;}
 
-// — Lissajous (bottom → top)
-let liD=0, liT=0;
-function drawLissajous(){
-  ctx.clearRect(0,0,W,H);
-  liD=(liD+0.46)%H;
-  const amp=Math.min(W,H)*.42, delta=liT*.0004;
-  for(const dy of [H-liD, -liD]){
-    const ox=W/2, oy=H/2+dy;
-    ctx.beginPath();
-    for(let i=0;i<=3200;i++){
-      const a=(i/3200)*Math.PI*2;
-      const x=ox+amp*Math.sin(3*a+delta), y=oy+amp*Math.sin(4*a);
-      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle=FC.emocion+'.72)'; ctx.lineWidth=1.1; ctx.stroke();
-  }
-  liT++;
-}
-
-// — Fibonacci (bottom → top)
-let fibPts=[], fD=0, fT=0;
-function buildFib(){
-  fibPts=[];
-  const n=1000, g=Math.PI*(3-Math.sqrt(5)), sc=Math.min(W,H)*.015;
-  for(let i=0;i<n;i++){
-    const rad=sc*Math.sqrt(i), th=i*g;
-    fibPts.push([rad*Math.cos(th), rad*Math.sin(th), Math.sqrt(i)*.1]);
-  }
-}
-function drawFib(){
-  ctx.clearRect(0,0,W,H);
-  fD=(fD+0.33)%H;
-  for(const dy of [H-fD, -fD]){
-    const ox=W/2, oy=H/2+dy;
-    fibPts.forEach((p,i)=>{
-      const alpha=.18+(i/fibPts.length)*.68;
-      const px=ox+p[0]+Math.sin(fT*.001+i*.05)*1.5;
-      const py=oy+p[1]+Math.cos(fT*.0013+i*.04)*1.5;
-      ctx.beginPath(); ctx.arc(px,py,Math.max(.4,p[2]),0,Math.PI*2);
-      ctx.fillStyle=FC.sentido+(alpha*.9)+')'; ctx.fill();
-    });
-  }
-  fT++;
-}
+let fibPts=[],fD=0,fT=0;
+function buildFib(){fibPts=[];const n=1000,g=Math.PI*(3-Math.sqrt(5)),sc=Math.min(W,H)*.015;for(let i=0;i<n;i++){const rad=sc*Math.sqrt(i),th=i*g;fibPts.push([rad*Math.cos(th),rad*Math.sin(th),Math.sqrt(i)*.1]);}}
+function drawFib(){ctx.clearRect(0,0,W,H);fD=(fD+0.33)%H;for(const dy of[H-fD,-fD]){const ox=W/2,oy=H/2+dy;fibPts.forEach((p,i)=>{const alpha=.18+(i/fibPts.length)*.68,px=ox+p[0]+Math.sin(fT*.001+i*.05)*1.5,py=oy+p[1]+Math.cos(fT*.0013+i*.04)*1.5;ctx.beginPath();ctx.arc(px,py,Math.max(.4,p[2]),0,Math.PI*2);ctx.fillStyle=FC.sentido+(alpha*.9)+')';ctx.fill();});}fT++;}
 
 function animate(){
   switch(curF){
-    case 'intuicion':   drawLorenz();    break;
-    case 'imaginacion': drawSpiro();     break;
-    case 'emocion':     drawLissajous(); break;
-    case 'sentido':     drawFib();       break;
+    case'intuicion':   drawLorenz();    break;
+    case'imaginacion': drawSpiro();     break;
+    case'emocion':     drawLissajous(); break;
+    case'sentido':     drawFib();       break;
     default: ctx.clearRect(0,0,W,H);
   }
   requestAnimationFrame(animate);
 }
 
-// ── INIT ────────────────────────────────────────────────────
-resize(); // sets W,H and builds fib
-
+resize();
 const fKeys=['intuicion','imaginacion','emocion','sentido'];
-const ri = Math.floor(Math.random()*4);
-curF = fKeys[ri];
+const ri=Math.floor(Math.random()*4);
+curF=fKeys[ri];
 document.querySelectorAll('.btm-tab')[ri].classList.add('active');
-document.getElementById('eText').textContent = EF[curF][lang];
-
+window.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('eText').textContent=EF[curF][lang];
+});
+if(document.readyState!=='loading'){
+  document.getElementById('eText').textContent=EF[curF][lang];
+}
 requestAnimationFrame(animate);
 </script>
 </body>
