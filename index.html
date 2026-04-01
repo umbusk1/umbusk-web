@@ -8,9 +8,8 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{background:#111;color:#e0e0e0;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;overflow:hidden;}
-canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-events:none;z-index:0;}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 
-/* ══ PAGE ══ */
 .page{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;align-items:center;padding-top:20px;}
 
 /* LANG */
@@ -19,22 +18,13 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .lang-btn{padding:5px 12px;border:none;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:1px;background:transparent;color:#444;font-family:'Segoe UI',sans-serif;transition:all .15s;}
 .lang-btn.active{background:#e07818;color:#fff;}
 
-/* ══ CARD AREA ══ */
+/* CARD AREA */
 .card-area{flex:1;min-height:0;display:flex;align-items:flex-start;justify-content:center;width:100%;overflow:hidden;}
 
-/* ══ CARD CONTAINER: 34 + 615 + 30 = 679px ══ */
-.card-container{
-  position:relative;
-  width:380px;
-  height:679px;
-  flex-shrink:0;
-  display:flex;
-  flex-direction:column;
-  padding-top:34px;
-  padding-bottom:30px;
-}
+/* CONTAINER: 34 top + 615 card + 30 btm = 679 + enfoque 90 = 769 */
+.card-container{position:relative;width:380px;height:769px;flex-shrink:0;display:flex;flex-direction:column;padding-top:34px;padding-bottom:120px;}
 
-/* ══ TOP TABS — full width flush with card ══ */
+/* TOP TABS */
 .top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;z-index:10;}
 .top-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;
   background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;
@@ -42,22 +32,33 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
   font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
   transition:background .18s,color .18s;user-select:none;}
 .top-tab+.top-tab{margin-left:-1px;}
-.top-tab:hover{background:#161616;border-color:#232323;}
+.top-tab:hover{background:#161616;}
 .top-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;z-index:1;}
 
-/* ══ BOTTOM TABS — flush with card ══ */
-.btm-tabs{position:absolute;bottom:0;left:0;right:0;height:30px;display:flex;z-index:10;}
+/* BOTTOM TABS */
+.btm-tabs{position:absolute;bottom:90px;left:0;right:0;height:30px;display:flex;z-index:10;}
 .btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;
   background:#111;border:1px solid #1e1e1e;border-top:1px solid #2a2a2a;
   border-radius:0 0 8px 8px;color:#252525;cursor:pointer;
   font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
   transition:background .18s,color .18s;user-select:none;}
 .btm-tab+.btm-tab{margin-left:-1px;}
-.btm-tab:hover{background:#161616;border-color:#232323;}
+.btm-tab:hover{background:#161616;}
 .btm-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-top-color:#1a1a1a;color:#e07818;z-index:1;}
 
-/* ══ SIDE TABS ══ */
-.side-tab{position:absolute;top:50%;transform:translateY(-50%);
+/* ENFOQUE AREA — 90px, attached below btm-tabs */
+.enfoque-area{
+  position:absolute;bottom:0;left:0;right:0;height:90px;
+  background:#141414;border:1px solid #2a2a2a;border-top:none;
+  border-radius:0 0 10px 10px;
+  padding:12px 20px;
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+.e-text{font-size:12px;color:#555;line-height:1.65;}
+
+/* SIDE TABS */
+.side-tab{position:absolute;top:50%;transform:translateY(-60%);
   background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;
   padding:20px 8px;font-size:9px;letter-spacing:2px;writing-mode:vertical-rl;
   transition:background .2s,color .2s;user-select:none;z-index:3;}
@@ -65,8 +66,8 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .left-tab{right:100%;margin-right:-1px;border-right:none;border-radius:8px 0 0 8px;}
 .right-tab{left:100%;margin-left:-1px;border-left:none;border-radius:0 8px 8px 0;}
 
-/* ══ SIDE PANELS ══ */
-.side-panel{position:absolute;top:34px;bottom:30px;width:270px;
+/* SIDE PANELS */
+.side-panel{position:absolute;top:34px;bottom:120px;width:270px;
   background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;
   display:flex;flex-direction:column;overflow:hidden;
   opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:2;}
@@ -81,23 +82,22 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .panel-body::-webkit-scrollbar{width:3px;}
 .panel-body::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 
-/* ══ MAIN CARD ══ */
+/* MAIN CARD */
 .card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:0;
   flex:1;min-height:0;display:flex;flex-direction:column;
   box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;z-index:2;overflow:hidden;}
 
-/* LOGO */
 .logo-area{text-align:center;padding:18px 24px 12px;flex-shrink:0;}
 .logo-area img{height:38px;object-fit:contain;}
 .brand-name{font-size:10px;color:#444;letter-spacing:4px;text-transform:uppercase;margin-top:5px;}
 
-/* PANELS */
 .panels-wrap{flex:1;min-height:0;overflow:hidden;padding:0 24px;}
 .panel{display:none;height:100%;overflow-y:auto;padding-bottom:6px;animation:fadeIn .22s ease;}
 .panel.on{display:block;}
 .panel::-webkit-scrollbar{width:3px;}
 .panel::-webkit-scrollbar-thumb{background:#252525;border-radius:2px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+
 .p-label{font-size:9.5px;letter-spacing:.2em;color:#e07818;text-transform:uppercase;margin-bottom:9px;}
 h1{font-size:20px;font-weight:300;line-height:1.35;margin-bottom:10px;}
 h1 strong{font-weight:700;color:#fff;}
@@ -111,7 +111,7 @@ h1 strong{font-weight:700;color:#fff;}
 .sname{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:2px;}
 .sdesc{font-size:11.5px;color:#444;line-height:1.5;}
 
-/* CONTACT panel */
+/* CONTACT */
 .field{margin-bottom:9px;}
 .flabel{display:block;font-size:9.5px;color:#444;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
 .finput{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:7px;color:#fff;font-size:12.5px;padding:9px 11px;outline:none;font-family:'Segoe UI',sans-serif;transition:border-color .2s;resize:none;}
@@ -121,54 +121,11 @@ h1 strong{font-weight:700;color:#fff;}
 .btn-send:hover{opacity:.88;}
 .c-info{font-size:10px;color:#2a2a2a;text-align:center;margin-top:12px;line-height:2;}
 
-/* INFO panel */
+/* INFO */
 .info-item{padding:10px 0;border-bottom:1px solid #1f1f1f;}
 .info-item:last-child{border:none;}
 .info-key{font-size:9px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
 .info-val{font-size:12px;color:#555;}
-
-/* ══ ENFOQUE STRIP — below btm-tabs, outside card ══ */
-.enfoque-strip{
-  width:380px;flex-shrink:0;
-  overflow:hidden;max-height:0;
-  transition:max-height .3s ease, padding .3s ease;
-  padding:0 24px;
-  background:transparent;
-}
-.enfoque-strip.open{max-height:64px;padding:10px 24px;}
-.enfoque-inner{display:flex;align-items:flex-start;gap:14px;}
-.e-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#e07818;min-width:76px;padding-top:2px;flex-shrink:0;}
-.e-text{font-size:11.5px;color:#444;line-height:1.55;}
-
-/* ══ FOOTER ══ */
-/* width = left panel (270) + gap (25) + card (380) + gap (25) + right panel (270) = 970px */
-.site-footer{
-  flex-shrink:0;z-index:1;position:relative;
-  width:970px;max-width:100vw;
-  padding:10px 0 0;
-  border-top:1px solid #1a1a1a;
-}
-.footer-inner{display:flex;align-items:center;justify-content:space-between;}
-.footer-nav{display:flex;gap:16px;}
-.footer-nav a{font-size:9px;color:#252525;text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:color .2s;}
-.footer-nav a:hover{color:#555;}
-.footer-copy{font-size:9px;color:#1a1a1a;letter-spacing:1px;}
-.footer-info{font-size:9px;color:#1a1a1a;letter-spacing:.5px;}
-
-/* ══ MOBILE ══ */
-@media(max-width:767px){
-  body{overflow-y:auto;height:auto;}
-  .page{height:auto;padding-bottom:20px;}
-  .card-area{height:auto;overflow:visible;}
-  .card-container{height:auto;padding-bottom:0;}
-  .btm-tabs{position:relative;bottom:auto;margin-top:-1px;}
-  .enfoque-strip{width:100%;}
-  .side-tab{display:none;}
-  .side-panel{display:none;}
-  .lang-row,.site-footer{width:100%;padding-left:16px;padding-right:16px;}
-  .footer-inner{flex-direction:column;gap:8px;text-align:center;}
-  .footer-nav{flex-wrap:wrap;justify-content:center;}
-}
 </style>
 </head>
 <body>
@@ -229,7 +186,7 @@ h1 strong{font-weight:700;color:#fff;}
           <div class="panel" id="tab-servicios">
             <div class="p-label" data-es="Servicios" data-en="Services">Servicios</div>
             <div class="srow"><div class="sname" data-es="Chatbot Funcional" data-en="Functional Chatbot">Chatbot Funcional</div><div class="sdesc" data-es="Agente de IA con tu información. Listo en 4–6 semanas." data-en="AI agent with your information. Ready in 4–6 weeks.">Agente de IA con tu información. Listo en 4–6 semanas.</div></div>
-            <div class="srow"><div class="sname" data-es="Integración Multicanal" data-en="Multi-Channel">Integración Multicanal</div><div class="sdesc" data-es="Extiende tu chatbot a WhatsApp, Instagram y correo." data-en="Extend your chatbot to WhatsApp, Instagram and email.">Extiende tu chatbot a WhatsApp, Instagram y correo.</div></div>
+            <div class="srow"><div class="sname" data-es="Integración Multicanal" data-en="Multi-Channel">Integración Multicanal</div><div class="sdesc" data-es="Extiende tu chatbot a WhatsApp, Instagram y correo." data-en="Extend your chatbot to WhatsApp, Instagram y correo.">Extiende tu chatbot a WhatsApp, Instagram y correo.</div></div>
             <div class="srow"><div class="sname" data-es="Chatbot + Base de Datos" data-en="Chatbot + Database">Chatbot + Base de Datos</div><div class="sdesc" data-es="Respuestas en tiempo real conectadas a tus datos." data-en="Real-time answers connected to your data.">Respuestas en tiempo real conectadas a tus datos.</div></div>
             <div class="srow"><div class="sname" data-es="Prototipo a Medida" data-en="Custom Prototype">Prototipo a Medida</div><div class="sdesc" data-es="Tienes una idea. La exploramos y construimos juntos." data-en="You have an idea. We explore and build it together.">Tienes una idea. La exploramos y construimos juntos.</div></div>
           </div>
@@ -242,6 +199,11 @@ h1 strong{font-weight:700;color:#fff;}
         <button class="btm-tab" data-f="imaginacion" onclick="setF('imaginacion',this)" data-es="IMAGINACIÓN" data-en="IMAGINATION">IMAGINACIÓN</button>
         <button class="btm-tab" data-f="emocion"     onclick="setF('emocion',this)"     data-es="EMOCIÓN"     data-en="EMOTION">EMOCIÓN</button>
         <button class="btm-tab" data-f="sentido"     onclick="setF('sentido',this)"     data-es="SENTIDO"     data-en="SENSE">SENTIDO</button>
+      </div>
+
+      <!-- ENFOQUE AREA -->
+      <div class="enfoque-area">
+        <div class="e-text" id="eText"></div>
       </div>
 
       <!-- RIGHT: INFO -->
@@ -260,42 +222,19 @@ h1 strong{font-weight:700;color:#fff;}
         </div>
       </div>
 
-    </div><!-- /card-container -->
-  </div><!-- /card-area -->
-
-  <!-- ENFOQUE STRIP — outside card, below btm-tabs -->
-  <div class="enfoque-strip" id="enfoqueStrip">
-    <div class="enfoque-inner">
-      <div class="e-label" id="eLabel"></div>
-      <div class="e-text"  id="eText"></div>
     </div>
   </div>
 
-  <!-- FOOTER — 970px = left(270) + gap(25) + card(380) + gap(25) + right(270) -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <nav class="footer-nav">
-        <a onclick="setTab('home');return false;">HOME</a>
-        <a onclick="setTab('productos');return false;" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</a>
-        <a onclick="setTab('servicios');return false;" data-es="SERVICIOS" data-en="SERVICES">SERVICIOS</a>
-        <a onclick="togL();return false;" data-es="CONTACTO" data-en="CONTACT">CONTACTO</a>
-        <a href="#" data-es="POLÍTICAS" data-en="POLICIES">POLÍTICAS</a>
-      </nav>
-      <div class="footer-copy">© 2026 UMBUSK LLC</div>
-      <div class="footer-info">Tarpon Springs, FL · USA &nbsp;·&nbsp; +58 422 232 4636 &nbsp;·&nbsp; +1 904 231 9989</div>
-    </div>
-  </footer>
-
-</div>
+</div><!-- /page -->
 
 <script>
 const EF={
-  intuicion:  {es:['Intuición','El conocimiento que precede a la razón. Saber antes de poder explicar.'],          en:['Intuition','Knowledge that precedes reason. Knowing before being able to explain.']},
-  imaginacion:{es:['Imaginación','La capacidad de ver lo que aún no existe. El origen de todo prototipo.'],         en:['Imagination','The ability to see what does not yet exist. The origin of every prototype.']},
-  emocion:    {es:['Emoción','La energía que convierte una idea en compromiso. El motor del proceso creativo.'],   en:['Emotion','The energy that turns an idea into commitment. The engine of the creative process.']},
-  sentido:    {es:['Sentido','¿Para qué? La pregunta que orienta el trabajo y da dirección al proceso.'],           en:['Sense','What for? The question that guides the work and gives direction to the process.']}
+  intuicion:  {es:'El conocimiento que precede a la razón. Saber antes de poder explicar.',         en:'Knowledge that precedes reason. Knowing before being able to explain.'},
+  imaginacion:{es:'La capacidad de ver lo que aún no existe. El origen de todo prototipo.',          en:'The ability to see what does not yet exist. The origin of every prototype.'},
+  emocion:    {es:'La energía que convierte una idea en compromiso. El motor del proceso creativo.', en:'The energy that turns an idea into commitment. The engine of the creative process.'},
+  sentido:    {es:'¿Para qué? La pregunta que orienta el trabajo y da dirección al proceso.',         en:'What for? The question that guides the work and gives direction to the process.'}
 };
-let lang='es', curF=null;
+let lang='es', curF='intuicion';
 
 function setL(l,btn){
   lang=l;
@@ -306,7 +245,7 @@ function setL(l,btn){
     if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v;
     else el.innerHTML=v;
   });
-  if(curF) updateEF();
+  document.getElementById('eText').textContent = EF[curF][lang];
 }
 
 function setTab(id,btn){
@@ -317,105 +256,121 @@ function setTab(id,btn){
   const p=document.getElementById('tab-'+id); if(p) p.classList.add('on');
 }
 
-function setF(f,btn){
-  const same = (curF===f && document.getElementById('enfoqueStrip').classList.contains('open'));
-  document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
-  if(same){
-    curF=null;
-    document.getElementById('enfoqueStrip').classList.remove('open');
-    if(f==='intuicion'){lx=.1;ly=0;lz=0;lpts=[];}
-    return;
-  }
-  curF=f;
+function setF(f, btn){
+  curF = f;
+  // reset lorenz on switch
   if(f==='intuicion'){lx=.1;ly=0;lz=0;lpts=[];}
+  document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('enfoqueStrip').classList.add('open');
-  updateEF();
+  document.getElementById('eText').textContent = EF[curF][lang];
 }
 
-function updateEF(){
-  if(!curF) return;
-  const d=EF[curF][lang];
-  document.getElementById('eLabel').textContent=d[0];
-  document.getElementById('eText').textContent=d[1];
-}
-
-/* both panels can be open simultaneously */
 function togL(){document.getElementById('lpanel').classList.toggle('open');}
 function closeL(){document.getElementById('lpanel').classList.remove('open');}
 function togR(){document.getElementById('rpanel').classList.toggle('open');}
 function closeR(){document.getElementById('rpanel').classList.remove('open');}
 
-// ── CANVAS
-const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-let W,H;
-function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;buildFib();}
-window.addEventListener('resize',resize);resize();
+// ── CANVAS ──────────────────────────────────────────────────
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H;
 
-const FC={intuicion:'rgba(224,120,24,',imaginacion:'rgba(155,89,182,',emocion:'rgba(200,50,70,',sentido:'rgba(40,180,100,'};
+function resize(){
+  W = cv.width  = window.innerWidth;
+  H = cv.height = window.innerHeight;
+  buildFib();
+}
+window.addEventListener('resize', resize);
 
-// Lorenz — left to right
-let lx=.1,ly=0,lz=0,lpts=[],lD=0;
-function stepLorenz(){const dt=.005,s=10,r=28,b=8/3;lx+=s*(ly-lx)*dt;ly+=(lx*(r-lz)-ly)*dt;lz+=(lx*ly-b*lz)*dt;lpts.push([lx,ly,lz]);if(lpts.length>3200)lpts.shift();}
+const FC = {
+  intuicion:   'rgba(224,120,24,',
+  imaginacion: 'rgba(155,89,182,',
+  emocion:     'rgba(200,50,70,',
+  sentido:     'rgba(40,180,100,'
+};
+
+// — Lorenz (left → right)
+let lx=.1, ly=0, lz=0, lpts=[], lD=0;
+function stepLorenz(){
+  const dt=.005,s=10,r=28,b=8/3;
+  lx+=s*(ly-lx)*dt; ly+=(lx*(r-lz)-ly)*dt; lz+=(lx*ly-b*lz)*dt;
+  lpts.push([lx,ly,lz]); if(lpts.length>3200) lpts.shift();
+}
 function drawLorenz(){
   ctx.clearRect(0,0,W,H);
-  for(let i=0;i<10;i++)stepLorenz();
-  lD=(lD+0.5)%W;
-  const sc=Math.min(W,H)/48;
-  for(const dx of [lD,lD-W]){
+  for(let i=0;i<10;i++) stepLorenz();
+  lD=(lD+0.55)%W;
+  const sc=Math.min(W,H)/46;
+  for(const dx of [lD, lD-W]){
     ctx.beginPath();
-    lpts.forEach((p,i)=>{const px=W/2+dx+p[0]*sc,py=H/2+(p[2]-25)*-sc;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);});
-    ctx.strokeStyle=FC.intuicion+'.78)';ctx.lineWidth=1.1;ctx.stroke();
+    lpts.forEach((p,i)=>{
+      const px=W/2+dx+p[0]*sc, py=H/2+(p[2]-25)*-sc;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    });
+    ctx.strokeStyle=FC.intuicion+'.85)'; ctx.lineWidth=1.2; ctx.stroke();
   }
 }
 
-// Spiro — left to right
-let sD=0,sT=0;
+// — Spirograph (left → right)
+let sD=0, sT=0;
 function drawSpiro(){
   ctx.clearRect(0,0,W,H);
-  sD=(sD+0.38)%W;
-  const R=Math.min(W,H)*.36,r=R*.382,d=r*.72;
-  for(const dx of [sD,sD-W]){
-    const ox=W/2+dx,oy=H/2;
+  sD=(sD+0.42)%W;
+  const R=Math.min(W,H)*.38, r=R*.382, d=r*.72;
+  for(const dx of [sD, sD-W]){
+    const ox=W/2+dx, oy=H/2;
     ctx.beginPath();
-    for(let i=0;i<=4200;i++){const a=(i/4200)*Math.PI*2*13+sT*.00012;const x=ox+(R-r)*Math.cos(a)+d*Math.cos(((R-r)/r)*a),y=oy+(R-r)*Math.sin(a)-d*Math.sin(((R-r)/r)*a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-    ctx.strokeStyle=FC.imaginacion+'.62)';ctx.lineWidth=0.85;ctx.stroke();
+    for(let i=0;i<=4200;i++){
+      const a=(i/4200)*Math.PI*2*13+sT*.00012;
+      const x=ox+(R-r)*Math.cos(a)+d*Math.cos(((R-r)/r)*a);
+      const y=oy+(R-r)*Math.sin(a)-d*Math.sin(((R-r)/r)*a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle=FC.imaginacion+'.68)'; ctx.lineWidth=0.9; ctx.stroke();
   }
   sT++;
 }
 
-// Lissajous — bottom to top
-let liD=0,liT=0;
+// — Lissajous (bottom → top)
+let liD=0, liT=0;
 function drawLissajous(){
   ctx.clearRect(0,0,W,H);
-  liD=(liD+0.42)%H;
-  const amp=Math.min(W,H)*.4,delta=liT*.0004;
-  for(const dy of [H-liD,-liD]){
-    const ox=W/2,oy=H/2+dy;
+  liD=(liD+0.46)%H;
+  const amp=Math.min(W,H)*.42, delta=liT*.0004;
+  for(const dy of [H-liD, -liD]){
+    const ox=W/2, oy=H/2+dy;
     ctx.beginPath();
-    for(let i=0;i<=3200;i++){const a=(i/3200)*Math.PI*2;const x=ox+amp*Math.sin(3*a+delta),y=oy+amp*Math.sin(4*a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-    ctx.strokeStyle=FC.emocion+'.65)';ctx.lineWidth=1;ctx.stroke();
+    for(let i=0;i<=3200;i++){
+      const a=(i/3200)*Math.PI*2;
+      const x=ox+amp*Math.sin(3*a+delta), y=oy+amp*Math.sin(4*a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle=FC.emocion+'.72)'; ctx.lineWidth=1.1; ctx.stroke();
   }
   liT++;
 }
 
-// Fibonacci — bottom to top
-let fibPts=[],fD=0,fT=0;
+// — Fibonacci (bottom → top)
+let fibPts=[], fD=0, fT=0;
 function buildFib(){
   fibPts=[];
-  const n=1000,g=Math.PI*(3-Math.sqrt(5)),sc=Math.min(W,H)*.014;
-  for(let i=0;i<n;i++){const rad=sc*Math.sqrt(i),th=i*g;fibPts.push([rad*Math.cos(th),rad*Math.sin(th),Math.sqrt(i)*.09]);}
+  const n=1000, g=Math.PI*(3-Math.sqrt(5)), sc=Math.min(W,H)*.015;
+  for(let i=0;i<n;i++){
+    const rad=sc*Math.sqrt(i), th=i*g;
+    fibPts.push([rad*Math.cos(th), rad*Math.sin(th), Math.sqrt(i)*.1]);
+  }
 }
 function drawFib(){
   ctx.clearRect(0,0,W,H);
-  fD=(fD+0.3)%H;
-  for(const dy of [H-fD,-fD]){
-    const ox=W/2,oy=H/2+dy;
+  fD=(fD+0.33)%H;
+  for(const dy of [H-fD, -fD]){
+    const ox=W/2, oy=H/2+dy;
     fibPts.forEach((p,i)=>{
-      const alpha=.15+(i/fibPts.length)*.65;
-      const px=ox+p[0]+Math.sin(fT*.001+i*.05)*1.5,py=oy+p[1]+Math.cos(fT*.0013+i*.04)*1.5;
-      ctx.beginPath();ctx.arc(px,py,Math.max(.35,p[2]),0,Math.PI*2);
-      ctx.fillStyle=FC.sentido+(alpha*.85)+')';ctx.fill();
+      const alpha=.18+(i/fibPts.length)*.68;
+      const px=ox+p[0]+Math.sin(fT*.001+i*.05)*1.5;
+      const py=oy+p[1]+Math.cos(fT*.0013+i*.04)*1.5;
+      ctx.beginPath(); ctx.arc(px,py,Math.max(.4,p[2]),0,Math.PI*2);
+      ctx.fillStyle=FC.sentido+(alpha*.9)+')'; ctx.fill();
     });
   }
   fT++;
@@ -423,23 +378,25 @@ function drawFib(){
 
 function animate(){
   switch(curF){
-    case'intuicion':   drawLorenz();    break;
-    case'imaginacion': drawSpiro();     break;
-    case'emocion':     drawLissajous(); break;
-    case'sentido':     drawFib();       break;
+    case 'intuicion':   drawLorenz();    break;
+    case 'imaginacion': drawSpiro();     break;
+    case 'emocion':     drawLissajous(); break;
+    case 'sentido':     drawFib();       break;
     default: ctx.clearRect(0,0,W,H);
   }
   requestAnimationFrame(animate);
 }
 
-// INIT — random foundation
+// ── INIT ────────────────────────────────────────────────────
+resize(); // sets W,H and builds fib
+
 const fKeys=['intuicion','imaginacion','emocion','sentido'];
-const ri=Math.floor(Math.random()*4);
-curF=fKeys[ri];
+const ri = Math.floor(Math.random()*4);
+curF = fKeys[ri];
 document.querySelectorAll('.btm-tab')[ri].classList.add('active');
-document.getElementById('enfoqueStrip').classList.add('open');
-updateEF();
-animate();
+document.getElementById('eText').textContent = EF[curF][lang];
+
+requestAnimationFrame(animate);
 </script>
 </body>
 </html>
