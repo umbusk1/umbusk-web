@@ -34,28 +34,30 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
   padding-bottom:30px;
 }
 
-/* ══ TOP TABS ══ */
-.top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;justify-content:center;gap:8px;z-index:10;}
-.top-tab{width:114px;height:34px;display:flex;align-items:center;justify-content:center;
+/* ══ TOP TABS — full width flush with card ══ */
+.top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;z-index:10;}
+.top-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;
   background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;
   border-radius:8px 8px 0 0;color:#252525;cursor:pointer;
   font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
   transition:background .18s,color .18s;user-select:none;}
+.top-tab+.top-tab{margin-left:-1px;}
 .top-tab:hover{background:#161616;border-color:#232323;}
-.top-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;}
+.top-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;z-index:1;}
 
-/* ══ BOTTOM TABS (top tabs rotated 180°) ══ */
-.btm-tabs{position:absolute;bottom:0;left:0;right:0;height:30px;display:flex;justify-content:center;gap:8px;z-index:10;}
+/* ══ BOTTOM TABS — flush with card ══ */
+.btm-tabs{position:absolute;bottom:0;left:0;right:0;height:30px;display:flex;z-index:10;}
 .btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;
   background:#111;border:1px solid #1e1e1e;border-top:1px solid #2a2a2a;
   border-radius:0 0 8px 8px;color:#252525;cursor:pointer;
   font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
   transition:background .18s,color .18s;user-select:none;}
+.btm-tab+.btm-tab{margin-left:-1px;}
 .btm-tab:hover{background:#161616;border-color:#232323;}
-.btm-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-top-color:#1a1a1a;color:#e07818;}
+.btm-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-top-color:#1a1a1a;color:#e07818;z-index:1;}
 
 /* ══ SIDE TABS ══ */
-.side-tab{position:absolute;top:calc(50%);transform:translateY(-50%);
+.side-tab{position:absolute;top:50%;transform:translateY(-50%);
   background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;
   padding:20px 8px;font-size:9px;letter-spacing:2px;writing-mode:vertical-rl;
   transition:background .2s,color .2s;user-select:none;z-index:3;}
@@ -79,7 +81,7 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .panel-body::-webkit-scrollbar{width:3px;}
 .panel-body::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 
-/* ══ MAIN CARD: 615px inner, border-radius 0 (tabs provide corners) ══ */
+/* ══ MAIN CARD ══ */
 .card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:0;
   flex:1;min-height:0;display:flex;flex-direction:column;
   box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;z-index:2;overflow:hidden;}
@@ -96,7 +98,6 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .panel::-webkit-scrollbar{width:3px;}
 .panel::-webkit-scrollbar-thumb{background:#252525;border-radius:2px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-
 .p-label{font-size:9.5px;letter-spacing:.2em;color:#e07818;text-transform:uppercase;margin-bottom:9px;}
 h1{font-size:20px;font-weight:300;line-height:1.35;margin-bottom:10px;}
 h1 strong{font-weight:700;color:#fff;}
@@ -109,11 +110,6 @@ h1 strong{font-weight:700;color:#fff;}
 .srow:last-child{border:none;}
 .sname{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:2px;}
 .sdesc{font-size:11.5px;color:#444;line-height:1.5;}
-
-/* ENFOQUE STRIP */
-.enfoque-strip{flex-shrink:0;padding:11px 24px;border-top:1px solid #2a2a2a;display:flex;align-items:flex-start;gap:14px;min-height:54px;}
-.e-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#e07818;min-width:76px;padding-top:2px;flex-shrink:0;}
-.e-text{font-size:11.5px;color:#444;line-height:1.6;}
 
 /* CONTACT panel */
 .field{margin-bottom:9px;}
@@ -131,13 +127,33 @@ h1 strong{font-weight:700;color:#fff;}
 .info-key{font-size:9px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
 .info-val{font-size:12px;color:#555;}
 
+/* ══ ENFOQUE STRIP — below btm-tabs, outside card ══ */
+.enfoque-strip{
+  width:380px;flex-shrink:0;
+  overflow:hidden;max-height:0;
+  transition:max-height .3s ease, padding .3s ease;
+  padding:0 24px;
+  background:transparent;
+}
+.enfoque-strip.open{max-height:64px;padding:10px 24px;}
+.enfoque-inner{display:flex;align-items:flex-start;gap:14px;}
+.e-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#e07818;min-width:76px;padding-top:2px;flex-shrink:0;}
+.e-text{font-size:11.5px;color:#444;line-height:1.55;}
+
 /* ══ FOOTER ══ */
-.site-footer{flex-shrink:0;z-index:1;position:relative;width:380px;padding:10px 0 0;}
+/* width = left panel (270) + gap (25) + card (380) + gap (25) + right panel (270) = 970px */
+.site-footer{
+  flex-shrink:0;z-index:1;position:relative;
+  width:970px;max-width:100vw;
+  padding:10px 0 0;
+  border-top:1px solid #1a1a1a;
+}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;}
 .footer-nav{display:flex;gap:16px;}
 .footer-nav a{font-size:9px;color:#252525;text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:color .2s;}
 .footer-nav a:hover{color:#555;}
 .footer-copy{font-size:9px;color:#1a1a1a;letter-spacing:1px;}
+.footer-info{font-size:9px;color:#1a1a1a;letter-spacing:.5px;}
 
 /* ══ MOBILE ══ */
 @media(max-width:767px){
@@ -146,7 +162,7 @@ h1 strong{font-weight:700;color:#fff;}
   .card-area{height:auto;overflow:visible;}
   .card-container{height:auto;padding-bottom:0;}
   .btm-tabs{position:relative;bottom:auto;margin-top:-1px;}
-  .btm-tab{border-radius:0 0 8px 8px;}
+  .enfoque-strip{width:100%;}
   .side-tab{display:none;}
   .side-panel{display:none;}
   .lang-row,.site-footer{width:100%;padding-left:16px;padding-right:16px;}
@@ -169,7 +185,7 @@ h1 strong{font-weight:700;color:#fff;}
   <div class="card-area">
     <div class="card-container">
 
-      <!-- LEFT PANEL: CONTACTO -->
+      <!-- LEFT: CONTACTO -->
       <div class="side-panel left-panel" id="lpanel">
         <div class="panel-header">
           <div class="panel-title" data-es="CONTACTO" data-en="CONTACT">CONTACTO</div>
@@ -198,7 +214,6 @@ h1 strong{font-weight:700;color:#fff;}
           <img src="https://umbusk.com/imagenes/logo-umbusk.png" alt="Umbusk"/>
           <div class="brand-name">UMBUSK</div>
         </div>
-
         <div class="panels-wrap">
           <div class="panel on" id="tab-home">
             <div class="p-label" data-es="Fábrica de Prototipos" data-en="Prototype Factory">Fábrica de Prototipos</div>
@@ -207,18 +222,9 @@ h1 strong{font-weight:700;color:#fff;}
           </div>
           <div class="panel" id="tab-productos">
             <div class="p-label" data-es="Productos" data-en="Products">Productos</div>
-            <a class="pcard" href="https://compita.umbusk.com" target="_blank">
-              <div class="pname">Compita</div>
-              <div class="pdesc" data-es="Inteligencia de licitaciones para República Dominicana. Análisis con IA." data-en="Procurement intelligence for the Dominican Republic. AI-powered analysis.">Inteligencia de licitaciones para República Dominicana. Análisis con IA.</div>
-            </a>
-            <a class="pcard" href="https://kanban.umbusk.com" target="_blank">
-              <div class="pname">KanbanBonsai</div>
-              <div class="pdesc" data-es="Gestión de proyectos Kanban con filosofía japonesa." data-en="Kanban project management with Japanese philosophy.">Gestión de proyectos Kanban con filosofía japonesa.</div>
-            </a>
-            <a class="pcard" href="https://dialer.umbusk.com" target="_blank">
-              <div class="pname">Umbusk Dialer</div>
-              <div class="pdesc" data-es="Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU." data-en="Corporate dialer for campaigns in DR, Venezuela, Panama and the US.">Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU.</div>
-            </a>
+            <a class="pcard" href="https://compita.umbusk.com" target="_blank"><div class="pname">Compita</div><div class="pdesc" data-es="Inteligencia de licitaciones para República Dominicana. Análisis con IA." data-en="Procurement intelligence for the Dominican Republic. AI-powered analysis.">Inteligencia de licitaciones para República Dominicana. Análisis con IA.</div></a>
+            <a class="pcard" href="https://kanban.umbusk.com" target="_blank"><div class="pname">KanbanBonsai</div><div class="pdesc" data-es="Gestión de proyectos Kanban con filosofía japonesa." data-en="Kanban project management with Japanese philosophy.">Gestión de proyectos Kanban con filosofía japonesa.</div></a>
+            <a class="pcard" href="https://dialer.umbusk.com" target="_blank"><div class="pname">Umbusk Dialer</div><div class="pdesc" data-es="Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU." data-en="Corporate dialer for campaigns in DR, Venezuela, Panama and the US.">Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU.</div></a>
           </div>
           <div class="panel" id="tab-servicios">
             <div class="p-label" data-es="Servicios" data-en="Services">Servicios</div>
@@ -228,15 +234,9 @@ h1 strong{font-weight:700;color:#fff;}
             <div class="srow"><div class="sname" data-es="Prototipo a Medida" data-en="Custom Prototype">Prototipo a Medida</div><div class="sdesc" data-es="Tienes una idea. La exploramos y construimos juntos." data-en="You have an idea. We explore and build it together.">Tienes una idea. La exploramos y construimos juntos.</div></div>
           </div>
         </div>
-
-        <!-- ENFOQUE STRIP (inside card, above bottom tabs) -->
-        <div class="enfoque-strip">
-          <div class="e-label" id="eLabel">—</div>
-          <div class="e-text"  id="eText">—</div>
-        </div>
       </div><!-- /card -->
 
-      <!-- BOTTOM TABS (outside card, mirrored) -->
+      <!-- BOTTOM TABS -->
       <div class="btm-tabs">
         <button class="btm-tab" data-f="intuicion"   onclick="setF('intuicion',this)"   data-es="INTUICIÓN"   data-en="INTUITION">INTUICIÓN</button>
         <button class="btm-tab" data-f="imaginacion" onclick="setF('imaginacion',this)" data-es="IMAGINACIÓN" data-en="IMAGINATION">IMAGINACIÓN</button>
@@ -244,7 +244,7 @@ h1 strong{font-weight:700;color:#fff;}
         <button class="btm-tab" data-f="sentido"     onclick="setF('sentido',this)"     data-es="SENTIDO"     data-en="SENSE">SENTIDO</button>
       </div>
 
-      <!-- RIGHT PANEL: INFO -->
+      <!-- RIGHT: INFO -->
       <div class="side-tab right-tab" onclick="togR()" data-es="INFO" data-en="INFO">INFO</div>
       <div class="side-panel right-panel" id="rpanel">
         <div class="panel-header">
@@ -263,7 +263,15 @@ h1 strong{font-weight:700;color:#fff;}
     </div><!-- /card-container -->
   </div><!-- /card-area -->
 
-  <!-- FOOTER -->
+  <!-- ENFOQUE STRIP — outside card, below btm-tabs -->
+  <div class="enfoque-strip" id="enfoqueStrip">
+    <div class="enfoque-inner">
+      <div class="e-label" id="eLabel"></div>
+      <div class="e-text"  id="eText"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER — 970px = left(270) + gap(25) + card(380) + gap(25) + right(270) -->
   <footer class="site-footer">
     <div class="footer-inner">
       <nav class="footer-nav">
@@ -274,20 +282,20 @@ h1 strong{font-weight:700;color:#fff;}
         <a href="#" data-es="POLÍTICAS" data-en="POLICIES">POLÍTICAS</a>
       </nav>
       <div class="footer-copy">© 2026 UMBUSK LLC</div>
+      <div class="footer-info">Tarpon Springs, FL · USA &nbsp;·&nbsp; +58 422 232 4636 &nbsp;·&nbsp; +1 904 231 9989</div>
     </div>
   </footer>
 
 </div>
 
 <script>
-// ── ENFOQUE DATA
 const EF={
-  intuicion:  {es:['Intuición','El conocimiento que precede a la razón. Saber antes de poder explicar.'],en:['Intuition','Knowledge that precedes reason. Knowing before being able to explain.']},
-  imaginacion:{es:['Imaginación','La capacidad de ver lo que aún no existe. El origen de todo prototipo.'],en:['Imagination','The ability to see what does not yet exist. The origin of every prototype.']},
-  emocion:    {es:['Emoción','La energía que convierte una idea en compromiso. El motor del proceso creativo.'],en:['Emotion','The energy that turns an idea into commitment. The engine of the creative process.']},
-  sentido:    {es:['Sentido','¿Para qué? La pregunta que orienta el trabajo y da dirección al proceso.'],en:['Sense','What for? The question that guides the work and gives direction to the process.']}
+  intuicion:  {es:['Intuición','El conocimiento que precede a la razón. Saber antes de poder explicar.'],          en:['Intuition','Knowledge that precedes reason. Knowing before being able to explain.']},
+  imaginacion:{es:['Imaginación','La capacidad de ver lo que aún no existe. El origen de todo prototipo.'],         en:['Imagination','The ability to see what does not yet exist. The origin of every prototype.']},
+  emocion:    {es:['Emoción','La energía que convierte una idea en compromiso. El motor del proceso creativo.'],   en:['Emotion','The energy that turns an idea into commitment. The engine of the creative process.']},
+  sentido:    {es:['Sentido','¿Para qué? La pregunta que orienta el trabajo y da dirección al proceso.'],           en:['Sense','What for? The question that guides the work and gives direction to the process.']}
 };
-let lang='es', curF='intuicion';
+let lang='es', curF=null;
 
 function setL(l,btn){
   lang=l;
@@ -298,7 +306,7 @@ function setL(l,btn){
     if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v;
     else el.innerHTML=v;
   });
-  updateEF();
+  if(curF) updateEF();
 }
 
 function setTab(id,btn){
@@ -310,21 +318,32 @@ function setTab(id,btn){
 }
 
 function setF(f,btn){
+  const same = (curF===f && document.getElementById('enfoqueStrip').classList.contains('open'));
+  document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
+  if(same){
+    curF=null;
+    document.getElementById('enfoqueStrip').classList.remove('open');
+    if(f==='intuicion'){lx=.1;ly=0;lz=0;lpts=[];}
+    return;
+  }
   curF=f;
   if(f==='intuicion'){lx=.1;ly=0;lz=0;lpts=[];}
-  document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  document.getElementById('enfoqueStrip').classList.add('open');
   updateEF();
 }
+
 function updateEF(){
+  if(!curF) return;
   const d=EF[curF][lang];
   document.getElementById('eLabel').textContent=d[0];
   document.getElementById('eText').textContent=d[1];
 }
 
-function togL(){document.getElementById('rpanel').classList.remove('open');document.getElementById('lpanel').classList.toggle('open');}
+/* both panels can be open simultaneously */
+function togL(){document.getElementById('lpanel').classList.toggle('open');}
 function closeL(){document.getElementById('lpanel').classList.remove('open');}
-function togR(){document.getElementById('lpanel').classList.remove('open');document.getElementById('rpanel').classList.toggle('open');}
+function togR(){document.getElementById('rpanel').classList.toggle('open');}
 function closeR(){document.getElementById('rpanel').classList.remove('open');}
 
 // ── CANVAS
@@ -408,15 +427,17 @@ function animate(){
     case'imaginacion': drawSpiro();     break;
     case'emocion':     drawLissajous(); break;
     case'sentido':     drawFib();       break;
+    default: ctx.clearRect(0,0,W,H);
   }
   requestAnimationFrame(animate);
 }
 
-// INIT
+// INIT — random foundation
 const fKeys=['intuicion','imaginacion','emocion','sentido'];
 const ri=Math.floor(Math.random()*4);
 curF=fKeys[ri];
 document.querySelectorAll('.btm-tab')[ri].classList.add('active');
+document.getElementById('enfoqueStrip').classList.add('open');
 updateEF();
 animate();
 </script>
