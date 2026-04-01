@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Umbusk LLC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#111;color:#e0e0e0;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.11;pointer-events:none;z-index:0;}
+
+/* ── WRAPPER ── */
+.wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;}
+
+/* ── LANG ── */
+.lang-toggle{display:flex;gap:4px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:3px;margin-bottom:10px;align-self:flex-end;}
+.lang-btn{padding:5px 12px;border:none;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:1px;background:transparent;color:#444;font-family:'Segoe UI',sans-serif;transition:background .15s,color .15s;}
+.lang-btn.active{background:#e07818;color:#fff;}
+
+/* ── CARD CONTAINER (like Dialer) ── */
+.card-container{position:relative;width:380px;padding-top:34px;}
+
+/* ── TOP TABS ── */
+.top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;gap:8px;z-index:10;}
+.mode-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;border-radius:8px 8px 0 0;color:#252525;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
+.mode-tab:hover{background:#161616;border-color:#232323;}
+.mode-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;}
+
+/* ── SIDE TABS ── */
+.side-tab{position:absolute;top:50%;transform:translateY(-50%);background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;padding:20px 8px;font-size:9px;letter-spacing:2px;writing-mode:vertical-rl;transition:background .2s,color .2s;user-select:none;z-index:3;}
+.side-tab:hover{background:#2a2a2a;color:#bbb;}
+.left-tab{right:100%;margin-right:-1px;border-right:none;border-radius:8px 0 0 8px;}
+.right-tab{left:100%;margin-left:-1px;border-left:none;border-radius:0 8px 8px 0;}
+.card-container .side-tab{top:calc(50% + 17px);}
+
+/* ── SIDE PANELS ── */
+.side-panel{position:absolute;top:34px;bottom:0;width:270px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:2;}
+.side-panel.open{opacity:1;pointer-events:all;transform:translateX(0) !important;}
+.left-panel{right:calc(100% + 25px);transform:translateX(14px);}
+.right-panel{left:calc(100% + 25px);transform:translateX(-14px);}
+.panel-header{display:flex;justify-content:space-between;align-items:center;padding:14px 14px 10px;border-bottom:1px solid #2a2a2a;flex-shrink:0;}
+.panel-title{font-size:11px;color:#555;letter-spacing:2px;text-transform:uppercase;}
+.btn-icon{background:#222;border:1px solid #333;border-radius:6px;color:#666;font-size:11px;padding:5px 9px;cursor:pointer;}
+.btn-icon:hover{background:#2a2a2a;color:#aaa;}
+.panel-body{flex:1;overflow-y:auto;padding:12px;}
+.panel-body::-webkit-scrollbar{width:3px;}
+.panel-body::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+
+/* ── MAIN CARD ── */
+.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:0 0 16px 16px;padding:24px 26px 22px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;z-index:2;}
+
+/* ── LOGO AREA ── */
+.logo-area{text-align:center;margin-bottom:6px;}
+.logo-area img{height:40px;object-fit:contain;}
+.brand-sub{text-align:center;font-size:10px;color:#444;letter-spacing:3px;text-transform:uppercase;margin-top:4px;}
+.found-tag{display:inline-block;background:#1a1008;border:1px solid #2a1a08;border-radius:20px;padding:3px 12px;font-size:9px;color:#e07818;letter-spacing:2px;text-transform:uppercase;margin-top:6px;}
+
+/* ── PANEL CONTENT ── */
+.panel{display:none;animation:fadeIn .22s ease;}
+.panel.on{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+
+/* ── TYPOGRAPHY ── */
+.p-label{font-size:9.5px;letter-spacing:.2em;color:#e07818;text-transform:uppercase;margin-bottom:10px;}
+h1{font-size:20px;font-weight:300;line-height:1.35;margin-bottom:11px;letter-spacing:-.01em;}
+h1 strong{font-weight:700;color:#fff;}
+.copy{font-size:12px;color:#555;line-height:1.75;margin-bottom:14px;}
+
+/* ── FOUNDATION BUTTONS ── */
+.founds{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+.fb{background:none;border:1px solid #2a2a2a;color:#444;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:6px 13px;cursor:pointer;border-radius:4px;font-family:'Segoe UI',sans-serif;transition:all .2s;}
+.fb:hover,.fb.active{border-color:#e07818;color:#e0e0e0;}
+
+/* ── PRODUCT CARDS ── */
+.pcard{display:block;border:1px solid #2a2a2a;border-radius:8px;padding:12px 14px;margin-bottom:8px;text-decoration:none;transition:border-color .2s,background .2s;}
+.pcard:hover{border-color:#e07818;background:#1e1e1e;}
+.pname{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e0e0e0;margin-bottom:3px;}
+.pdesc{font-size:11.5px;color:#444;line-height:1.55;}
+
+/* ── SERVICE ROWS ── */
+.srow{padding:10px 0;border-bottom:1px solid #1f1f1f;}
+.srow:last-child{border:none;}
+.sname{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:2px;}
+.sdesc{font-size:11.5px;color:#444;line-height:1.55;}
+
+/* ── APPROACH ROWS ── */
+.arow{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #1f1f1f;align-items:flex-start;}
+.arow:last-child{border:none;}
+.alabel{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#e07818;min-width:86px;padding-top:2px;}
+.atext{font-size:11.5px;color:#444;line-height:1.6;}
+
+/* ── CONTACT FORM ── */
+.field{margin-bottom:10px;}
+.flabel{display:block;font-size:10px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.finput{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:8px;color:#fff;font-size:13px;padding:10px 12px;outline:none;font-family:'Segoe UI',sans-serif;transition:border-color .2s;resize:none;}
+.finput:focus{border-color:#e07818;}
+.finput::placeholder{color:#2a2a2a;}
+.btn-send{width:100%;background:linear-gradient(135deg,#7a3a00,#e07818);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;padding:13px;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;margin-top:4px;}
+.btn-send:hover{opacity:.88;}
+.cinfo{font-size:10px;color:#333;text-align:center;margin-top:12px;line-height:2;letter-spacing:.5px;}
+
+/* ── NAV PANEL items ── */
+.nav-item{display:block;padding:11px 12px;border-bottom:1px solid #1f1f1f;color:#555;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:color .2s,background .2s;border-radius:4px;}
+.nav-item:last-child{border:none;}
+.nav-item:hover{color:#e0e0e0;background:#222;}
+
+/* ── INFO PANEL items ── */
+.info-item{padding:10px 0;border-bottom:1px solid #1f1f1f;}
+.info-item:last-child{border:none;}
+.info-key{font-size:9px;color:#444;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.info-val{font-size:12px;color:#888;}
+.info-val a{color:#888;text-decoration:none;}
+.info-val a:hover{color:#e07818;}
+</style>
+</head>
+<body>
+
+<canvas id="cv"></canvas>
+
+<div class="wrap">
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setL('es',this)">ES</button>
+    <button class="lang-btn"       onclick="setL('en',this)">EN</button>
+  </div>
+
+  <div class="card-container">
+
+    <!-- LEFT PANEL: Navigation -->
+    <div class="side-panel left-panel" id="leftPanel">
+      <div class="panel-header">
+        <div class="panel-title" data-es="NAVEGACIÓN" data-en="NAVIGATION">NAVEGACIÓN</div>
+        <button class="btn-icon" onclick="closeLeft()">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="nav-item" onclick="setTab('fabrica');closeLeft();" data-es="FÁBRICA" data-en="FACTORY">FÁBRICA</div>
+        <div class="nav-item" onclick="setTab('productos');closeLeft();" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</div>
+        <div class="nav-item" onclick="setTab('servicios');closeLeft();" data-es="SERVICIOS" data-en="SERVICES">SERVICIOS</div>
+        <div class="nav-item" onclick="setTab('enfoque');closeLeft();" data-es="ENFOQUE" data-en="APPROACH">ENFOQUE</div>
+        <div class="nav-item" onclick="setTab('contacto');closeLeft();" data-es="CONTACTO" data-en="CONTACT">CONTACTO</div>
+        <div style="margin-top:20px;padding-top:14px;border-top:1px solid #1f1f1f;">
+          <a class="nav-item" href="https://compita.umbusk.com" target="_blank" style="display:block;">COMPITA ↗</a>
+          <a class="nav-item" href="https://kanban.umbusk.com" target="_blank" style="display:block;">KANBANBONSAI ↗</a>
+          <a class="nav-item" href="https://dialer.umbusk.com" target="_blank" style="display:block;">DIALER ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="side-tab left-tab" onclick="toggleLeft()" data-es="MENÚ" data-en="MENU">MENÚ</div>
+
+    <!-- TOP TABS -->
+    <div class="top-tabs">
+      <button class="mode-tab active" onclick="setTab('fabrica',this)" data-es="FÁBRICA" data-en="FACTORY">FÁBRICA</button>
+      <button class="mode-tab"        onclick="setTab('productos',this)" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</button>
+      <button class="mode-tab"        onclick="setTab('servicios',this)" data-es="SERVICIOS" data-en="SERVICES">SERVICIOS</button>
+      <button class="mode-tab"        onclick="setTab('enfoque',this)" data-es="ENFOQUE" data-en="APPROACH">ENFOQUE</button>
+      <button class="mode-tab"        onclick="setTab('contacto',this)" data-es="CONTACTO" data-en="CONTACT">CONTACTO</button>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card">
+      <div class="logo-area">
+        <img src="https://umbusk.com/imagenes/logo-umbusk.png" alt="Umbusk"/>
+        <div class="brand-sub">UMBUSK LLC</div>
+        <div class="found-tag" id="foundTag">Intuición</div>
+      </div>
+
+      <!-- FÁBRICA -->
+      <div class="panel on" id="tab-fabrica" style="margin-top:18px;">
+        <div class="p-label" data-es="Fábrica de Prototipos" data-en="Prototype Factory">Fábrica de Prototipos</div>
+        <h1 data-es="Donde las <strong>ideas</strong><br>cobran forma" data-en="Where <strong>ideas</strong><br>take shape">Donde las <strong>ideas</strong><br>cobran forma</h1>
+        <p class="copy" data-es="Combinamos contribución humana con inteligencia artificial para construir artefactos digitales funcionales — en semanas, no en meses." data-en="We combine human contribution with artificial intelligence to build functional digital artifacts — in weeks, not months.">Combinamos contribución humana con inteligencia artificial para construir artefactos digitales funcionales — en semanas, no en meses.</p>
+        <div class="founds">
+          <button class="fb active" onclick="setF('intuicion','Intuición','Intuition',this)" data-es="Intuición" data-en="Intuition">Intuición</button>
+          <button class="fb"        onclick="setF('imaginacion','Imaginación','Imagination',this)" data-es="Imaginación" data-en="Imagination">Imaginación</button>
+          <button class="fb"        onclick="setF('emocion','Emoción','Emotion',this)" data-es="Emoción" data-en="Emotion">Emoción</button>
+          <button class="fb"        onclick="setF('sentido','Sentido','Sense',this)" data-es="Sentido" data-en="Sense">Sentido</button>
+        </div>
+      </div>
+
+      <!-- PRODUCTOS -->
+      <div class="panel" id="tab-productos" style="margin-top:18px;">
+        <div class="p-label" data-es="Productos" data-en="Products">Productos</div>
+        <a class="pcard" href="https://compita.umbusk.com" target="_blank">
+          <div class="pname">Compita</div>
+          <div class="pdesc" data-es="Inteligencia de licitaciones para República Dominicana. Análisis con IA." data-en="Procurement intelligence for the Dominican Republic. AI-powered analysis.">Inteligencia de licitaciones para República Dominicana. Análisis con IA.</div>
+        </a>
+        <a class="pcard" href="https://kanban.umbusk.com" target="_blank">
+          <div class="pname">KanbanBonsai</div>
+          <div class="pdesc" data-es="Gestión de proyectos Kanban con filosofía japonesa y notificaciones." data-en="Kanban project management with Japanese philosophy and notifications.">Gestión de proyectos Kanban con filosofía japonesa y notificaciones.</div>
+        </a>
+        <a class="pcard" href="https://dialer.umbusk.com" target="_blank">
+          <div class="pname">Umbusk Dialer</div>
+          <div class="pdesc" data-es="Dialer corporativo para campañas de marketing en RD, Venezuela, Panamá y EE.UU." data-en="Corporate dialer for marketing campaigns in DR, Venezuela, Panama and the US.">Dialer corporativo para campañas de marketing en RD, Venezuela, Panamá y EE.UU.</div>
+        </a>
+      </div>
+
+      <!-- SERVICIOS -->
+      <div class="panel" id="tab-servicios" style="margin-top:18px;">
+        <div class="p-label" data-es="Servicios" data-en="Services">Servicios</div>
+        <div class="srow">
+          <div class="sname" data-es="Chatbot Funcional" data-en="Functional Chatbot">Chatbot Funcional</div>
+          <div class="sdesc" data-es="Agente de IA entrenado con tu información. Listo en 4–6 semanas." data-en="AI agent trained with your information. Ready in 4–6 weeks.">Agente de IA entrenado con tu información. Listo en 4–6 semanas.</div>
+        </div>
+        <div class="srow">
+          <div class="sname" data-es="Integración Multicanal" data-en="Multi-Channel">Integración Multicanal</div>
+          <div class="sdesc" data-es="Extiende tu chatbot a WhatsApp, Instagram y correo." data-en="Extend your chatbot to WhatsApp, Instagram and email.">Extiende tu chatbot a WhatsApp, Instagram y correo.</div>
+        </div>
+        <div class="srow">
+          <div class="sname" data-es="Chatbot + Base de Datos" data-en="Chatbot + Database">Chatbot + Base de Datos</div>
+          <div class="sdesc" data-es="Respuestas en tiempo real conectadas a tus datos." data-en="Real-time answers connected to your data.">Respuestas en tiempo real conectadas a tus datos.</div>
+        </div>
+        <div class="srow">
+          <div class="sname" data-es="Prototipo a Medida" data-en="Custom Prototype">Prototipo a Medida</div>
+          <div class="sdesc" data-es="Tienes una idea. La exploramos, diseñamos y construimos juntos." data-en="You have an idea. We explore, design and build it together.">Tienes una idea. La exploramos, diseñamos y construimos juntos.</div>
+        </div>
+      </div>
+
+      <!-- ENFOQUE -->
+      <div class="panel" id="tab-enfoque" style="margin-top:18px;">
+        <div class="p-label" data-es="Filosofía de Trabajo" data-en="Working Philosophy">Filosofía de Trabajo</div>
+        <p class="copy" data-es="La IA no reemplaza el diseño humano. Cuatro ingredientes que ningún modelo puede generar solo:" data-en="AI does not replace human design. Four ingredients no model can generate alone:">La IA no reemplaza el diseño humano. Cuatro ingredientes que ningún modelo puede generar solo:</p>
+        <div class="arow">
+          <div class="alabel" data-es="Intuición" data-en="Intuition">Intuición</div>
+          <div class="atext" data-es="El conocimiento que precede a la razón. Saber antes de poder explicar." data-en="Knowledge that precedes reason. Knowing before being able to explain.">El conocimiento que precede a la razón. Saber antes de poder explicar.</div>
+        </div>
+        <div class="arow">
+          <div class="alabel" data-es="Imaginación" data-en="Imagination">Imaginación</div>
+          <div class="atext" data-es="La capacidad de ver lo que aún no existe. El origen de todo prototipo." data-en="The ability to see what doesn't yet exist. The origin of every prototype.">La capacidad de ver lo que aún no existe. El origen de todo prototipo.</div>
+        </div>
+        <div class="arow">
+          <div class="alabel" data-es="Emoción" data-en="Emotion">Emoción</div>
+          <div class="atext" data-es="La energía que convierte una idea en compromiso y acción." data-en="The energy that turns an idea into commitment and action.">La energía que convierte una idea en compromiso y acción.</div>
+        </div>
+        <div class="arow">
+          <div class="alabel" data-es="Sentido" data-en="Sense">Sentido</div>
+          <div class="atext" data-es="La pregunta que orienta: ¿para qué? El criterio que da dirección." data-en="The guiding question: what for? The criterion that gives direction.">La pregunta que orienta: ¿para qué? El criterio que da dirección.</div>
+        </div>
+      </div>
+
+      <!-- CONTACTO -->
+      <div class="panel" id="tab-contacto" style="margin-top:18px;">
+        <div class="p-label" data-es="Conversemos" data-en="Let's Talk">Conversemos</div>
+        <div class="field">
+          <label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label>
+          <input class="finput" type="text" placeholder="Tu nombre">
+        </div>
+        <div class="field">
+          <label class="flabel" data-es="CORREO" data-en="EMAIL">CORREO</label>
+          <input class="finput" type="email" placeholder="tu@correo.com">
+        </div>
+        <div class="field">
+          <label class="flabel" data-es="MENSAJE" data-en="MESSAGE">MENSAJE</label>
+          <textarea class="finput" rows="3" placeholder="..."></textarea>
+        </div>
+        <button class="btn-send" data-es="Enviar Mensaje →" data-en="Send Message →">Enviar Mensaje →</button>
+        <div class="cinfo">
+          Tarpon Springs, FL · USA<br>
+          +58 422 232 4636 · +1 904 231 9989
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div style="margin-top:18px;padding-top:12px;border-top:1px solid #1f1f1f;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:10px;color:#2a2a2a;letter-spacing:1px;">© 2026 UMBUSK LLC</span>
+        <a href="#" style="font-size:10px;color:#2a2a2a;text-decoration:none;letter-spacing:1px;" data-es="Políticas" data-en="Policies">Políticas</a>
+      </div>
+    </div><!-- /card -->
+
+    <!-- RIGHT PANEL: Info -->
+    <div class="side-tab right-tab" onclick="toggleRight()" data-es="INFO" data-en="INFO">INFO</div>
+    <div class="side-panel right-panel" id="rightPanel">
+      <div class="panel-header">
+        <div class="panel-title">INFO</div>
+        <button class="btn-icon" onclick="closeRight()">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="info-item">
+          <div class="info-key" data-es="EMPRESA" data-en="COMPANY">EMPRESA</div>
+          <div class="info-val">Umbusk LLC</div>
+        </div>
+        <div class="info-item">
+          <div class="info-key" data-es="SEDE" data-en="LOCATION">SEDE</div>
+          <div class="info-val">Tarpon Springs, FL · USA</div>
+        </div>
+        <div class="info-item">
+          <div class="info-key" data-es="CORREO" data-en="EMAIL">CORREO</div>
+          <div class="info-val"><a href="mailto:info@umbusk.com">info@umbusk.com</a></div>
+        </div>
+        <div class="info-item">
+          <div class="info-key">WHATSAPP</div>
+          <div class="info-val">+58 422 232 4636</div>
+        </div>
+        <div class="info-item">
+          <div class="info-key">TEL USA</div>
+          <div class="info-val">+1 904 231 9989</div>
+        </div>
+        <div class="info-item">
+          <div class="info-key">WEB</div>
+          <div class="info-val"><a href="https://umbusk.com">umbusk.com</a></div>
+        </div>
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid #1f1f1f;">
+          <div class="info-key" style="margin-bottom:10px;" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</div>
+          <a class="nav-item" href="https://compita.umbusk.com" target="_blank" style="display:block;font-size:10px;letter-spacing:1.5px;">COMPITA ↗</a>
+          <a class="nav-item" href="https://kanban.umbusk.com"  target="_blank" style="display:block;font-size:10px;letter-spacing:1.5px;">KANBANBONSAI ↗</a>
+          <a class="nav-item" href="https://dialer.umbusk.com"  target="_blank" style="display:block;font-size:10px;letter-spacing:1.5px;">DIALER ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /card-container -->
+</div><!-- /wrap -->
+
+<script>
+// ── CANVAS ──────────────────────────────────
+const cv=document.getElementById('cv'), cx=cv.getContext('2d');
+let W,H,t=0;
+function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+window.addEventListener('resize',resize); resize();
+
+const fColors={intuicion:'rgba(224,120,24,',imaginacion:'rgba(155,89,182,',emocion:'rgba(200,50,70,',sentido:'rgba(40,180,100,'};
+let curF='intuicion';
+
+// Lorenz
+let lx=0.1,ly=0,lz=0,pts=[];
+function stepLorenz(){const dt=.005,s=10,r=28,b=8/3;lx+=s*(ly-lx)*dt;ly+=(lx*(r-lz)-ly)*dt;lz+=(lx*ly-b*lz)*dt;pts.push([lx,ly,lz]);if(pts.length>3000)pts.shift();}
+function drawLorenz(){cx.clearRect(0,0,W,H);for(let i=0;i<10;i++)stepLorenz();const sc=Math.min(W,H)/58,ox=W/2,oy=H/2;cx.beginPath();pts.forEach((p,i)=>{const px=ox+p[0]*sc,py=oy+(p[2]-25)*-sc;i===0?cx.moveTo(px,py):cx.lineTo(px,py);});cx.strokeStyle=fColors.intuicion+'0.7)';cx.lineWidth=.65;cx.stroke();}
+
+// Spirograph
+function drawSpiro(){cx.clearRect(0,0,W,H);const ox=W/2,oy=H/2,R=Math.min(W,H)*.36,r=R*.382,d=r*.72;cx.beginPath();for(let i=0;i<=4000;i++){const a=(i/4000)*Math.PI*2*13+t*.00012;const x=ox+(R-r)*Math.cos(a)+d*Math.cos(((R-r)/r)*a);const y=oy+(R-r)*Math.sin(a)-d*Math.sin(((R-r)/r)*a);i===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.strokeStyle=fColors.imaginacion+'0.5)';cx.lineWidth=.55;cx.stroke();t++;}
+
+// Lissajous
+function drawLissajous(){cx.clearRect(0,0,W,H);const ox=W/2,oy=H/2,amp=Math.min(W,H)*.38,delta=t*.0004;cx.beginPath();for(let i=0;i<=3000;i++){const a=(i/3000)*Math.PI*2;const x=ox+amp*Math.sin(3*a+delta),y=oy+amp*Math.sin(4*a);i===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.strokeStyle=fColors.emocion+'0.5)';cx.lineWidth=.65;cx.stroke();t++;}
+
+// Fibonacci
+let fibPts=[];
+function buildFib(){fibPts=[];const n=900,g=Math.PI*(3-Math.sqrt(5)),ox=W/2,oy=H/2,sc=Math.min(W,H)*.013;for(let i=0;i<n;i++){const rad=sc*Math.sqrt(i),theta=i*g;fibPts.push([ox+rad*Math.cos(theta),oy+rad*Math.sin(theta),Math.sqrt(i)*.09]);}}
+buildFib(); window.addEventListener('resize',buildFib);
+function drawFib(){cx.clearRect(0,0,W,H);fibPts.forEach((p,i)=>{const alpha=.1+(i/fibPts.length)*.6,ox2=p[0]+Math.sin(t*.001+i*.05)*1.5,oy2=p[1]+Math.cos(t*.0013+i*.04)*1.5;cx.beginPath();cx.arc(ox2,oy2,Math.max(.3,p[2]),0,Math.PI*2);cx.fillStyle=fColors.sentido+(alpha*.65)+')';cx.fill();});t++;}
+
+function animate(){switch(curF){case'intuicion':drawLorenz();break;case'imaginacion':drawSpiro();break;case'emocion':drawLissajous();break;case'sentido':drawFib();}requestAnimationFrame(animate);}
+
+// ── LANGUAGE ──────────────────────────────────
+let lang='es';
+function setL(l,btn){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-es]').forEach(el=>{
+    const v=el.getAttribute('data-'+l);
+    if(!v)return;
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=v;
+    else el.innerHTML=v;
+  });
+}
+
+// ── TABS ──────────────────────────────────────
+function setTab(id,btn){
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  if(btn)btn.classList.add('active');
+  else{document.querySelectorAll('.mode-tab').forEach(b=>{if(b.getAttribute('data-es').toLowerCase().includes(id.substring(0,4)))b.classList.add('active');});}
+  document.getElementById('tab-'+id).classList.add('on');
+}
+
+// ── FOUNDATIONS ───────────────────────────────
+function setF(f,es,en,btn){
+  curF=f; t=0;
+  if(f==='intuicion'){lx=0.1;ly=0;lz=0;pts=[];}
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('foundTag').textContent=lang==='es'?es:en;
+}
+
+// ── PANELS ────────────────────────────────────
+function toggleLeft(){document.getElementById('rightPanel').classList.remove('open');document.getElementById('leftPanel').classList.toggle('open');}
+function closeLeft(){document.getElementById('leftPanel').classList.remove('open');}
+function toggleRight(){document.getElementById('leftPanel').classList.remove('open');document.getElementById('rightPanel').classList.toggle('open');}
+function closeRight(){document.getElementById('rightPanel').classList.remove('open');}
+
+// ── RANDOM FOUNDATION ON LOAD ─────────────────
+const fList=['intuicion','imaginacion','emocion','sentido'];
+const fES=['Intuición','Imaginación','Emoción','Sentido'];
+const fEN=['Intuition','Imagination','Emotion','Sense'];
+const rnd=Math.floor(Math.random()*4);
+curF=fList[rnd];
+document.getElementById('foundTag').textContent=fES[rnd];
+document.querySelectorAll('.fb').forEach((b,i)=>b.classList.toggle('active',i===rnd));
+
+animate();
+</script>
+</body>
+</html>
