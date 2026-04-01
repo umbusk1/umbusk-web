@@ -379,7 +379,7 @@ function closeR(){document.getElementById('rpanel').classList.remove('open');}
 
 // ── CANVAS
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
-let W,H,mx=null,my=null;
+let W,H,mx=null,my=null,mxSmooth=null,mySmooth=null;
 
 cv.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 cv.addEventListener('mouseleave',()=>{mx=null;my=null;});
@@ -390,204 +390,262 @@ cv.addEventListener('touchend',()=>{mx=null;my=null;});
 function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;initAll();}
 window.addEventListener('resize',resize);
 
-// ══════════════════════════════════════════════════════
-// INTUICIÓN — Atractor de Lorenz (naranja)
-// Mouse X → sigma (5–20)  Mouse Y → rho (24–38)
-// Clic → resetea trayectoria
-// ══════════════════════════════════════════════════════
-let lx,ly,lz,lpts,lSigma=10,lRho=28;
-const lBeta=8/3, lDT=0.006, lMAX=6000;
-
-function lorenzStep(n){
-  for(let i=0;i<n;i++){
-    const dx=lSigma*(ly-lx)*lDT;
-    const dy=(lx*(lRho-lz)-ly)*lDT;
-    const dz=(lx*ly-lBeta*lz)*lDT;
-    lx+=dx;ly+=dy;lz+=dz;
-    lpts.push(lx,lz); // flat array: x,z pairs
-    if(lpts.length>lMAX*2) lpts.splice(0,12);
-  }
-}
-
-function initIntuicion(){
-  lx=0.1;ly=0;lz=1;lpts=[];
-  // warm-up so butterfly appears immediately
-  for(let i=0;i<3000;i++){
-    const dx=lSigma*(ly-lx)*lDT;
-    const dy=(lx*(lRho-lz)-ly)*lDT;
-    const dz=(lx*ly-lBeta*lz)*lDT;
-    lx+=dx;ly+=dy;lz+=dz;
-  }
-}
-
-function drawIntuicion(){
-  if(mx!==null){lSigma=5+(mx/W)*15;lRho=24+(my/H)*14;}
-  lorenzStep(7);
-  ctx.fillStyle='rgba(17,17,17,0.13)';ctx.fillRect(0,0,W,H);
-  if(lpts.length<4) return;
-  const sc=Math.min(W,H)/52, cx=W/2, cy=H/2;
-  const n=lpts.length/2;
-  ctx.beginPath();
-  for(let i=0;i<n;i++){
-    const sx=cx+lpts[i*2]*sc, sy=cy+(lpts[i*2+1]-27)*sc;
-    i===0?ctx.moveTo(sx,sy):ctx.lineTo(sx,sy);
-  }
-  ctx.strokeStyle='rgba(224,120,24,0.5)';ctx.lineWidth=0.85;ctx.stroke();
-  // current point glow
-  const px=cx+lx*sc, py=cy+(lz-27)*sc;
-  const g=ctx.createRadialGradient(px,py,0,px,py,6);
-  g.addColorStop(0,'rgba(255,180,80,0.9)');g.addColorStop(1,'rgba(255,180,80,0)');
-  ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-}
-
-// ══════════════════════════════════════════════════════
-// IMAGINACIÓN — Espirógrafo (violeta/púrpura)
-// Mouse X → radio interno r  Mouse Y → distancia d
-// Clic → guarda capa actual (hasta 10 capas)
-// ══════════════════════════════════════════════════════
-let spiroLayers=[];
-let spR=40,spD=60;
-const spROuter=110;
-
-function gcd2(a,b){a=Math.round(Math.abs(a));b=Math.round(Math.abs(b));while(b>0){let t=b;b=a%b;a=t;}return a||1;}
-
-function spiroPoints(R,r,d,cx,cy,steps){
-  const g=gcd2(R,r), period=Math.PI*2*(r/g);
-  const pts=[];
-  for(let i=0;i<=steps;i++){
-    const t=(i/steps)*period;
-    pts.push(cx+(R-r)*Math.cos(t)+d*Math.cos((R-r)/r*t),
-             cy+(R-r)*Math.sin(t)-d*Math.sin((R-r)/r*t));
-  }
-  return pts;
-}
-
-function initImaginacion(){spiroLayers=[];}
-
-function drawImaginacion(){
-  if(mx!==null){spR=8+(mx/W)*72;spD=8+(my/H)*105;}
-  ctx.fillStyle='rgba(17,17,17,0.09)';ctx.fillRect(0,0,W,H);
-  const cx=W/2,cy=H/2;
-  // saved layers
-  spiroLayers.forEach(l=>{
-    ctx.beginPath();
-    for(let i=0;i<l.pts.length;i+=2){
-      i===0?ctx.moveTo(l.pts[i],l.pts[i+1]):ctx.lineTo(l.pts[i],l.pts[i+1]);
-    }
-    ctx.strokeStyle=l.color;ctx.lineWidth=0.75;ctx.stroke();
-  });
-  // live curve
-  const pts=spiroPoints(spROuter,spR,spD,cx,cy,900);
-  ctx.beginPath();
-  for(let i=0;i<pts.length;i+=2){
-    i===0?ctx.moveTo(pts[i],pts[i+1]):ctx.lineTo(pts[i],pts[i+1]);
-  }
-  ctx.strokeStyle='rgba(160,90,230,0.55)';ctx.lineWidth=0.9;ctx.stroke();
-}
-
-function saveSpiroLayer(){
-  const cx=W/2,cy=H/2;
-  const pts=spiroPoints(spROuter,spR,spD,cx,cy,900);
-  const hue=240+Math.random()*90;
-  spiroLayers.push({pts,color:`hsla(${hue},65%,65%,0.35)`});
-  if(spiroLayers.length>10) spiroLayers.shift();
-}
-
-// ══════════════════════════════════════════════════════
-// EMOCIÓN — Interferencia de ondas (rojo)
-// Mouse → fuente móvil  Clic → añade fuente fija (max 6)
-// ══════════════════════════════════════════════════════
-let wSources=[],wT=0;
-
-function initEmocion(){
-  wT=0;
-  wSources=[{x:null,y:null},{x:null,y:null}]; // positions set on first draw
-  // will be initialized to screen thirds on first resize
-}
-
-function drawEmocion(){
-  // lazy-init source positions
-  if(wSources[0].x===null){wSources[0]={x:W*.33,y:H*.5};wSources[1]={x:W*.67,y:H*.5};}
-  wT++;
-  const step=7, k=0.048, speed=1.8, wl=Math.PI*2/k;
-  const imgData=ctx.createImageData(W,H);
-  const d=imgData.data;
-  const srcs=[...wSources];
-  if(mx!==null) srcs.push({x:mx,y:my});
-  const ns=srcs.length;
-
-  for(let py=0;py<H;py+=step){
-    for(let px=0;px<W;px+=step){
-      let amp=0;
-      for(let s=0;s<ns;s++){
-        const dist=Math.sqrt((px-srcs[s].x)**2+(py-srcs[s].y)**2)||0.1;
-        amp+=Math.sin(k*dist-wT*speed*.05)/Math.max(1,dist*.012);
-      }
-      const norm=Math.max(0,Math.min(1,(amp*.55+1)/2));
-      const r=Math.round(norm*210+20),g_=Math.round(norm*35),b_=Math.round(norm*45);
-      for(let dy=0;dy<step&&py+dy<H;dy++){
-        const row=(py+dy)*W;
-        for(let dx=0;dx<step&&px+dx<W;dx++){
-          const idx=(row+px+dx)*4;
-          d[idx]=r;d[idx+1]=g_;d[idx+2]=b_;d[idx+3]=200;
-        }
-      }
-    }
-  }
-  ctx.putImageData(imgData,0,0);
-}
-
-// ══════════════════════════════════════════════════════
-// SENTIDO — Figuras de Lissajous (verde)
-// Mouse X → frecuencia a (1–6)  Mouse Y → fase δ (0–π)
-// Clic → incrementa frecuencia b
-// ══════════════════════════════════════════════════════
-let lisA=3,lisB=2,lisDelta=Math.PI/4,lisT=0;
-
-function initSentido(){lisA=3;lisB=2;lisDelta=Math.PI/4;lisT=0;}
-
-function drawSentido(){
+// ── smooth mouse (lag behind real position for elegance)
+function smoothMouse(){
   if(mx!==null){
-    lisA=Math.max(1,Math.round(1+(mx/W)*5));
-    lisDelta=(my/H)*Math.PI;
+    mxSmooth=mxSmooth===null?mx:mxSmooth+(mx-mxSmooth)*0.06;
+    mySmooth=mySmooth===null?my:mySmooth+(my-mySmooth)*0.06;
   }
-  ctx.fillStyle='rgba(17,17,17,0.11)';ctx.fillRect(0,0,W,H);
-  lisT+=0.016;
-  const cx=W/2,cy=H/2,rx=Math.min(W,H)*.36,ry=Math.min(W,H)*.36;
-  const steps=1400;
+}
 
-  // static figure (full period)
-  ctx.beginPath();
-  for(let i=0;i<=steps;i++){
-    const t=(i/steps)*Math.PI*2;
-    const x=cx+rx*Math.sin(lisA*t+lisDelta), y=cy+ry*Math.sin(lisB*t);
-    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+// ══════════════════════════════════════════════════════
+// INTUICIÓN — Orbes de gradiente flotantes (naranja/ámbar)
+// Estilo Stripe: blobs grandes y suaves en movimiento lento
+// Mouse los atrae gentilmente · Clic → explosión
+// ══════════════════════════════════════════════════════
+let iOrbs=[], iT=0, iClicks=[];
+function initIntuicion(){
+  iOrbs=[];
+  const cols=['rgba(224,120,24,','rgba(255,160,40,','rgba(180,80,10,','rgba(255,100,10,','rgba(240,140,30,'];
+  for(let i=0;i<5;i++) iOrbs.push({
+    x:W*.15+Math.random()*W*.7, y:H*.15+Math.random()*H*.7,
+    tx:Math.random()*W, ty:Math.random()*H,
+    vx:0, vy:0,
+    r:Math.min(W,H)*(0.3+Math.random()*0.2),
+    col:cols[i],
+    phase:Math.random()*Math.PI*2,
+    speed:0.0003+Math.random()*0.0004
+  });
+  iClicks=[];
+}
+function drawIntuicion(){
+  iT++;
+  smoothMouse();
+  ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);
+
+  // click ripples
+  iClicks=iClicks.filter(c=>c.a>0.01);
+  iClicks.forEach(c=>{
+    c.r+=4; c.a*=0.93;
+    ctx.beginPath();ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(255,160,40,${c.a})`;ctx.lineWidth=1.5;ctx.stroke();
+  });
+
+  iOrbs.forEach((o,i)=>{
+    // drift target wanders
+    o.tx+=Math.sin(iT*o.speed+o.phase)*1.2;
+    o.ty+=Math.cos(iT*o.speed*1.3+o.phase)*1.0;
+    o.tx=Math.max(0,Math.min(W,o.tx));
+    o.ty=Math.max(0,Math.min(H,o.ty));
+
+    // mouse attraction
+    if(mxSmooth!==null){
+      const dx=mxSmooth-o.x, dy=mySmooth-o.y;
+      o.vx+=dx*0.00015; o.vy+=dy*0.00015;
+    }
+    // spring toward target
+    o.vx+=(o.tx-o.x)*0.0008;
+    o.vy+=(o.ty-o.y)*0.0008;
+    o.vx*=0.94; o.vy*=0.94;
+    o.x+=o.vx; o.y+=o.vy;
+
+    const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);
+    g.addColorStop(0,o.col+'0.22)');
+    g.addColorStop(0.5,o.col+'0.10)');
+    g.addColorStop(1,o.col+'0)');
+    ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
+    ctx.fillStyle=g;ctx.fill();
+  });
+  // mouse glow
+  if(mxSmooth!==null){
+    const mg=ctx.createRadialGradient(mxSmooth,mySmooth,0,mxSmooth,mySmooth,90);
+    mg.addColorStop(0,'rgba(255,170,60,0.12)');mg.addColorStop(1,'rgba(255,170,60,0)');
+    ctx.beginPath();ctx.arc(mxSmooth,mySmooth,90,0,Math.PI*2);ctx.fillStyle=mg;ctx.fill();
   }
-  ctx.strokeStyle='rgba(40,180,100,0.4)';ctx.lineWidth=0.9;ctx.stroke();
+}
 
-  // animated dot tracing the curve
-  const at=lisT%(Math.PI*2);
-  const ax=cx+rx*Math.sin(lisA*at+lisDelta), ay=cy+ry*Math.sin(lisB*at);
-  const gd=ctx.createRadialGradient(ax,ay,0,ax,ay,7);
-  gd.addColorStop(0,'rgba(80,240,140,0.95)');gd.addColorStop(1,'rgba(80,240,140,0)');
-  ctx.beginPath();ctx.arc(ax,ay,7,0,Math.PI*2);ctx.fillStyle=gd;ctx.fill();
+// ══════════════════════════════════════════════════════
+// IMAGINACIÓN — Cintas de seda flotantes (violeta)
+// Curvas bezier animadas que ondean con gracia
+// Mouse las curva · Clic → añade cinta nueva
+// ══════════════════════════════════════════════════════
+let iRibbons=[], imT=0;
+function makeRibbon(){
+  const hue=260+Math.random()*60;
+  return {
+    x1:Math.random()*W, y1:Math.random()*H,
+    x2:Math.random()*W, y2:Math.random()*H,
+    cp1x:Math.random()*W, cp1y:Math.random()*H,
+    cp2x:Math.random()*W, cp2y:Math.random()*H,
+    v1x:(Math.random()-.5)*.5, v1y:(Math.random()-.5)*.5,
+    v2x:(Math.random()-.5)*.5, v2y:(Math.random()-.5)*.5,
+    vc1x:(Math.random()-.5)*.8, vc1y:(Math.random()-.5)*.8,
+    vc2x:(Math.random()-.5)*.8, vc2y:(Math.random()-.5)*.8,
+    hue, alpha:0.18+Math.random()*0.18,
+    width:80+Math.random()*120
+  };
+}
+function initImaginacion(){iRibbons=[];for(let i=0;i<6;i++)iRibbons.push(makeRibbon());imT=0;}
+function wrapPt(v,max){return v<0?v+max:v>max?v-max:v;}
+function drawImaginacion(){
+  imT++;
+  smoothMouse();
+  ctx.fillStyle='rgba(17,17,17,0.18)';ctx.fillRect(0,0,W,H);
+  iRibbons.forEach(r=>{
+    // mouse influence on control points
+    const mfx=mxSmooth!==null?(mxSmooth-W/2)*0.0008:0;
+    const mfy=mySmooth!==null?(mySmooth-H/2)*0.0008:0;
+    r.cp1x+=r.vc1x+mfx*60; r.cp1y+=r.vc1y+mfy*60;
+    r.cp2x+=r.vc2x+mfx*60; r.cp2y+=r.vc2y+mfy*60;
+    r.x1+=r.v1x; r.y1+=r.v1y;
+    r.x2+=r.v2x; r.y2+=r.v2y;
+    // wrap endpoints
+    r.x1=wrapPt(r.x1,W);r.y1=wrapPt(r.y1,H);
+    r.x2=wrapPt(r.x2,W);r.y2=wrapPt(r.y2,H);
+    r.cp1x=wrapPt(r.cp1x,W);r.cp1y=wrapPt(r.cp1y,H);
+    r.cp2x=wrapPt(r.cp2x,W);r.cp2y=wrapPt(r.cp2y,H);
 
-  // label: a:b ratio
-  ctx.font='10px Segoe UI';ctx.fillStyle='rgba(40,180,100,0.35)';
-  ctx.fillText(`${lisA} : ${lisB}`,12,H-14);
+    // draw thick bezier as gradient ribbon
+    const g=ctx.createLinearGradient(r.x1,r.y1,r.x2,r.y2);
+    g.addColorStop(0,`hsla(${r.hue},70%,65%,0)`);
+    g.addColorStop(0.3,`hsla(${r.hue},70%,65%,${r.alpha})`);
+    g.addColorStop(0.7,`hsla(${r.hue},70%,65%,${r.alpha})`);
+    g.addColorStop(1,`hsla(${r.hue},70%,65%,0)`);
+    ctx.beginPath();
+    ctx.moveTo(r.x1,r.y1);
+    ctx.bezierCurveTo(r.cp1x,r.cp1y,r.cp2x,r.cp2y,r.x2,r.y2);
+    ctx.strokeStyle=g;ctx.lineWidth=r.width;ctx.stroke();
+  });
+  if(mxSmooth!==null){
+    const mg=ctx.createRadialGradient(mxSmooth,mySmooth,0,mxSmooth,mySmooth,110);
+    mg.addColorStop(0,'rgba(180,100,255,0.1)');mg.addColorStop(1,'rgba(180,100,255,0)');
+    ctx.beginPath();ctx.arc(mxSmooth,mySmooth,110,0,Math.PI*2);ctx.fillStyle=mg;ctx.fill();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// EMOCIÓN — Pulso y ondas vivas (rojo/coral)
+// Anillos que respiran + mouse crea olas de energía
+// Clic → pulso de energía
+// ══════════════════════════════════════════════════════
+let emOrbs=[], emRipples=[], emT=0;
+function initEmocion(){
+  emOrbs=[];
+  const cs=['rgba(220,60,80,','rgba(180,30,60,','rgba(255,90,60,','rgba(200,40,100,'];
+  for(let i=0;i<4;i++) emOrbs.push({
+    x:W*.2+Math.random()*W*.6, y:H*.2+Math.random()*H*.6,
+    tx:Math.random()*W, ty:Math.random()*H,
+    vx:0,vy:0,
+    r:Math.min(W,H)*(0.22+Math.random()*0.18),
+    col:cs[i], phase:i*Math.PI*.5, speed:0.0004+Math.random()*0.0003
+  });
+  emRipples=[];emT=0;
+}
+function drawEmocion(){
+  emT++;smoothMouse();
+  ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);
+  emOrbs.forEach((o,i)=>{
+    o.tx+=Math.sin(emT*o.speed+o.phase)*1.5;
+    o.ty+=Math.cos(emT*o.speed*1.2+o.phase)*1.2;
+    o.tx=Math.max(0,Math.min(W,o.tx));o.ty=Math.max(0,Math.min(H,o.ty));
+    if(mxSmooth!==null){o.vx+=(mxSmooth-o.x)*0.0002;o.vy+=(mySmooth-o.y)*0.0002;}
+    o.vx+=(o.tx-o.x)*0.001;o.vy+=(o.ty-o.y)*0.001;
+    o.vx*=0.93;o.vy*=0.93;o.x+=o.vx;o.y+=o.vy;
+    // breathing radius
+    const br=o.r*(1+Math.sin(emT*0.015+o.phase)*0.12);
+    const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,br);
+    g.addColorStop(0,o.col+'0.28)');g.addColorStop(0.6,o.col+'0.10)');g.addColorStop(1,o.col+'0)');
+    ctx.beginPath();ctx.arc(o.x,o.y,br,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  });
+  // ripples
+  emRipples=emRipples.filter(r=>r.a>0.02);
+  emRipples.forEach(r=>{
+    r.r+=3.5;r.a*=0.96;
+    for(let k=0;k<3;k++){
+      const rk=r.r-k*22;if(rk<0)continue;
+      ctx.beginPath();ctx.arc(r.x,r.y,rk,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(255,100,80,${r.a*(1-k*.3)})`;ctx.lineWidth=1.5-k*.4;ctx.stroke();
+    }
+  });
+  if(mxSmooth!==null){
+    const mg=ctx.createRadialGradient(mxSmooth,mySmooth,0,mxSmooth,mySmooth,80);
+    mg.addColorStop(0,'rgba(255,80,60,0.14)');mg.addColorStop(1,'rgba(255,80,60,0)');
+    ctx.beginPath();ctx.arc(mxSmooth,mySmooth,80,0,Math.PI*2);ctx.fillStyle=mg;ctx.fill();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// SENTIDO — Aurora boreal fluida (verde/teal)
+// Cortinas de luz que fluyen horizontalmente
+// Mouse las dobla · Clic → nueva ola de aurora
+// ══════════════════════════════════════════════════════
+let snOrbs=[], snT=0, snWaves=[];
+function initSentido(){
+  snOrbs=[];
+  const cs=['rgba(30,200,120,','rgba(20,160,100,','rgba(60,220,140,','rgba(10,180,140,'];
+  for(let i=0;i<4;i++) snOrbs.push({
+    x:Math.random()*W, y:Math.random()*H,
+    tx:Math.random()*W, ty:Math.random()*H,
+    vx:0,vy:0,
+    r:Math.min(W,H)*(0.28+Math.random()*0.18),
+    col:cs[i], phase:i*Math.PI*.5, speed:0.00025+Math.random()*0.0003
+  });
+  snWaves=[];snT=0;
+}
+function drawSentido(){
+  snT++;smoothMouse();
+  ctx.fillStyle='rgba(17,17,17,0.15)';ctx.fillRect(0,0,W,H);
+
+  // aurora curtain bands
+  for(let k=0;k<4;k++){
+    const yBase=H*(0.2+k*0.18)+Math.sin(snT*0.006+k*1.2)*H*0.06;
+    const mShift=mxSmooth!==null?(mxSmooth-W/2)*0.04:0;
+    const myShift=mySmooth!==null?(mySmooth-H/2)*0.06:0;
+    ctx.beginPath();
+    ctx.moveTo(0,yBase+myShift);
+    for(let x=0;x<=W;x+=8){
+      const y=yBase+Math.sin(x*0.008+snT*0.012+k)*38
+               +Math.sin(x*0.015+snT*0.008)*20
+               +(mxSmooth!==null?Math.sin(x*0.01-mxSmooth*0.003)*myShift*0.5:0);
+      x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    const hue=145+k*12;
+    const grad=ctx.createLinearGradient(0,yBase-60,0,yBase+60);
+    grad.addColorStop(0,`hsla(${hue},70%,55%,0)`);
+    grad.addColorStop(0.5,`hsla(${hue},70%,55%,${0.08+k*0.02})`);
+    grad.addColorStop(1,`hsla(${hue},70%,55%,0)`);
+    ctx.strokeStyle=grad;ctx.lineWidth=55+k*10;ctx.stroke();
+  }
+
+  snOrbs.forEach((o,i)=>{
+    o.tx+=Math.sin(snT*o.speed+o.phase)*1.1;
+    o.ty+=Math.cos(snT*o.speed*1.1+o.phase)*0.8;
+    o.tx=Math.max(0,Math.min(W,o.tx));o.ty=Math.max(0,Math.min(H,o.ty));
+    if(mxSmooth!==null){o.vx+=(mxSmooth-o.x)*0.00012;o.vy+=(mySmooth-o.y)*0.00012;}
+    o.vx+=(o.tx-o.x)*0.0007;o.vy+=(o.ty-o.y)*0.0007;
+    o.vx*=0.95;o.vy*=0.95;o.x+=o.vx;o.y+=o.vy;
+    const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);
+    g.addColorStop(0,o.col+'0.18)');g.addColorStop(1,o.col+'0)');
+    ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  });
+  if(mxSmooth!==null){
+    const mg=ctx.createRadialGradient(mxSmooth,mySmooth,0,mxSmooth,mySmooth,100);
+    mg.addColorStop(0,'rgba(60,230,140,0.10)');mg.addColorStop(1,'rgba(60,230,140,0)');
+    ctx.beginPath();ctx.arc(mxSmooth,mySmooth,100,0,Math.PI*2);ctx.fillStyle=mg;ctx.fill();
+  }
 }
 
 // ── Clic actions
 function spawnClick(x,y){
-  if(curF==='intuicion'){initIntuicion();}
-  if(curF==='imaginacion'){saveSpiroLayer();}
-  if(curF==='emocion'&&wSources.length<6){wSources.push({x,y});}
-  if(curF==='sentido'){lisB=lisB%5+1;}
+  if(curF==='intuicion'){
+    for(let k=0;k<3;k++) iClicks.push({x,y,r:0,a:0.7-k*.15});
+  }
+  if(curF==='imaginacion'){iRibbons.push(makeRibbon());if(iRibbons.length>10)iRibbons.shift();}
+  if(curF==='emocion'){emRipples.push({x,y,r:0,a:0.9});}
+  if(curF==='sentido'){snOrbs.forEach(o=>{o.vx+=(x-o.x)*0.003;o.vy+=(y-o.y)*0.003;});}
 }
 
-function initAll(){
-  initIntuicion();initImaginacion();initEmocion();initSentido();
-}
+function initAll(){initIntuicion();initImaginacion();initEmocion();initSentido();}
 
 function animate(){
   switch(curF){
