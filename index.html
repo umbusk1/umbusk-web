@@ -14,7 +14,7 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:all;z-i
 .lang-toggle{display:flex;gap:4px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:3px;}
 .lang-btn{padding:5px 12px;border:none;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:1px;background:transparent;color:#444;font-family:'Segoe UI',sans-serif;transition:all .15s;}
 .lang-btn.active{background:#e07818;color:#fff;}
-.card-area{flex:1;min-height:0;display:flex;align-items:flex-start;justify-content:center;width:100%;overflow:hidden;}
+.card-area{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:100%;}
 .card-container{position:relative;width:380px;height:769px;flex-shrink:0;display:flex;flex-direction:column;padding-top:34px;padding-bottom:120px;}
 .top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;z-index:10;}
 .top-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;border-radius:8px 8px 0 0;color:#252525;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
@@ -28,6 +28,7 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:all;z-i
 .btm-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-top-color:#1a1a1a;color:#e07818;z-index:1;}
 .enfoque-area{position:absolute;bottom:0;left:0;right:0;height:90px;background:#141414;border:1px solid #2a2a2a;border-top:none;border-radius:0 0 10px 10px;padding:12px 20px;display:flex;align-items:center;}
 .e-text{font-size:12px;color:#555;line-height:1.65;}
+.e-footer{font-size:9px;color:#2a2a2a;text-align:center;margin-top:10px;line-height:1.8;letter-spacing:.3px;}
 .side-tab{position:absolute;top:50%;transform:translateY(-60%);background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;padding:20px 8px;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;writing-mode:vertical-rl;transition:background .2s,color .2s;user-select:none;z-index:3;}
 .side-tab:hover{background:#2a2a2a;color:#bbb;}
 .left-tab{right:100%;margin-right:-1px;border-right:none;border-radius:8px 0 0 8px;}
@@ -301,6 +302,11 @@ h1 strong{font-weight:700;color:#fff;}
           <div class="info-item"><div class="info-key">TEL USA</div><div class="info-val">+1 904 231 9989</div></div>
           <div class="info-item"><div class="info-key">WEB</div><div class="info-val">umbusk.com</div></div>
         </div>
+      </div>
+
+    </div>
+      <div style="flex-shrink:0;width:380px;padding-top:6px;text-align:center;font-family:'Segoe UI',sans-serif;font-size:9px;color:#333;letter-spacing:.3px;line-height:1.8;pointer-events:none;">
+        vibe-coded by Umbusk y Claude AI de Anthropic<br>© 2026 Umbusk, LLC · Todos los derechos reservados
       </div>
 
     </div>
