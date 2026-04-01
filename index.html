@@ -20,25 +20,54 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .lang-btn.active{background:#e07818;color:#fff;}
 
 /* ══ CARD AREA ══ */
-.card-area{flex:1;min-height:0;display:flex;align-items:flex-start;justify-content:center;width:100%;}
+.card-area{flex:1;min-height:0;display:flex;align-items:flex-start;justify-content:center;width:100%;overflow:hidden;}
 
-/* CARD CONTAINER */
-.card-container{position:relative;width:380px;height:100%;display:flex;flex-direction:column;padding-top:34px;flex-shrink:0;}
+/* ══ CARD CONTAINER: 34 + 615 + 30 = 679px ══ */
+.card-container{
+  position:relative;
+  width:380px;
+  height:679px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  padding-top:34px;
+  padding-bottom:30px;
+}
 
-/* ══ TOP TABS — 3, centered ══ */
+/* ══ TOP TABS ══ */
 .top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;justify-content:center;gap:8px;z-index:10;}
-.mode-tab{width:114px;height:34px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;border-radius:8px 8px 0 0;color:#252525;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
-.mode-tab:hover{background:#161616;border-color:#232323;}
-.mode-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;}
+.top-tab{width:114px;height:34px;display:flex;align-items:center;justify-content:center;
+  background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;
+  border-radius:8px 8px 0 0;color:#252525;cursor:pointer;
+  font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  transition:background .18s,color .18s;user-select:none;}
+.top-tab:hover{background:#161616;border-color:#232323;}
+.top-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;}
+
+/* ══ BOTTOM TABS (top tabs rotated 180°) ══ */
+.btm-tabs{position:absolute;bottom:0;left:0;right:0;height:30px;display:flex;justify-content:center;gap:8px;z-index:10;}
+.btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;
+  background:#111;border:1px solid #1e1e1e;border-top:1px solid #2a2a2a;
+  border-radius:0 0 8px 8px;color:#252525;cursor:pointer;
+  font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  transition:background .18s,color .18s;user-select:none;}
+.btm-tab:hover{background:#161616;border-color:#232323;}
+.btm-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-top-color:#1a1a1a;color:#e07818;}
 
 /* ══ SIDE TABS ══ */
-.side-tab{position:absolute;top:calc(50% + 17px);transform:translateY(-50%);background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;padding:20px 8px;font-size:9px;letter-spacing:2px;writing-mode:vertical-rl;transition:background .2s,color .2s;user-select:none;z-index:3;}
+.side-tab{position:absolute;top:calc(50%);transform:translateY(-50%);
+  background:#222;border:1px solid #2a2a2a;color:#555;cursor:pointer;
+  padding:20px 8px;font-size:9px;letter-spacing:2px;writing-mode:vertical-rl;
+  transition:background .2s,color .2s;user-select:none;z-index:3;}
 .side-tab:hover{background:#2a2a2a;color:#bbb;}
 .left-tab{right:100%;margin-right:-1px;border-right:none;border-radius:8px 0 0 8px;}
 .right-tab{left:100%;margin-left:-1px;border-left:none;border-radius:0 8px 8px 0;}
 
 /* ══ SIDE PANELS ══ */
-.side-panel{position:absolute;top:34px;bottom:0;width:270px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:2;}
+.side-panel{position:absolute;top:34px;bottom:30px;width:270px;
+  background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;
+  display:flex;flex-direction:column;overflow:hidden;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:2;}
 .side-panel.open{opacity:1;pointer-events:all;transform:translateX(0) !important;}
 .left-panel{right:calc(100% + 25px);transform:translateX(14px);}
 .right-panel{left:calc(100% + 25px);transform:translateX(-14px);}
@@ -50,15 +79,17 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .panel-body::-webkit-scrollbar{width:3px;}
 .panel-body::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 
-/* ══ MAIN CARD ══ */
-.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:0 0 16px 16px;flex:1;min-height:0;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;z-index:2;overflow:hidden;}
+/* ══ MAIN CARD: 615px inner, border-radius 0 (tabs provide corners) ══ */
+.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:0;
+  flex:1;min-height:0;display:flex;flex-direction:column;
+  box-shadow:0 8px 40px rgba(0,0,0,.6);position:relative;z-index:2;overflow:hidden;}
 
 /* LOGO */
-.logo-area{text-align:center;padding:20px 24px 14px;flex-shrink:0;}
+.logo-area{text-align:center;padding:18px 24px 12px;flex-shrink:0;}
 .logo-area img{height:38px;object-fit:contain;}
 .brand-name{font-size:10px;color:#444;letter-spacing:4px;text-transform:uppercase;margin-top:5px;}
 
-/* PANELS WRAP */
+/* PANELS */
 .panels-wrap{flex:1;min-height:0;overflow:hidden;padding:0 24px;}
 .panel{display:none;height:100%;overflow-y:auto;padding-bottom:6px;animation:fadeIn .22s ease;}
 .panel.on{display:block;}
@@ -66,7 +97,6 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.22;pointer-ev
 .panel::-webkit-scrollbar-thumb{background:#252525;border-radius:2px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 
-/* PANEL CONTENT */
 .p-label{font-size:9.5px;letter-spacing:.2em;color:#e07818;text-transform:uppercase;margin-bottom:9px;}
 h1{font-size:20px;font-weight:300;line-height:1.35;margin-bottom:10px;}
 h1 strong{font-weight:700;color:#fff;}
@@ -80,18 +110,12 @@ h1 strong{font-weight:700;color:#fff;}
 .sname{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:2px;}
 .sdesc{font-size:11.5px;color:#444;line-height:1.5;}
 
-/* ══ BOTTOM SECTION ══ */
-.bottom-section{flex-shrink:0;border-top:1px solid #2a2a2a;}
-.enfoque-strip{padding:11px 24px;min-height:52px;display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid #1e1e1e;}
+/* ENFOQUE STRIP */
+.enfoque-strip{flex-shrink:0;padding:11px 24px;border-top:1px solid #2a2a2a;display:flex;align-items:flex-start;gap:14px;min-height:54px;}
 .e-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#e07818;min-width:76px;padding-top:2px;flex-shrink:0;}
 .e-text{font-size:11.5px;color:#444;line-height:1.6;}
-.btm-tabs{display:flex;}
-.btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-top:1px solid #1e1e1e;border-right:1px solid #1e1e1e;color:#2a2a2a;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:color .2s,background .2s;user-select:none;}
-.btm-tab:last-child{border-right:none;}
-.btm-tab:hover{color:#777;background:#1e1e1e;}
-.btm-tab.active{color:#e07818;background:#161616;}
 
-/* ══ CONTACT (side panel) ══ */
+/* CONTACT panel */
 .field{margin-bottom:9px;}
 .flabel{display:block;font-size:9.5px;color:#444;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
 .finput{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:7px;color:#fff;font-size:12.5px;padding:9px 11px;outline:none;font-family:'Segoe UI',sans-serif;transition:border-color .2s;resize:none;}
@@ -101,50 +125,40 @@ h1 strong{font-weight:700;color:#fff;}
 .btn-send:hover{opacity:.88;}
 .c-info{font-size:10px;color:#2a2a2a;text-align:center;margin-top:12px;line-height:2;}
 
-/* ══ INFO (side panel) ══ */
+/* INFO panel */
 .info-item{padding:10px 0;border-bottom:1px solid #1f1f1f;}
 .info-item:last-child{border:none;}
 .info-key{font-size:9px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
 .info-val{font-size:12px;color:#555;}
 
 /* ══ FOOTER ══ */
-.site-footer{flex-shrink:0;z-index:1;position:relative;width:min(960px,100vw);padding:12px 20px;border-top:1px solid #1a1a1a;}
+.site-footer{flex-shrink:0;z-index:1;position:relative;width:380px;padding:10px 0 0;}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;}
-.footer-nav{display:flex;gap:18px;}
-.footer-nav a{font-size:9px;color:#222;text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:color .2s;}
+.footer-nav{display:flex;gap:16px;}
+.footer-nav a{font-size:9px;color:#252525;text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:color .2s;}
 .footer-nav a:hover{color:#555;}
-.footer-copy{font-size:9px;color:#1e1e1e;letter-spacing:1px;}
-.footer-info{font-size:9px;color:#1e1e1e;text-align:right;line-height:1.9;}
+.footer-copy{font-size:9px;color:#1a1a1a;letter-spacing:1px;}
 
 /* ══ MOBILE ══ */
 @media(max-width:767px){
   body{overflow-y:auto;height:auto;}
   .page{height:auto;padding-bottom:20px;}
-  .card-area{height:auto;}
-  .card-container{height:auto;}
-  .panels-wrap{height:220px;}
+  .card-area{height:auto;overflow:visible;}
+  .card-container{height:auto;padding-bottom:0;}
+  .btm-tabs{position:relative;bottom:auto;margin-top:-1px;}
+  .btm-tab{border-radius:0 0 8px 8px;}
   .side-tab{display:none;}
   .side-panel{display:none;}
-  .lang-row{width:100%;padding:0 16px;}
-  .footer-inner{flex-direction:column;gap:10px;text-align:center;}
+  .lang-row,.site-footer{width:100%;padding-left:16px;padding-right:16px;}
+  .footer-inner{flex-direction:column;gap:8px;text-align:center;}
   .footer-nav{flex-wrap:wrap;justify-content:center;}
-  .footer-info{text-align:center;}
-  .mob-section{display:block!important;width:380px;margin-top:8px;}
 }
-@media(min-width:768px){.mob-section{display:none;}}
-
-/* mobile drawers */
-.mob-tab{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;cursor:pointer;margin-bottom:1px;font-size:9.5px;color:#555;letter-spacing:2px;text-transform:uppercase;}
-.mob-tab:hover{background:#222;}
-.mob-body{background:#1a1a1a;border:1px solid #2a2a2a;border-top:none;border-radius:0 0 8px 8px;padding:14px;display:none;margin-bottom:8px;}
-.mob-body.open{display:block;}
 </style>
 </head>
 <body>
 <canvas id="cv"></canvas>
 <div class="page">
 
-  <!-- LANG -->
   <div class="lang-row">
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setL('es',this)">ES</button>
@@ -152,20 +166,19 @@ h1 strong{font-weight:700;color:#fff;}
     </div>
   </div>
 
-  <!-- CARD AREA -->
   <div class="card-area">
     <div class="card-container">
 
-      <!-- LEFT: CONTACTO -->
+      <!-- LEFT PANEL: CONTACTO -->
       <div class="side-panel left-panel" id="lpanel">
         <div class="panel-header">
           <div class="panel-title" data-es="CONTACTO" data-en="CONTACT">CONTACTO</div>
           <button class="btn-icon" onclick="closeL()">✕</button>
         </div>
         <div class="panel-body">
-          <div class="field"><label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label><input class="finput" type="text" data-ph-es="Tu nombre" data-ph-en="Your name" placeholder="Tu nombre"/></div>
+          <div class="field"><label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label><input class="finput" type="text" placeholder="Tu nombre"/></div>
           <div class="field"><label class="flabel" data-es="CORREO" data-en="EMAIL">CORREO</label><input class="finput" type="email" placeholder="tu@correo.com"/></div>
-          <div class="field"><label class="flabel" data-es="MENSAJE" data-en="MESSAGE">MENSAJE</label><textarea class="finput" rows="4" data-ph-es="..." data-ph-en="..." placeholder="..."></textarea></div>
+          <div class="field"><label class="flabel" data-es="MENSAJE" data-en="MESSAGE">MENSAJE</label><textarea class="finput" rows="4" placeholder="..."></textarea></div>
           <button class="btn-send" data-es="Enviar Mensaje →" data-en="Send Message →">Enviar Mensaje →</button>
           <div class="c-info">Tarpon Springs, FL · USA<br>+58 422 232 4636 · +1 904 231 9989</div>
         </div>
@@ -174,9 +187,9 @@ h1 strong{font-weight:700;color:#fff;}
 
       <!-- TOP TABS -->
       <div class="top-tabs">
-        <button class="mode-tab" data-tab="productos" onclick="setTab('productos',this)" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</button>
-        <button class="mode-tab active" data-tab="home" onclick="setTab('home',this)" data-es="HOME" data-en="HOME">HOME</button>
-        <button class="mode-tab" data-tab="servicios" onclick="setTab('servicios',this)" data-es="SERVICIOS" data-en="SERVICES">SERVICIOS</button>
+        <button class="top-tab" data-tab="productos" onclick="setTab('productos',this)" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</button>
+        <button class="top-tab active" data-tab="home" onclick="setTab('home',this)">HOME</button>
+        <button class="top-tab" data-tab="servicios" onclick="setTab('servicios',this)" data-es="SERVICIOS" data-en="SERVICES">SERVICIOS</button>
       </div>
 
       <!-- MAIN CARD -->
@@ -187,13 +200,11 @@ h1 strong{font-weight:700;color:#fff;}
         </div>
 
         <div class="panels-wrap">
-          <!-- HOME -->
           <div class="panel on" id="tab-home">
             <div class="p-label" data-es="Fábrica de Prototipos" data-en="Prototype Factory">Fábrica de Prototipos</div>
             <h1 data-es="Donde las <strong>ideas</strong><br>cobran forma" data-en="Where <strong>ideas</strong><br>take shape">Donde las <strong>ideas</strong><br>cobran forma</h1>
             <p class="copy" data-es="Combinamos contribución humana con inteligencia artificial para construir artefactos digitales funcionales — en semanas, no en meses." data-en="We combine human contribution with artificial intelligence to build functional digital artifacts — in weeks, not months.">Combinamos contribución humana con inteligencia artificial para construir artefactos digitales funcionales — en semanas, no en meses.</p>
           </div>
-          <!-- PRODUCTOS -->
           <div class="panel" id="tab-productos">
             <div class="p-label" data-es="Productos" data-en="Products">Productos</div>
             <a class="pcard" href="https://compita.umbusk.com" target="_blank">
@@ -209,7 +220,6 @@ h1 strong{font-weight:700;color:#fff;}
               <div class="pdesc" data-es="Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU." data-en="Corporate dialer for campaigns in DR, Venezuela, Panama and the US.">Dialer corporativo para campañas en RD, Venezuela, Panamá y EE.UU.</div>
             </a>
           </div>
-          <!-- SERVICIOS -->
           <div class="panel" id="tab-servicios">
             <div class="p-label" data-es="Servicios" data-en="Services">Servicios</div>
             <div class="srow"><div class="sname" data-es="Chatbot Funcional" data-en="Functional Chatbot">Chatbot Funcional</div><div class="sdesc" data-es="Agente de IA con tu información. Listo en 4–6 semanas." data-en="AI agent with your information. Ready in 4–6 weeks.">Agente de IA con tu información. Listo en 4–6 semanas.</div></div>
@@ -219,22 +229,22 @@ h1 strong{font-weight:700;color:#fff;}
           </div>
         </div>
 
-        <!-- BOTTOM -->
-        <div class="bottom-section">
-          <div class="enfoque-strip">
-            <div class="e-label" id="eLabel">—</div>
-            <div class="e-text"  id="eText">—</div>
-          </div>
-          <div class="btm-tabs">
-            <button class="btm-tab" data-f="intuicion"   onclick="setF('intuicion',this)"   data-es="Intuición"   data-en="Intuition">Intuición</button>
-            <button class="btm-tab" data-f="imaginacion" onclick="setF('imaginacion',this)" data-es="Imaginación" data-en="Imagination">Imaginación</button>
-            <button class="btm-tab" data-f="emocion"     onclick="setF('emocion',this)"     data-es="Emoción"     data-en="Emotion">Emoción</button>
-            <button class="btm-tab" data-f="sentido"     onclick="setF('sentido',this)"     data-es="Sentido"     data-en="Sense">Sentido</button>
-          </div>
+        <!-- ENFOQUE STRIP (inside card, above bottom tabs) -->
+        <div class="enfoque-strip">
+          <div class="e-label" id="eLabel">—</div>
+          <div class="e-text"  id="eText">—</div>
         </div>
       </div><!-- /card -->
 
-      <!-- RIGHT: INFO -->
+      <!-- BOTTOM TABS (outside card, mirrored) -->
+      <div class="btm-tabs">
+        <button class="btm-tab" data-f="intuicion"   onclick="setF('intuicion',this)"   data-es="INTUICIÓN"   data-en="INTUITION">INTUICIÓN</button>
+        <button class="btm-tab" data-f="imaginacion" onclick="setF('imaginacion',this)" data-es="IMAGINACIÓN" data-en="IMAGINATION">IMAGINACIÓN</button>
+        <button class="btm-tab" data-f="emocion"     onclick="setF('emocion',this)"     data-es="EMOCIÓN"     data-en="EMOTION">EMOCIÓN</button>
+        <button class="btm-tab" data-f="sentido"     onclick="setF('sentido',this)"     data-es="SENTIDO"     data-en="SENSE">SENTIDO</button>
+      </div>
+
+      <!-- RIGHT PANEL: INFO -->
       <div class="side-tab right-tab" onclick="togR()" data-es="INFO" data-en="INFO">INFO</div>
       <div class="side-panel right-panel" id="rpanel">
         <div class="panel-header">
@@ -253,51 +263,32 @@ h1 strong{font-weight:700;color:#fff;}
     </div><!-- /card-container -->
   </div><!-- /card-area -->
 
-  <!-- MOBILE DRAWERS -->
-  <div class="mob-section" style="display:none">
-    <div class="mob-tab" onclick="mobToggle('mc','mcc')"><span data-es="CONTACTO" data-en="CONTACT">CONTACTO</span><span id="mcc">▼</span></div>
-    <div class="mob-body" id="mc">
-      <div class="field"><label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label><input class="finput" type="text" placeholder="Tu nombre"/></div>
-      <div class="field"><label class="flabel" data-es="CORREO" data-en="EMAIL">CORREO</label><input class="finput" type="email" placeholder="tu@correo.com"/></div>
-      <div class="field"><label class="flabel" data-es="MENSAJE" data-en="MESSAGE">MENSAJE</label><textarea class="finput" rows="3" placeholder="..."></textarea></div>
-      <button class="btn-send" data-es="Enviar →" data-en="Send →">Enviar →</button>
-    </div>
-    <div class="mob-tab" onclick="mobToggle('mi','mic')"><span>INFO</span><span id="mic">▼</span></div>
-    <div class="mob-body" id="mi">
-      <div class="info-item"><div class="info-key" data-es="SEDE" data-en="LOCATION">SEDE</div><div class="info-val">Tarpon Springs, FL · USA</div></div>
-      <div class="info-item"><div class="info-key">WHATSAPP</div><div class="info-val">+58 422 232 4636</div></div>
-      <div class="info-item"><div class="info-key">TEL</div><div class="info-val">+1 904 231 9989</div></div>
-    </div>
-  </div>
-
   <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-inner">
       <nav class="footer-nav">
-        <a href="#" onclick="setTab('home');return false;" data-es="HOME" data-en="HOME">HOME</a>
-        <a href="#" onclick="setTab('productos');return false;" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</a>
-        <a href="#" onclick="setTab('servicios');return false;" data-es="SERVICIOS" data-en="SERVICES">SERVICIOS</a>
-        <a href="#" onclick="togL();return false;" data-es="CONTACTO" data-en="CONTACT">CONTACTO</a>
+        <a onclick="setTab('home');return false;">HOME</a>
+        <a onclick="setTab('productos');return false;" data-es="PRODUCTOS" data-en="PRODUCTS">PRODUCTOS</a>
+        <a onclick="setTab('servicios');return false;" data-es="SERVICIOS" data-en="SERVICES">SERVICIOS</a>
+        <a onclick="togL();return false;" data-es="CONTACTO" data-en="CONTACT">CONTACTO</a>
         <a href="#" data-es="POLÍTICAS" data-en="POLICIES">POLÍTICAS</a>
       </nav>
       <div class="footer-copy">© 2026 UMBUSK LLC</div>
-      <div class="footer-info">Tarpon Springs, FL · USA &nbsp;·&nbsp; +58 422 232 4636 &nbsp;·&nbsp; +1 904 231 9989</div>
     </div>
   </footer>
 
-</div><!-- /page -->
+</div>
 
 <script>
 // ── ENFOQUE DATA
-const EF = {
-  intuicion:   {es:['Intuición','El conocimiento que precede a la razón. Saber antes de poder explicar.'],           en:['Intuition','Knowledge that precedes reason. Knowing before being able to explain.']},
-  imaginacion: {es:['Imaginación','La capacidad de ver lo que aún no existe. El origen de todo prototipo.'],          en:['Imagination','The ability to see what does not yet exist. The origin of every prototype.']},
-  emocion:     {es:['Emoción','La energía que convierte una idea en compromiso. El motor del proceso creativo.'],    en:['Emotion','The energy that turns an idea into commitment. The engine of the creative process.']},
-  sentido:     {es:['Sentido','¿Para qué? La pregunta que orienta el trabajo y da dirección al proceso.'],            en:['Sense','What for? The question that guides the work and gives direction to the process.']}
+const EF={
+  intuicion:  {es:['Intuición','El conocimiento que precede a la razón. Saber antes de poder explicar.'],en:['Intuition','Knowledge that precedes reason. Knowing before being able to explain.']},
+  imaginacion:{es:['Imaginación','La capacidad de ver lo que aún no existe. El origen de todo prototipo.'],en:['Imagination','The ability to see what does not yet exist. The origin of every prototype.']},
+  emocion:    {es:['Emoción','La energía que convierte una idea en compromiso. El motor del proceso creativo.'],en:['Emotion','The energy that turns an idea into commitment. The engine of the creative process.']},
+  sentido:    {es:['Sentido','¿Para qué? La pregunta que orienta el trabajo y da dirección al proceso.'],en:['Sense','What for? The question that guides the work and gives direction to the process.']}
 };
 let lang='es', curF='intuicion';
 
-// LANGUAGE
 function setL(l,btn){
   lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
@@ -310,15 +301,14 @@ function setL(l,btn){
   updateEF();
 }
 
-// TABS
 function setTab(id,btn){
-  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.top-tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('[data-tab="'+id+'"]').forEach(b=>b.classList.add('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelectorAll('[data-tab="'+id+'"]').forEach(b=>b.classList.add('active'));
   const p=document.getElementById('tab-'+id); if(p) p.classList.add('on');
 }
 
-// FOUNDATIONS
 function setF(f,btn){
   curF=f;
   if(f==='intuicion'){lx=.1;ly=0;lz=0;lpts=[];}
@@ -332,72 +322,65 @@ function updateEF(){
   document.getElementById('eText').textContent=d[1];
 }
 
-// DESKTOP PANELS
 function togL(){document.getElementById('rpanel').classList.remove('open');document.getElementById('lpanel').classList.toggle('open');}
 function closeL(){document.getElementById('lpanel').classList.remove('open');}
 function togR(){document.getElementById('lpanel').classList.remove('open');document.getElementById('rpanel').classList.toggle('open');}
 function closeR(){document.getElementById('rpanel').classList.remove('open');}
 
-// MOBILE DRAWERS
-function mobToggle(bodyId,chevId){
-  const b=document.getElementById(bodyId), c=document.getElementById(chevId);
-  b.classList.toggle('open');
-  c.textContent=b.classList.contains('open')?'▲':'▼';
-}
-
-// ── CANVAS ANIMATIONS
-const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+// ── CANVAS
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 let W,H;
 function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;buildFib();}
-window.addEventListener('resize',resize); resize();
+window.addEventListener('resize',resize);resize();
 
 const FC={intuicion:'rgba(224,120,24,',imaginacion:'rgba(155,89,182,',emocion:'rgba(200,50,70,',sentido:'rgba(40,180,100,'};
 
-// Lorenz — LEFT TO RIGHT
+// Lorenz — left to right
 let lx=.1,ly=0,lz=0,lpts=[],lD=0;
 function stepLorenz(){const dt=.005,s=10,r=28,b=8/3;lx+=s*(ly-lx)*dt;ly+=(lx*(r-lz)-ly)*dt;lz+=(lx*ly-b*lz)*dt;lpts.push([lx,ly,lz]);if(lpts.length>3200)lpts.shift();}
 function drawLorenz(){
   ctx.clearRect(0,0,W,H);
-  for(let i=0;i<10;i++) stepLorenz();
-  const sc=Math.min(W,H)/48; lD=(lD+0.5)%W;
+  for(let i=0;i<10;i++)stepLorenz();
+  lD=(lD+0.5)%W;
+  const sc=Math.min(W,H)/48;
   for(const dx of [lD,lD-W]){
     ctx.beginPath();
     lpts.forEach((p,i)=>{const px=W/2+dx+p[0]*sc,py=H/2+(p[2]-25)*-sc;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);});
-    ctx.strokeStyle=FC.intuicion+'.75)';ctx.lineWidth=1;ctx.stroke();
+    ctx.strokeStyle=FC.intuicion+'.78)';ctx.lineWidth=1.1;ctx.stroke();
   }
 }
 
-// Spiro — LEFT TO RIGHT
+// Spiro — left to right
 let sD=0,sT=0;
 function drawSpiro(){
   ctx.clearRect(0,0,W,H);
-  sD=(sD+0.4)%W;
+  sD=(sD+0.38)%W;
   const R=Math.min(W,H)*.36,r=R*.382,d=r*.72;
   for(const dx of [sD,sD-W]){
     const ox=W/2+dx,oy=H/2;
     ctx.beginPath();
     for(let i=0;i<=4200;i++){const a=(i/4200)*Math.PI*2*13+sT*.00012;const x=ox+(R-r)*Math.cos(a)+d*Math.cos(((R-r)/r)*a),y=oy+(R-r)*Math.sin(a)-d*Math.sin(((R-r)/r)*a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-    ctx.strokeStyle=FC.imaginacion+'.58)';ctx.lineWidth=0.7;ctx.stroke();
+    ctx.strokeStyle=FC.imaginacion+'.62)';ctx.lineWidth=0.85;ctx.stroke();
   }
   sT++;
 }
 
-// Lissajous — BOTTOM TO TOP
+// Lissajous — bottom to top
 let liD=0,liT=0;
 function drawLissajous(){
   ctx.clearRect(0,0,W,H);
-  liD=(liD+0.45)%H;
+  liD=(liD+0.42)%H;
   const amp=Math.min(W,H)*.4,delta=liT*.0004;
-  for(const dy of [-liD,H-liD]){
+  for(const dy of [H-liD,-liD]){
     const ox=W/2,oy=H/2+dy;
     ctx.beginPath();
     for(let i=0;i<=3200;i++){const a=(i/3200)*Math.PI*2;const x=ox+amp*Math.sin(3*a+delta),y=oy+amp*Math.sin(4*a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-    ctx.strokeStyle=FC.emocion+'.62)';ctx.lineWidth=0.85;ctx.stroke();
+    ctx.strokeStyle=FC.emocion+'.65)';ctx.lineWidth=1;ctx.stroke();
   }
   liT++;
 }
 
-// Fibonacci — BOTTOM TO TOP
+// Fibonacci — bottom to top
 let fibPts=[],fD=0,fT=0;
 function buildFib(){
   fibPts=[];
@@ -406,14 +389,14 @@ function buildFib(){
 }
 function drawFib(){
   ctx.clearRect(0,0,W,H);
-  fD=(fD+0.32)%H;
-  for(const dy of [-fD,H-fD]){
+  fD=(fD+0.3)%H;
+  for(const dy of [H-fD,-fD]){
     const ox=W/2,oy=H/2+dy;
     fibPts.forEach((p,i)=>{
-      const alpha=.15+(i/fibPts.length)*.6;
+      const alpha=.15+(i/fibPts.length)*.65;
       const px=ox+p[0]+Math.sin(fT*.001+i*.05)*1.5,py=oy+p[1]+Math.cos(fT*.0013+i*.04)*1.5;
-      ctx.beginPath();ctx.arc(px,py,Math.max(.3,p[2]),0,Math.PI*2);
-      ctx.fillStyle=FC.sentido+(alpha*.8)+')';ctx.fill();
+      ctx.beginPath();ctx.arc(px,py,Math.max(.35,p[2]),0,Math.PI*2);
+      ctx.fillStyle=FC.sentido+(alpha*.85)+')';ctx.fill();
     });
   }
   fT++;
@@ -421,15 +404,15 @@ function drawFib(){
 
 function animate(){
   switch(curF){
-    case 'intuicion':   drawLorenz();    break;
-    case 'imaginacion': drawSpiro();     break;
-    case 'emocion':     drawLissajous(); break;
-    case 'sentido':     drawFib();       break;
+    case'intuicion':   drawLorenz();    break;
+    case'imaginacion': drawSpiro();     break;
+    case'emocion':     drawLissajous(); break;
+    case'sentido':     drawFib();       break;
   }
   requestAnimationFrame(animate);
 }
 
-// RANDOM INIT
+// INIT
 const fKeys=['intuicion','imaginacion','emocion','sentido'];
 const ri=Math.floor(Math.random()*4);
 curF=fKeys[ri];
