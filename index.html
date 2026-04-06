@@ -712,11 +712,10 @@ if(window.innerWidth>640){
   document.getElementById('lpanel').classList.add('open');
   document.getElementById('rpanel').classList.add('open');
 }
-const fKeys=['intuicion','imaginacion','emocion','sentido'];
-const ri=Math.floor(Math.random()*4);
-curF=fKeys[ri];
-document.querySelectorAll('.btm-tab')[ri].classList.add('active');
-document.getElementById('eText').innerHTML=EF[curF][lang];
+curF='intuicion';
+document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('.btm-tab')[0].classList.add('active');
+document.getElementById('eText').innerHTML=EF['intuicion'][lang];
 requestAnimationFrame(animate);
 </script>
 </body>
