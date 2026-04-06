@@ -169,10 +169,11 @@ h1 strong{font-weight:700;color:#fff;}
           <button class="btn-icon" onclick="closeL()">✕</button>
         </div>
         <div class="panel-body">
-          <div class="field"><label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label><input class="finput" type="text" placeholder="Tu nombre"/></div>
-          <div class="field"><label class="flabel" data-es="CORREO" data-en="EMAIL">CORREO</label><input class="finput" type="email" placeholder="tu@correo.com"/></div>
-          <div class="field"><label class="flabel" data-es="MENSAJE" data-en="MESSAGE">MENSAJE</label><textarea class="finput" rows="4" placeholder="..."></textarea></div>
-          <button class="btn-send" data-es="Enviar Mensaje →" data-en="Send Message →">Enviar Mensaje →</button>
+          <div class="field"><label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label><input class="finput" id="cf-name" type="text" placeholder="Tu nombre"/></div>
+          <div class="field"><label class="flabel" data-es="CORREO" data-en="EMAIL">CORREO</label><input class="finput" id="cf-email" type="email" placeholder="tu@correo.com"/></div>
+          <div class="field"><label class="flabel" data-es="MENSAJE" data-en="MESSAGE">MENSAJE</label><textarea class="finput" id="cf-msg" rows="4" placeholder="..."></textarea></div>
+          <button class="btn-send" id="cf-btn" onclick="sendContact()" data-es="Enviar Mensaje →" data-en="Send Message →">Enviar Mensaje →</button>
+          <div id="cf-status" style="font-size:11px;text-align:center;margin-top:8px;min-height:16px;"></div>
           <div class="c-info">Tarpon Springs, FL · USA<br>+58 422 232 4636 · +1 904 231 9989</div>
         </div>
       </div>
@@ -349,6 +350,7 @@ h1 strong{font-weight:700;color:#fff;}
         <div class="panel-body">
           <div class="info-item"><div class="info-key" data-es="EMPRESA" data-en="COMPANY">EMPRESA</div><div class="info-val">Umbusk LLC</div></div>
           <div class="info-item"><div class="info-key" data-es="SEDE" data-en="LOCATION">SEDE</div><div class="info-val">Tarpon Springs, FL · USA</div></div>
+          <div class="info-item"><div class="info-key">WHATSAPP</div><div class="info-val">+58 422 232 4636</div></div>
           <div class="info-item"><div class="info-key">TEL USA</div><div class="info-val">+1 904 231 9989</div></div>
           <div class="info-item"><div class="info-key">WEB</div><div class="info-val">umbusk.com</div></div>
         </div>
@@ -414,6 +416,40 @@ function setF(f,btn){
   document.querySelectorAll('.btm-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('eText').innerHTML=EF[curF][lang];
+}
+
+function sendContact(){
+  const FORMSPREE_ID='mykblojy';
+  const name=document.getElementById('cf-name').value.trim();
+  const email=document.getElementById('cf-email').value.trim();
+  const msg=document.getElementById('cf-msg').value.trim();
+  const status=document.getElementById('cf-status');
+  const btn=document.getElementById('cf-btn');
+  if(!name||!email||!msg){status.style.color='#e07818';status.textContent=lang==='es'?'Por favor completa todos los campos.':'Please fill in all fields.';return;}
+  btn.disabled=true;btn.style.opacity='.5';
+  status.style.color='#555';status.textContent=lang==='es'?'Enviando...':'Sending...';
+  fetch('https://formspree.io/f/'+FORMSPREE_ID,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({name,email,message:msg})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.ok){
+      status.style.color='#4caf50';
+      status.textContent=lang==='es'?'¡Mensaje enviado! Te contactamos pronto.':'Message sent! We\'ll be in touch soon.';
+      document.getElementById('cf-name').value='';
+      document.getElementById('cf-email').value='';
+      document.getElementById('cf-msg').value='';
+    } else {
+      status.style.color='#e07818';status.textContent=lang==='es'?'Hubo un error. Intenta de nuevo.':'Something went wrong. Please try again.';
+    }
+    btn.disabled=false;btn.style.opacity='1';
+  })
+  .catch(()=>{
+    status.style.color='#e07818';status.textContent=lang==='es'?'Error de conexión. Intenta de nuevo.':'Connection error. Please try again.';
+    btn.disabled=false;btn.style.opacity='1';
+  });
 }
 
 function togSrow(e,btn){
