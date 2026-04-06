@@ -180,7 +180,7 @@ h1 strong{font-weight:700;color:#fff;}
       <!-- MAIN CARD -->
       <div class="card">
         <div class="logo-area">
-          <img src="/logo-umbusk.png" alt="Umbusk"/>
+          <img src="https://umbusk.com/imagenes/logo-umbusk.png" alt="Umbusk"/>
           <div class="brand-name">UMBUSK</div>
         </div>
         <div class="panels-wrap">
@@ -708,6 +708,10 @@ function animate(){
 }
 
 resize();
+if(window.innerWidth>640){
+  document.getElementById('lpanel').classList.add('open');
+  document.getElementById('rpanel').classList.add('open');
+}
 const fKeys=['intuicion','imaginacion','emocion','sentido'];
 const ri=Math.floor(Math.random()*4);
 curF=fKeys[ri];
