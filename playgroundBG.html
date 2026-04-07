@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Umbusk BG Playground</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0a0a;
+  font-family:'Inter',system-ui,sans-serif;color:#e0e0e0;font-size:13px}
+
+#wrap{position:absolute;inset:0 272px 0 0}
+canvas{width:100%;height:100%;display:block;cursor:crosshair}
+
+#panel{
+  position:absolute;top:0;right:0;width:272px;height:100%;
+  background:#111;border-left:1px solid #1e1e1e;
+  overflow-y:auto;padding:16px 14px 20px;
+  display:flex;flex-direction:column;gap:18px
+}
+
+.logo{font-size:11px;font-weight:700;letter-spacing:.2em;color:#444;
+  text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#f97316}
+
+.sec-title{font-size:9.5px;font-weight:700;letter-spacing:.14em;color:#444;
+  text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid #1a1a1a;margin-bottom:4px}
+
+.style-row{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.stab{
+  padding:7px 0;border-radius:6px;font-size:10.5px;font-weight:600;
+  letter-spacing:.04em;border:1px solid #2a2a2a;background:#161616;
+  color:#555;cursor:pointer;text-align:center;transition:all .2s
+}
+.stab:hover{color:#888;border-color:#333}
+.stab.on{border-color:var(--ac);color:var(--ac);background:#1c1c1c}
+
+.pal-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pbtn{
+  aspect-ratio:1;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;transition:transform .15s,border-color .15s;
+}
+.pbn.on,.pbn-on{border:2px solid #fff!important;transform:scale(1.18)}
+
+.param{display:flex;flex-direction:column;gap:3px;margin-top:2px}
+.plabel{display:flex;justify-content:space-between;color:#777}
+.plabel b{color:#ccc;font-weight:500;font-variant-numeric:tabular-nums}
+input[type=range]{
+  width:100%;height:3px;appearance:none;background:#222;border-radius:2px;cursor:pointer;
+  accent-color:#f97316
+}
+
+.tog-row{display:flex;justify-content:space-between;align-items:center}
+.tog{position:relative;width:34px;height:18px;cursor:pointer}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-tr{
+  position:absolute;inset:0;background:#2a2a2a;border-radius:9px;transition:.2s
+}
+.tog input:checked+.tog-tr{background:#f97316}
+.tog-tr:after{
+  content:'';position:absolute;width:12px;height:12px;background:#fff;
+  border-radius:50%;top:3px;left:3px;transition:.2s
+}
+.tog input:checked+.tog-tr:after{left:19px}
+
+.reset{
+  padding:9px;background:#161616;border:1px solid #2a2a2a;border-radius:6px;
+  color:#555;font-size:11px;font-weight:700;letter-spacing:.1em;cursor:pointer;
+  text-align:center;transition:all .2s;text-transform:uppercase;margin-top:4px
+}
+.reset:hover{background:#1e1e1e;color:#aaa;border-color:#444}
+
+#hint{
+  font-size:10px;color:#333;line-height:1.5;
+  padding:8px;background:#141414;border-radius:6px;border:1px solid #1a1a1a
+}
+#fps{font-size:10px;color:#2e2e2e;text-align:right;margin-top:auto;padding-top:8px}
+</style>
+</head>
+<body>
+
+<div id="wrap"><canvas id="bg"></canvas></div>
+
+<div id="panel">
+  <div class="logo"><span class="logo-dot"></span> BG Playground</div>
+
+  <div>
+    <div class="sec-title">Estilo de ruido</div>
+    <div class="style-row">
+      <div class="stab on" data-s="flow" style="--ac:#f97316">Flow<br><span style="font-size:9px;opacity:.6">partículas</span></div>
+      <div class="stab"    data-s="plasma" style="--ac:#a855f7">Plasma<br><span style="font-size:9px;opacity:.6">orbes</span></div>
+      <div class="stab"    data-s="bands" style="--ac:#22c55e">Bandas<br><span style="font-size:9px;opacity:.6">aurora</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-title">Paleta Umbusk</div>
+    <div class="pal-row">
+      <div class="pBtn" data-p="intuicion" title="Intuición"
+        style="background:radial-gradient(circle at 40% 40%,#fb923c,#f97316,#7c2d12);border:2px solid #fff;transform:scale(1.18)"></div>
+      <div class="pBtn" data-p="imaginacion" title="Imaginación"
+        style="background:radial-gradient(circle at 40% 40%,#c084fc,#a855f7,#581c87)"></div>
+      <div class="pBtn" data-p="emocion" title="Emoción"
+        style="background:radial-gradient(circle at 40% 40%,#f87171,#ef4444,#7f1d1d)"></div>
+      <div class="pBtn" data-p="sentido" title="Sentido"
+        style="background:radial-gradient(circle at 40% 40%,#4ade80,#22c55e,#064e3b)"></div>
+    </div>
+  </div>
+
+  <div id="psec">
+    <!-- dynamic params -->
+  </div>
+
+  <div>
+    <div class="sec-title">Mouse</div>
+    <div class="tog-row" style="margin-bottom:8px">
+      <span style="color:#888">Interacción activa</span>
+      <label class="tog"><input type="checkbox" id="mTog" checked><div class="tog-tr"></div></label>
+    </div>
+    <div class="param">
+      <div class="plabel">Radio de influencia <b id="miV">100 px</b></div>
+      <input type="range" id="miR" min="40" max="300" value="100">
+    </div>
+  </div>
+
+  <div id="hint">
+    🖱 Mueve el mouse sobre el canvas.<br>
+    🖱 Clic para efecto especial.<br>
+    ✦ Ajusta parámetros en tiempo real.
+  </div>
+
+  <div class="reset" id="rst">↺ Restablecer defaults</div>
+  <div id="fps">— fps</div>
+</div>
+
+<script>
+// ── PERLIN NOISE ──────────────────────────────────────────────
+class Perlin {
+  constructor() {
+    this.p = new Uint8Array(512);
+    const t = [...Array(256)].map((_,i)=>i);
+    for (let i=255;i>0;i--){const j=Math.random()*(i+1)|0;[t[i],t[j]]=[t[j],t[i]];}
+    for (let i=0;i<512;i++) this.p[i]=t[i&255];
+  }
+  fade(t){return t*t*t*(t*(t*6-15)+10)}
+  lerp(a,b,t){return a+t*(b-a)}
+  grad(h,x,y){h&=3;const u=h<2?x:y,v=h<2?y:x;return((h&1)?-u:u)+((h&2)?-v:v)}
+  n(x,y){
+    const X=Math.floor(x)&255,Y=Math.floor(y)&255;
+    x-=Math.floor(x);y-=Math.floor(y);
+    const u=this.fade(x),v=this.fade(y);
+    const a=this.p[X]+Y,b=this.p[X+1]+Y;
+    return this.lerp(
+      this.lerp(this.grad(this.p[a],x,y),    this.grad(this.p[b],x-1,y),u),
+      this.lerp(this.grad(this.p[a+1],x,y-1),this.grad(this.p[b+1],x-1,y-1),u),v);
+  }
+}
+const pn = new Perlin();
+
+// ── PALETTES ──────────────────────────────────────────────────
+const PAL = {
+  intuicion:  {a:[251,146,60],b:[249,115,22],c:[194,65,12], bg:[13,5,0]},
+  imaginacion:{a:[192,132,252],b:[168,85,247],c:[124,58,237],bg:[6,0,16]},
+  emocion:    {a:[248,113,113],b:[239,68,68], c:[185,28,28], bg:[13,0,0]},
+  sentido:    {a:[74,222,128], b:[34,197,94], c:[13,148,136],bg:[0,16,10]},
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+const cv=document.getElementById('bg'),ctx=cv.getContext('2d');
+let W,H,animId,style='flow',pal='intuicion';
+let mx=0,my=0,smx=0,smy=0,mouseOn=true;
+let t=0,lastT=0,fc=0,ft=0;
+
+const DEFS={
+  flow:  {noiseScale:.0025, speed:1.2, count:350, fade:.04,  mouseR:100},
+  plasma:{noiseScale:.004,  speed:.7,  count:6,   size:1.2,  mouseR:100},
+  bands: {noiseScale:.003,  speed:.6,  count:8,   warp:1.2,  mouseR:100},
+};
+let P={};
+
+// ── RESIZE ────────────────────────────────────────────────────
+function resize(){
+  const wr=document.getElementById('wrap');
+  W=cv.width=wr.clientWidth; H=cv.height=wr.clientHeight;
+}
+
+// ── MOUSE ─────────────────────────────────────────────────────
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+cv.addEventListener('click',e=>onClic(e.clientX,e.clientY));
+window.addEventListener('resize',()=>{resize();boot(style)});
+
+// ── ENGINES ───────────────────────────────────────────────────
+
+// FLOW FIELD
+let pts=[];
+function initFlow(){
+  pts=[];
+  for(let i=0;i<P.count;i++)
+    pts.push({x:Math.random()*W,y:Math.random()*H,vx:0,vy:0,lf:Math.random()});
+  fillBg(1);
+}
+function drawFlow(){
+  const bg=PAL[pal].bg;
+  ctx.fillStyle=`rgba(${bg[0]},${bg[1]},${bg[2]},${P.fade})`;
+  ctx.fillRect(0,0,W,H);
+  ctx.save();
+  for(const p of pts){
+    let nx=p.x*P.noiseScale+t*P.speed*.00025, ny=p.y*P.noiseScale;
+    let angle=pn.n(nx,ny)*Math.PI*4;
+    if(mouseOn){
+      const dx=smx-p.x,dy=smy-p.y,d=Math.hypot(dx,dy);
+      if(d<P.mouseR) angle+=(1-d/P.mouseR)*2;
+    }
+    p.vx=p.vx*.88+Math.cos(angle)*.18;
+    p.vy=p.vy*.88+Math.sin(angle)*.18;
+    const ox=p.x,oy=p.y;
+    p.x+=p.vx*P.speed; p.y+=p.vy*P.speed; p.lf+=.005;
+    const al=Math.sin(p.lf*Math.PI)*.7+.1;
+    const nv=(pn.n(nx,ny)+1)*.5;
+    const [r,g,b]=lerpCol(nv);
+    ctx.strokeStyle=`rgba(${r},${g},${b},${al})`;
+    ctx.lineWidth=1.1;
+    ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(p.x,p.y);ctx.stroke();
+    if(p.x<-5||p.x>W+5||p.y<-5||p.y>H+5||p.lf>1){
+      p.x=Math.random()*W;p.y=Math.random()*H;p.vx=0;p.vy=0;p.lf=Math.random()*.3;
+    }
+  }
+  ctx.restore();
+}
+
+// PLASMA ORBS
+let orbs=[];
+function initPlasma(){
+  orbs=[];
+  for(let i=0;i<P.count;i++)
+    orbs.push({ox:Math.random()*100,oy:Math.random()*100,ox2:Math.random()*100,oy2:Math.random()*100,r:.2+Math.random()*.35});
+  fillBg(1);
+}
+function drawPlasma(){
+  fillBg(1);
+  const sp=P.speed*.0004;
+  orbs.forEach((o,i)=>{
+    let px=(pn.n(o.ox+t*sp,o.oy)+1)*.5*W;
+    let py=(pn.n(o.ox2,o.oy2+t*sp*.7)+1)*.5*H;
+    if(mouseOn){
+      const dx=smx-px,dy=smy-py,d=Math.hypot(dx,dy),rr=P.mouseR*2;
+      if(d<rr){px+=(dx/d)*(1-d/rr)*70;py+=(dy/d)*(1-d/rr)*70;}
+    }
+    const rad=Math.min(W,H)*o.r*P.size;
+    const [r,g,b]=lerpCol(i/(orbs.length-1||1));
+    const gr=ctx.createRadialGradient(px,py,0,px,py,rad);
+    gr.addColorStop(0,`rgba(${r},${g},${b},.4)`);
+    gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
+    ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+  });
+}
+
+// BANDS
+let bands=[];
+function initBands(){
+  bands=[];
+  for(let i=0;i<P.count;i++)
+    bands.push({off:Math.random()*100,sp:.4+Math.random()*.6});
+  fillBg(1);
+}
+function drawBands(){
+  fillBg(1);
+  const sp=P.speed*.0003, n=bands.length;
+  for(let i=0;i<n;i++){
+    const b=bands[i];
+    const yb=(i+.5)/n*H;
+    const nv=i/(n-1||1);
+    const [r,g,v]=lerpCol(nv);
+    const bh=H/n;
+    for(let pass=0;pass<3;pass++){
+      const lw=bh*(.25+pass*.35);
+      const al=(.14-pass*.03)*(1+Math.sin(i*1.7)*.3);
+      ctx.beginPath();
+      const steps=Math.ceil(W/6);
+      for(let s=0;s<=steps;s++){
+        const x=s/steps*W;
+        const warp=pn.n(x*P.noiseScale*.25+t*sp*b.sp, i*.6+b.off)*P.warp*H*.12;
+        let my2=0;
+        if(mouseOn){
+          const dx=smx-x,dy=smy-yb,d=Math.hypot(dx,dy),rr=P.mouseR*1.5;
+          if(d<rr) my2=(1-d/rr)*dy*.35;
+        }
+        s===0?ctx.moveTo(x,yb+warp+my2):ctx.lineTo(x,yb+warp+my2);
+      }
+      ctx.strokeStyle=`rgba(${r},${g},${v},${al})`;
+      ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
+    }
+  }
+}
+
+// CLICK EFFECTS
+let rings=[];
+function onClic(cx,cy){
+  if(style==='flow'){
+    pts.forEach(p=>{
+      const d=Math.hypot(p.x-cx,p.y-cy);
+      if(d<180){p.vx+=(p.x-cx)/d*4;p.vy+=(p.y-cy)/d*4;}
+    });
+  } else if(style==='plasma'){
+    orbs[0].ox=cx/W*100; orbs[0].oy=cy/H*100;
+  } else {
+    bands.forEach(b=>b.off=Math.random()*100);
+  }
+  rings.push({x:cx,y:cy,r:0,max:Math.max(W,H)*.4,t:0});
+}
+function drawRings(){
+  rings=rings.filter(r=>{
+    r.r+=5; r.t+=.04;
+    const al=Math.max(0,.4-r.r/r.max*.4);
+    if(al<=0) return false;
+    const [ri,gi,bi]=lerpCol(.5);
+    ctx.strokeStyle=`rgba(${ri},${gi},${bi},${al})`;
+    ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);ctx.stroke();
+    return r.r<r.max;
+  });
+}
+
+// ── HELPERS ───────────────────────────────────────────────────
+function fillBg(al){
+  const [r,g,b]=PAL[pal].bg;
+  ctx.fillStyle=al===1?`rgb(${r},${g},${b})`:`rgba(${r},${g},${b},${al})`;
+  ctx.fillRect(0,0,W,H);
+}
+function lerpCol(t){
+  const {a,b,c}=PAL[pal];
+  if(t<.5){const f=t*2;return[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f,a[2]+(b[2]-a[2])*f].map(Math.round);}
+  const f=(t-.5)*2;return[b[0]+(c[0]-b[0])*f,b[1]+(c[1]-b[1])*f,b[2]+(c[2]-b[2])*f].map(Math.round);
+}
+
+// ── PARAM CONFIG ──────────────────────────────────────────────
+const PCFG={
+  flow:[
+    {id:'noiseScale',lbl:'Escala de ruido',min:.0003,max:.012,step:.0001,fmt:v=>(v*1000).toFixed(1)+'‰'},
+    {id:'speed',     lbl:'Velocidad',      min:.2,   max:3,   step:.05,  fmt:v=>v.toFixed(1)+'×'},
+    {id:'count',     lbl:'Partículas',     min:50,   max:900, step:10,   fmt:v=>Math.round(v),reinit:'flow'},
+    {id:'fade',      lbl:'Rastro (fade)',  min:.005, max:.25, step:.005, fmt:v=>Math.round(v*100)+'%'},
+  ],
+  plasma:[
+    {id:'noiseScale',lbl:'Escala',         min:.001, max:.014,step:.0001,fmt:v=>(v*1000).toFixed(1)+'‰'},
+    {id:'speed',     lbl:'Velocidad',      min:.1,   max:2.5, step:.05,  fmt:v=>v.toFixed(1)+'×'},
+    {id:'count',     lbl:'Nº de orbes',    min:2,    max:12,  step:1,    fmt:v=>Math.round(v),reinit:'plasma'},
+    {id:'size',      lbl:'Tamaño orbes',   min:.4,   max:2.5, step:.05,  fmt:v=>v.toFixed(1)+'×'},
+  ],
+  bands:[
+    {id:'noiseScale',lbl:'Escala de ruido',min:.001, max:.009,step:.0001,fmt:v=>(v*1000).toFixed(1)+'‰'},
+    {id:'speed',     lbl:'Velocidad',      min:.1,   max:2,   step:.05,  fmt:v=>v.toFixed(1)+'×'},
+    {id:'count',     lbl:'Nº de bandas',   min:3,    max:18,  step:1,    fmt:v=>Math.round(v),reinit:'bands'},
+    {id:'warp',      lbl:'Curvatura',      min:.1,   max:3,   step:.05,  fmt:v=>v.toFixed(1)+'×'},
+  ],
+};
+function buildParams(){
+  const sec=document.getElementById('psec');
+  sec.innerHTML=`<div class="sec-title">Parámetros</div>`;
+  PCFG[style].forEach(c=>{
+    sec.innerHTML+=`<div class="param">
+      <div class="plabel">${c.lbl} <b id="lv_${c.id}">${c.fmt(P[c.id])}</b></div>
+      <input type="range" id="rg_${c.id}" min="${c.min}" max="${c.max}" step="${c.step}" value="${P[c.id]}">
+    </div>`;
+  });
+  PCFG[style].forEach(c=>{
+    document.getElementById(`rg_${c.id}`).addEventListener('input',e=>{
+      P[c.id]=parseFloat(e.target.value);
+      document.getElementById(`lv_${c.id}`).textContent=c.fmt(P[c.id]);
+      if(c.reinit){
+        if(c.reinit==='flow') initFlow();
+        else if(c.reinit==='plasma') initPlasma();
+        else initBands();
+      }
+    });
+  });
+}
+
+// ── BOOT / LOOP ───────────────────────────────────────────────
+function boot(s){
+  style=s; P=Object.assign({},DEFS[s],{mouseR:parseInt(document.getElementById('miR').value)||100});
+  cancelAnimationFrame(animId);
+  if(s==='flow') initFlow();
+  else if(s==='plasma') initPlasma();
+  else initBands();
+  buildParams();
+  loop();
+}
+
+function loop(ts=0){
+  const dt=Math.min(ts-lastT,50); lastT=ts; t+=dt;
+  fc++; if(t-ft>1000){document.getElementById('fps').textContent=fc+' fps';fc=0;ft=t;}
+  smx+=(mx-smx)*.06; smy+=(my-smy)*.06;
+  if(style==='flow') drawFlow();
+  else if(style==='plasma') drawPlasma();
+  else drawBands();
+  drawRings();
+  animId=requestAnimationFrame(loop);
+}
+
+// ── UI EVENTS ─────────────────────────────────────────────────
+document.querySelectorAll('.stab').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.stab').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); boot(b.dataset.s);
+  });
+});
+
+document.querySelectorAll('.pBtn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.pBtn').forEach(x=>{
+      x.style.border='2px solid transparent'; x.style.transform='';
+    });
+    b.style.border='2px solid #fff'; b.style.transform='scale(1.18)';
+    pal=b.dataset.p;
+    if(style==='plasma') initPlasma();
+    else fillBg(1);
+  });
+});
+
+document.getElementById('mTog').addEventListener('change',e=>{mouseOn=e.target.checked});
+document.getElementById('miR').addEventListener('input',e=>{
+  P.mouseR=parseInt(e.target.value);
+  document.getElementById('miV').textContent=e.target.value+' px';
+});
+document.getElementById('rst').addEventListener('click',()=>{
+  // reset palette
+  document.querySelectorAll('.pBtn').forEach((b,i)=>{
+    b.style.border=i===0?'2px solid #fff':'2px solid transparent';
+    b.style.transform=i===0?'scale(1.18)':'';
+  });
+  pal='intuicion';
+  document.getElementById('miR').value=100;
+  document.getElementById('miV').textContent='100 px';
+  document.getElementById('mTog').checked=true; mouseOn=true;
+  boot(style);
+});
+
+// ── INIT ──────────────────────────────────────────────────────
+resize();
+boot('flow');
+</script>
+</body>
+</html>
