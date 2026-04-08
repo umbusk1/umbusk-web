@@ -543,7 +543,12 @@ function setPGPalette(p,btn){
 // ═══════════════════════════════════════════════════════════
 // STORAGE
 // ═══════════════════════════════════════════════════════════
-const foundationConfigs={intuicion:null,imaginacion:null,emocion:null,sentido:null};
+const foundationConfigs={
+  intuicion:{style:"bands",palette:"gold",params:{noiseScale:0.0051,speed:0.25,count:13,warp:2.5,mouseR:173}},
+  imaginacion:{style:"plasma",palette:"lavender",params:{noiseScale:0.004,speed:0.7,count:6,size:0.45,mouseR:100}},
+  emocion:{style:"bands",palette:"red",params:{noiseScale:0.001,speed:0.6,count:3,warp:3,mouseR:67}},
+  sentido:{style:"flow",palette:"gold",params:{noiseScale:0.0025,speed:1.2,count:170,fade:0.02,mouseR:67}}
+};
 function loadFndConfigs(){try{const s=localStorage.getItem('umbusk_fnd');if(s){const d=JSON.parse(s);Object.keys(foundationConfigs).forEach(k=>{if(d[k]){const c=d[k];if(!VALID_PAL.includes(c.palette))c.palette='gold';foundationConfigs[k]=c;}});}}catch(e){}}
 function saveFndToDisk(){try{localStorage.setItem('umbusk_fnd',JSON.stringify(foundationConfigs));}catch(e){}}
 
