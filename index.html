@@ -538,6 +538,12 @@ function drawPG(){if(pgStyle==='flow')drawPGFlow();else if(pgStyle==='plasma')dr
 function drawWithCfg(cfg){
   const _s=pgStyle,_p=pgPalette,_pr=pgParams;
   pgStyle=cfg.style;pgPalette=VALID_PAL.includes(cfg.palette)?cfg.palette:'gold';pgParams=cfg.params;
+  if(pgStyle!=='solid'){
+    const n=cfg.params.count|0;
+    if((pgStyle==='flow'&&pgPts.length!==n)||(pgStyle==='plasma'&&pgOrbs.length!==n)||(pgStyle==='bands'&&pgBands.length!==n)){
+      if(pgStyle==='flow')initPGFlow();else if(pgStyle==='plasma')initPGPlasma();else initPGBands();
+    }
+  }
   drawPG();pgStyle=_s;pgPalette=_p;pgParams=_pr;
 }
 function buildPGParams(){
