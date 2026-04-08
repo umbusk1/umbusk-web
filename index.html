@@ -380,7 +380,10 @@ function sigSetTab(id,btn){
 }
 function sigSetF(f,btn){
   curF=f;renderMode='foundation';
-  if(!foundationConfigs[f])initFoundation(f);
+  const _c=foundationConfigs[f];
+  if(_c){pgStyle=_c.style;pgPalette=_c.palette;pgParams={..._c.params};gctx=ctx;
+    if(_c.style==='flow')initPGFlow();else if(_c.style==='plasma')initPGPlasma();else initPGBands();}
+  else initFoundation(f);
   document.querySelectorAll('#sigBtmTabs .btm-tab').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
   document.getElementById('sigEText').innerHTML=EF[f][lang];
@@ -539,38 +542,6 @@ function setPGPalette(p,btn){
   btn.style.border='2px solid #fff';btn.style.transform='scale(1.18)';
   pgPalette=p;if(pgStyle==='plasma'){gctx=pgCtxOff;initPGPlasma();gctx=ctx;}
 }
-// ── MOBILE NOISE CARD ─────────────────────────────────────
-function setNCMobTab(tab,btn){
-  document.querySelectorAll('#noiseCard .top-tab').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  else{const m={rat:'nct-rat',panel:'nct-panel',res:'nct-res'},el=document.getElementById(m[tab]);if(el)el.classList.add('active');}
-  document.querySelectorAll('#noiseCard .panel').forEach(p=>p.classList.remove('on'));
-  const pane=document.getElementById('nc-pane-'+tab);if(pane)pane.classList.add('on');
-}
-function buildPGParamsMob(){
-  const sec=document.getElementById('nc-pane-params'),cfg=PGCFG[pgStyle];if(!sec||!cfg)return;
-  let h='<div class="nc-sec"><div class="nc-sec-title">'+(lang==='es'?'Parámetros':'Parameters')+'</div>';
-  cfg.forEach(c=>{h+=`<div class="nc-param"><div class="nc-plabel">${c.lbl[lang]||c.lbl.es} <b id="mpglv_${c.id}">${c.fmt(pgParams[c.id])}</b></div><input type="range" id="mpgrg_${c.id}" min="${c.min}" max="${c.max}" step="${c.step}" value="${pgParams[c.id]}"></div>`;});
-  sec.innerHTML=h+'</div>';
-  cfg.forEach(c=>{const el=document.getElementById(`mpgrg_${c.id}`);if(el)el.addEventListener('input',e=>{pgParams[c.id]=parseFloat(e.target.value);const lv=document.getElementById(`mpglv_${c.id}`);if(lv)lv.textContent=c.fmt(pgParams[c.id]);if(c.ri==='flow')initPGFlow();else if(c.ri==='plasma')initPGPlasma();else if(c.ri==='bands')initPGBands();});});
-}
-function syncMobUI(){
-  document.querySelectorAll('#nc-pane-panel .nc-stab').forEach(b=>b.classList.toggle('on',b.dataset.s===pgStyle));
-  document.querySelectorAll('#nc-pane-panel .nc-pbtn').forEach(b=>{const on=b.dataset.p===pgPalette;b.style.border=on?'2px solid #fff':'2px solid transparent';b.style.transform=on?'scale(1.18)':'';});
-  buildPGParamsMob();
-}
-function setPGStyleMob(s,btn){
-  document.querySelectorAll('#nc-pane-panel .nc-stab').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');
-  pgStyle=s;pgParams=Object.assign({},PGDEFS[s],{mouseR:pgMouseR});
-  gctx=pgCtxOff;if(s==='flow')initPGFlow();else if(s==='plasma')initPGPlasma();else initPGBands();gctx=ctx;
-  buildPGParamsMob();syncPGUI();
-}
-function setPGPaletteMob(p,btn){
-  document.querySelectorAll('#nc-pane-panel .nc-pbtn').forEach(b=>{b.style.border='2px solid transparent';b.style.transform='';});
-  if(btn){btn.style.border='2px solid #fff';btn.style.transform='scale(1.18)';}
-  pgPalette=p;if(pgStyle==='plasma'){gctx=pgCtxOff;initPGPlasma();gctx=ctx;}
-  syncPGUI();
-}
 
 // ═══════════════════════════════════════════════════════════
 // STORAGE
@@ -652,6 +623,13 @@ function animate(ts){
 // ═══════════════════════════════════════════════════════════
 resize();loadFndConfigs();
 curF='intuicion';
+// Init PG arrays for all default configs (reverse order: intuicion last so its arrays are ready for first frame)
+['sentido','emocion','imaginacion','intuicion'].forEach(f=>{
+  const c=foundationConfigs[f];if(!c)return;
+  pgStyle=c.style;pgPalette=c.palette;pgParams={...c.params};gctx=ctx;
+  if(c.style==='flow')initPGFlow();else if(c.style==='plasma')initPGPlasma();else initPGBands();
+});
+pgStyle='flow';pgPalette='gold';pgParams={};gctx=ctx;
 document.querySelectorAll('#sigBtmTabs .btm-tab')[0].classList.add('active');
 document.getElementById('sigEText').innerHTML=EF['intuicion']['es'];
 document.getElementById('ncRatText').innerHTML=RATIONALE['es'];
