@@ -380,7 +380,10 @@ function sigSetTab(id,btn){
 }
 function sigSetF(f,btn){
   curF=f;renderMode='foundation';
-  if(!foundationConfigs[f])initFoundation(f);
+  const _c=foundationConfigs[f];
+  if(_c){pgStyle=_c.style;pgPalette=_c.palette;pgParams={..._c.params};gctx=ctx;
+    if(_c.style==='flow')initPGFlow();else if(_c.style==='plasma')initPGPlasma();else initPGBands();}
+  else initFoundation(f);
   document.querySelectorAll('#sigBtmTabs .btm-tab').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
   document.getElementById('sigEText').innerHTML=EF[f][lang];
@@ -620,6 +623,13 @@ function animate(ts){
 // ═══════════════════════════════════════════════════════════
 resize();loadFndConfigs();
 curF='intuicion';
+// Init PG arrays for all default configs (reverse order: intuicion last so its arrays are ready for first frame)
+['sentido','emocion','imaginacion','intuicion'].forEach(f=>{
+  const c=foundationConfigs[f];if(!c)return;
+  pgStyle=c.style;pgPalette=c.palette;pgParams={...c.params};gctx=ctx;
+  if(c.style==='flow')initPGFlow();else if(c.style==='plasma')initPGPlasma();else initPGBands();
+});
+pgStyle='flow';pgPalette='gold';pgParams={};gctx=ctx;
 document.querySelectorAll('#sigBtmTabs .btm-tab')[0].classList.add('active');
 document.getElementById('sigEText').innerHTML=EF['intuicion']['es'];
 document.getElementById('ncRatText').innerHTML=RATIONALE['es'];
