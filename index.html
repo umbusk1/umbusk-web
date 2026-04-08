@@ -102,7 +102,7 @@ h1 strong{font-weight:700;color:#fff;}
 #nclpanel .panel-body{padding:12px 12px 10px;overflow-y:auto;}
 .nc-sec{margin-bottom:10px;}
 .nc-sec-title{font-size:9.5px;font-weight:700;letter-spacing:.14em;color:#444;text-transform:uppercase;padding-bottom:4px;border-bottom:1px solid #1a1a1a;margin-bottom:6px;}
-.nc-stabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+.nc-stabs{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;}
 .nc-stab{padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;letter-spacing:.04em;border:1px solid #2a2a2a;background:#161616;color:#555;cursor:pointer;text-align:center;transition:all .2s;}
 .nc-stab.on{border-color:var(--ac);color:var(--ac);background:#1c1c1c;}
 .nc-palrow{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;justify-items:center;}
@@ -131,6 +131,8 @@ input[type=range]{width:100%;height:3px;appearance:none;background:#222;border-r
 .nc-rat-text em{color:#888;font-style:italic;}
 .site-footer{flex-shrink:0;width:380px;padding-top:6px;text-align:center;font-family:'Segoe UI',sans-serif;font-size:9px;color:#333;letter-spacing:.3px;line-height:1.8;pointer-events:none;}
 @media(max-width:640px){
+  /* Mobile: hide SEÑAL/RUIDO toggle */
+  .snr-toggle{display:none;}
   html,body{height:auto;min-height:100%;overflow-y:auto;overflow-x:hidden;}
   .page{height:auto;min-height:100vh;}
   canvas{pointer-events:none;}
@@ -151,7 +153,7 @@ input[type=range]{width:100%;height:3px;appearance:none;background:#222;border-r
 <canvas id="cv"></canvas>
 <div class="page">
   <div class="lang-row">
-    <div class="lang-toggle">
+    <div class="lang-toggle snr-toggle">
       <button class="lang-btn active" id="btnSig"   onclick="setMode('signal')" data-es="SEÑAL"  data-en="SIGNAL">SEÑAL</button>
       <button class="lang-btn"        id="btnNoise" onclick="setMode('noise')"  data-es="RUIDO"  data-en="NOISE">RUIDO</button>
     </div>
@@ -241,6 +243,7 @@ input[type=range]{width:100%;height:3px;appearance:none;background:#222;border-r
               <div class="nc-stab on" data-s="flow"   style="--ac:#f5bb50" onclick="setPGStyle('flow',this)">Flow<br><span style="font-size:9px;opacity:.5">partículas</span></div>
               <div class="nc-stab"    data-s="plasma" style="--ac:#bea6d8" onclick="setPGStyle('plasma',this)">Plasma<br><span style="font-size:9px;opacity:.5">orbes</span></div>
               <div class="nc-stab"    data-s="bands"  style="--ac:#b2d094" onclick="setPGStyle('bands',this)">Bandas<br><span style="font-size:9px;opacity:.5">aurora</span></div>
+              <div class="nc-stab"    data-s="solid"  style="--ac:#e07818" onclick="setPGStyle('solid',this)" data-es-sub="color" data-en-sub="color">Sólido<br><span style="font-size:9px;opacity:.5">color</span></div>
             </div>
           </div>
           <div class="nc-sec">
@@ -380,10 +383,7 @@ function sigSetTab(id,btn){
 }
 function sigSetF(f,btn){
   curF=f;renderMode='foundation';
-  const _c=foundationConfigs[f];
-  if(_c){pgStyle=_c.style;pgPalette=_c.palette;pgParams={..._c.params};gctx=ctx;
-    if(_c.style==='flow')initPGFlow();else if(_c.style==='plasma')initPGPlasma();else initPGBands();}
-  else initFoundation(f);
+  if(!foundationConfigs[f])initFoundation(f);
   document.querySelectorAll('#sigBtmTabs .btm-tab').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
   document.getElementById('sigEText').innerHTML=EF[f][lang];
@@ -495,11 +495,20 @@ const PGPAL={
   lightgreen:{a:[205,228,180],b:[178,208,148],c:[130,170,95],  bg:[5,12,3]}
 };
 const VALID_PAL=['gold','lavender','red','lightgreen'];
-const PGDEFS={flow:{noiseScale:.0025,speed:1.2,count:350,fade:.04,mouseR:100},plasma:{noiseScale:.004,speed:.7,count:6,size:1.2,mouseR:100},bands:{noiseScale:.003,speed:.6,count:8,warp:1.2,mouseR:100}};
+const PGDEFS={
+  flow: {noiseScale:.0025,speed:1.2,count:350,fade:.04,  mouseR:100},
+  plasma:{noiseScale:.004, speed:.7, count:6,  size:1.2,  mouseR:100},
+  bands: {noiseScale:.003, speed:.6, count:8,  warp:1.2,  mouseR:100},
+  solid: {intensity:.85,  blend:.4,                      mouseR:100}
+};
 const PGCFG={
   flow:[{id:'noiseScale',lbl:{es:'Escala ruido',en:'Noise scale'},min:.0003,max:.012,step:.0001,fmt:v=>(v*1000).toFixed(1)+'‰'},{id:'speed',lbl:{es:'Velocidad',en:'Speed'},min:.2,max:3,step:.05,fmt:v=>v.toFixed(1)+'×'},{id:'count',lbl:{es:'Partículas',en:'Particles'},min:50,max:900,step:10,fmt:v=>Math.round(v),ri:'flow'},{id:'fade',lbl:{es:'Rastro',en:'Trail'},min:.005,max:.25,step:.005,fmt:v=>Math.round(v*100)+'%'}],
   plasma:[{id:'noiseScale',lbl:{es:'Escala',en:'Scale'},min:.001,max:.014,step:.0001,fmt:v=>(v*1000).toFixed(1)+'‰'},{id:'speed',lbl:{es:'Velocidad',en:'Speed'},min:.1,max:2.5,step:.05,fmt:v=>v.toFixed(1)+'×'},{id:'count',lbl:{es:'Orbes',en:'Orbs'},min:2,max:12,step:1,fmt:v=>Math.round(v),ri:'plasma'},{id:'size',lbl:{es:'Tamaño',en:'Size'},min:.4,max:2.5,step:.05,fmt:v=>v.toFixed(1)+'×'}],
-  bands:[{id:'noiseScale',lbl:{es:'Escala ruido',en:'Noise scale'},min:.001,max:.009,step:.0001,fmt:v=>(v*1000).toFixed(1)+'‰'},{id:'speed',lbl:{es:'Velocidad',en:'Speed'},min:.1,max:2,step:.05,fmt:v=>v.toFixed(1)+'×'},{id:'count',lbl:{es:'Bandas',en:'Bands'},min:3,max:18,step:1,fmt:v=>Math.round(v),ri:'bands'},{id:'warp',lbl:{es:'Curvatura',en:'Warp'},min:.1,max:3,step:.05,fmt:v=>v.toFixed(1)+'×'}]
+  bands:[{id:'noiseScale',lbl:{es:'Escala ruido',en:'Noise scale'},min:.001,max:.009,step:.0001,fmt:v=>(v*1000).toFixed(1)+'‰'},{id:'speed',lbl:{es:'Velocidad',en:'Speed'},min:.1,max:2,step:.05,fmt:v=>v.toFixed(1)+'×'},{id:'count',lbl:{es:'Bandas',en:'Bands'},min:3,max:18,step:1,fmt:v=>Math.round(v),ri:'bands'},{id:'warp',lbl:{es:'Curvatura',en:'Warp'},min:.1,max:3,step:.05,fmt:v=>v.toFixed(1)+'×'}],
+  solid:[
+    {id:'intensity',lbl:{es:'Intensidad',en:'Intensity'},min:.05,max:1,  step:.05,fmt:v=>Math.round(v*100)+'%'},
+    {id:'blend',    lbl:{es:'Mezcla',    en:'Blend'},    min:0,  max:1,  step:.05,fmt:v=>Math.round(v*100)+'%'},
+  ]
 };
 let pgStyle='flow',pgPalette='gold',pgParams={},pgPts=[],pgOrbs=[],pgBands=[],pgMouseOn=true,pgMouseR=100;
 
@@ -511,7 +520,20 @@ function initPGBands(){pgBands=[];for(let i=0;i<pgParams.count;i++)pgBands.push(
 function drawPGFlow(){pgBGa(pgParams.fade);for(const p of pgPts){let nx=p.x*pgParams.noiseScale+pgT*pgParams.speed*.00025,ny=p.y*pgParams.noiseScale,angle=pn.n(nx,ny)*Math.PI*4;if(pgMouseOn&&mxS!==null){const dx=mxS-p.x,dy=myS-p.y,d=Math.hypot(dx,dy);if(d<pgParams.mouseR)angle+=(1-d/pgParams.mouseR)*2;}p.vx=p.vx*.88+Math.cos(angle)*.18;p.vy=p.vy*.88+Math.sin(angle)*.18;const ox=p.x,oy=p.y;p.x+=p.vx*pgParams.speed;p.y+=p.vy*pgParams.speed;p.lf+=.005;const al=Math.sin(p.lf*Math.PI)*.7+.1,nv=(pn.n(nx,ny)+1)*.5,[r,g,b]=pgLC(nv);gctx.strokeStyle=`rgba(${r},${g},${b},${al})`;gctx.lineWidth=1.1;gctx.beginPath();gctx.moveTo(ox,oy);gctx.lineTo(p.x,p.y);gctx.stroke();if(p.x<-5||p.x>W+5||p.y<-5||p.y>H+5||p.lf>1){p.x=Math.random()*W;p.y=Math.random()*H;p.vx=0;p.vy=0;p.lf=Math.random()*.3;}}}
 function drawPGPlasma(){pgBGa(1);const sp=pgParams.speed*.0004;pgOrbs.forEach((o,i)=>{let px=(pn.n(o.ox+pgT*sp,o.oy)+1)*.5*W,py=(pn.n(o.ox2,o.oy2+pgT*sp*.7)+1)*.5*H;if(pgMouseOn&&mxS!==null){const dx=mxS-px,dy=myS-py,d=Math.hypot(dx,dy),rr=pgParams.mouseR*2;if(d<rr){px+=(dx/d)*(1-d/rr)*70;py+=(dy/d)*(1-d/rr)*70;}}const rad=Math.min(W,H)*o.r*pgParams.size,[r,g,b]=pgLC(i/(pgOrbs.length-1||1)),gr=gctx.createRadialGradient(px,py,0,px,py,rad);gr.addColorStop(0,`rgba(${r},${g},${b},.4)`);gr.addColorStop(1,`rgba(${r},${g},${b},0)`);gctx.fillStyle=gr;gctx.fillRect(0,0,W,H);});}
 function drawPGBands(){pgBGa(1);const sp=pgParams.speed*.0003,n=pgBands.length;for(let i=0;i<n;i++){const b=pgBands[i],yb=(i+.5)/n*H,nv=i/(n-1||1),bh=H/n,[r,g,v]=pgLC(nv);for(let pass=0;pass<3;pass++){const lw=bh*(.25+pass*.35),al=(.14-pass*.03)*(1+Math.sin(i*1.7)*.3);gctx.beginPath();const st=Math.ceil(W/6);for(let s=0;s<=st;s++){const x=s/st*W,warp=pn.n(x*pgParams.noiseScale*.25+pgT*sp*b.sp,i*.6+b.off)*pgParams.warp*H*.12;let my2=0;if(pgMouseOn&&mxS!==null){const dx=mxS-x,dy=myS-yb,d=Math.hypot(dx,dy),rr=pgParams.mouseR*1.5;if(d<rr)my2=(1-d/rr)*dy*.35;}s===0?gctx.moveTo(x,yb+warp+my2):gctx.lineTo(x,yb+warp+my2);}gctx.strokeStyle=`rgba(${r},${g},${v},${al})`;gctx.lineWidth=lw;gctx.lineCap='round';gctx.stroke();}}}
-function drawPG(){if(pgStyle==='flow')drawPGFlow();else if(pgStyle==='plasma')drawPGPlasma();else drawPGBands();}
+function drawPGSolid(){
+  const{a,b,bg}=PGPAL[pgPalette]||PGPAL.gold;
+  const inten=pgParams.intensity??0.85, blen=pgParams.blend??0.4;
+  // dark base
+  gctx.fillStyle=`rgb(${bg})`;gctx.fillRect(0,0,W,H);
+  // interpolated colour between a and b
+  const col=a.map((v,i)=>Math.round(v+(b[i]-v)*blen));
+  // soft radial spread
+  const gr=gctx.createRadialGradient(W/2,H*.45,0,W/2,H*.45,Math.max(W,H)*.75);
+  gr.addColorStop(0,`rgba(${col},${inten})`);
+  gr.addColorStop(1,`rgba(${bg},0)`);
+  gctx.fillStyle=gr;gctx.fillRect(0,0,W,H);
+}
+function drawPG(){if(pgStyle==='flow')drawPGFlow();else if(pgStyle==='plasma')drawPGPlasma();else if(pgStyle==='bands')drawPGBands();else if(pgStyle==='solid')drawPGSolid();}
 function drawWithCfg(cfg){
   const _s=pgStyle,_p=pgPalette,_pr=pgParams;
   pgStyle=cfg.style;pgPalette=VALID_PAL.includes(cfg.palette)?cfg.palette:'gold';pgParams=cfg.params;
@@ -534,13 +556,45 @@ function syncPGUI(){
 function setPGStyle(s,btn){
   document.querySelectorAll('.nc-stab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
   pgStyle=s;pgParams=Object.assign({},PGDEFS[s],{mouseR:pgMouseR});
-  gctx=pgCtxOff;if(s==='flow')initPGFlow();else if(s==='plasma')initPGPlasma();else initPGBands();gctx=ctx;
+  if(s!=='solid'){gctx=pgCtxOff;if(s==='flow')initPGFlow();else if(s==='plasma')initPGPlasma();else initPGBands();gctx=ctx;}
   buildPGParams();
 }
 function setPGPalette(p,btn){
   document.querySelectorAll('.nc-pbtn').forEach(b=>{b.style.border='2px solid transparent';b.style.transform='';});
   btn.style.border='2px solid #fff';btn.style.transform='scale(1.18)';
   pgPalette=p;if(pgStyle==='plasma'){gctx=pgCtxOff;initPGPlasma();gctx=ctx;}
+}
+// ── MOBILE NOISE CARD ─────────────────────────────────────
+function setNCMobTab(tab,btn){
+  document.querySelectorAll('#noiseCard .top-tab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  else{const m={rat:'nct-rat',panel:'nct-panel',res:'nct-res'},el=document.getElementById(m[tab]);if(el)el.classList.add('active');}
+  document.querySelectorAll('#noiseCard .panel').forEach(p=>p.classList.remove('on'));
+  const pane=document.getElementById('nc-pane-'+tab);if(pane)pane.classList.add('on');
+}
+function buildPGParamsMob(){
+  const sec=document.getElementById('nc-pane-params'),cfg=PGCFG[pgStyle];if(!sec||!cfg)return;
+  let h='<div class="nc-sec"><div class="nc-sec-title">'+(lang==='es'?'Parámetros':'Parameters')+'</div>';
+  cfg.forEach(c=>{h+=`<div class="nc-param"><div class="nc-plabel">${c.lbl[lang]||c.lbl.es} <b id="mpglv_${c.id}">${c.fmt(pgParams[c.id])}</b></div><input type="range" id="mpgrg_${c.id}" min="${c.min}" max="${c.max}" step="${c.step}" value="${pgParams[c.id]}"></div>`;});
+  sec.innerHTML=h+'</div>';
+  cfg.forEach(c=>{const el=document.getElementById(`mpgrg_${c.id}`);if(el)el.addEventListener('input',e=>{pgParams[c.id]=parseFloat(e.target.value);const lv=document.getElementById(`mpglv_${c.id}`);if(lv)lv.textContent=c.fmt(pgParams[c.id]);if(c.ri==='flow')initPGFlow();else if(c.ri==='plasma')initPGPlasma();else if(c.ri==='bands')initPGBands();});});
+}
+function syncMobUI(){
+  document.querySelectorAll('#nc-pane-panel .nc-stab').forEach(b=>b.classList.toggle('on',b.dataset.s===pgStyle));
+  document.querySelectorAll('#nc-pane-panel .nc-pbtn').forEach(b=>{const on=b.dataset.p===pgPalette;b.style.border=on?'2px solid #fff':'2px solid transparent';b.style.transform=on?'scale(1.18)':'';});
+  buildPGParamsMob();
+}
+function setPGStyleMob(s,btn){
+  document.querySelectorAll('#nc-pane-panel .nc-stab').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');
+  pgStyle=s;pgParams=Object.assign({},PGDEFS[s],{mouseR:pgMouseR});
+  gctx=pgCtxOff;if(s==='flow')initPGFlow();else if(s==='plasma')initPGPlasma();else initPGBands();gctx=ctx;
+  buildPGParamsMob();syncPGUI();
+}
+function setPGPaletteMob(p,btn){
+  document.querySelectorAll('#nc-pane-panel .nc-pbtn').forEach(b=>{b.style.border='2px solid transparent';b.style.transform='';});
+  if(btn){btn.style.border='2px solid #fff';btn.style.transform='scale(1.18)';}
+  pgPalette=p;if(pgStyle==='plasma'){gctx=pgCtxOff;initPGPlasma();gctx=ctx;}
+  syncPGUI();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -623,13 +677,6 @@ function animate(ts){
 // ═══════════════════════════════════════════════════════════
 resize();loadFndConfigs();
 curF='intuicion';
-// Init PG arrays for all default configs (reverse order: intuicion last so its arrays are ready for first frame)
-['sentido','emocion','imaginacion','intuicion'].forEach(f=>{
-  const c=foundationConfigs[f];if(!c)return;
-  pgStyle=c.style;pgPalette=c.palette;pgParams={...c.params};gctx=ctx;
-  if(c.style==='flow')initPGFlow();else if(c.style==='plasma')initPGPlasma();else initPGBands();
-});
-pgStyle='flow';pgPalette='gold';pgParams={};gctx=ctx;
 document.querySelectorAll('#sigBtmTabs .btm-tab')[0].classList.add('active');
 document.getElementById('sigEText').innerHTML=EF['intuicion']['es'];
 document.getElementById('ncRatText').innerHTML=RATIONALE['es'];
