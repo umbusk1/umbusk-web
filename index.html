@@ -683,6 +683,13 @@ function animate(ts){
 // BOOT
 // ═══════════════════════════════════════════════════════════
 resize();loadFndConfigs();
+// Populate all data-es/data-en elements with default language on boot
+document.querySelectorAll('[data-es]').forEach(el=>{
+  const v=el.getAttribute('data-es');if(!v)return;
+  if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=v;
+  else if(/<[a-z]/i.test(v))el.innerHTML=v;
+  else el.textContent=v;
+});
 curF='intuicion';
 document.querySelectorAll('#sigBtmTabs .btm-tab')[0].classList.add('active');
 document.getElementById('sigEText').innerHTML=EF['intuicion']['es'];
