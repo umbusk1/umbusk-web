@@ -4,6 +4,16 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Umbusk LLC</title>
+<meta name="description" content="Fábrica de prototipos: de la idea al artefacto, en semanas, no en meses. Diseño e inteligencia artificial para convertir ideas en productos digitales funcionales.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.umbusk.com/">
+<meta property="og:site_name" content="Umbusk">
+<meta property="og:title" content="Umbusk · Fábrica de Prototipos">
+<meta property="og:description" content="De la idea al artefacto. En semanas, no en meses.">
+<meta property="og:image" content="https://www.umbusk.com/logo-umbusk.png">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="/favicon-umbusk.png">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4ZX7XFWXTK"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-4ZX7XFWXTK');</script>
@@ -27,14 +37,14 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:all;z-i
 .card-container{padding-bottom:120px;}
 #noiseCard{padding-bottom:30px;transform:translateX(calc(100vw + 500px));z-index:2;}
 .top-tabs{position:absolute;top:0;left:0;right:0;height:34px;display:flex;z-index:10;}
-.top-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;border-radius:8px 8px 0 0;color:#252525;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
+.top-tab{flex:1;height:34px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-bottom:1px solid #2a2a2a;border-radius:8px 8px 0 0;color:#6a6a6a;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
 .top-tab+.top-tab{margin-left:-1px;}
 .top-tab:hover{background:#161616;color:#bbb;}
 .top-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-bottom-color:#1a1a1a;color:#e07818;z-index:1;}
 .top-tab.ghost{visibility:hidden;pointer-events:none;}
 .btm-tabs{position:absolute;bottom:90px;left:0;right:0;height:30px;display:flex;z-index:10;}
 #noiseCard .btm-tabs{bottom:0;}
-.btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-top:1px solid #2a2a2a;border-radius:0 0 8px 8px;color:#252525;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
+.btm-tab{flex:1;height:30px;display:flex;align-items:center;justify-content:center;background:#111;border:1px solid #1e1e1e;border-top:1px solid #2a2a2a;border-radius:0 0 8px 8px;color:#5e5e5e;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:background .18s,color .18s;user-select:none;}
 .btm-tab+.btm-tab{margin-left:-1px;}
 .btm-tab:hover{background:#161616;color:#bbb;}
 .btm-tab.active{background:#1a1a1a;border-color:#2a2a2a;border-top-color:#1a1a1a;color:#e07818;z-index:1;}
@@ -83,22 +93,23 @@ h1 strong{font-weight:700;color:#fff;}
 .pmore:hover{background:#2a1808;}
 .slabel{font-style:italic;}.sshort{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}.slong{display:none;margin-top:4px;}
 .srow.open .sshort{display:none;}.srow.open .slong{display:block;}.srow.open .sclients{display:block!important;}
-.sclients{font-size:10.5px;color:#333;margin-top:6px;line-height:2;}
-.sclients a{color:#555;text-decoration:none;margin-left:4px;}.sclients a:hover{color:#e07818;}
+.sclients{font-size:10.5px;color:#5a5a5a;margin-top:6px;line-height:2;}
+.sclients a{color:#8a8a8a;text-decoration:none;margin-left:4px;}.sclients a:hover{color:#e07818;}
 .smore{display:inline-block;margin-top:6px;font-size:10px;color:#e07818;letter-spacing:1px;cursor:pointer;border:1px solid #2a1a08;border-radius:3px;padding:1px 7px;background:#1a1008;transition:background .2s;}
 .smore:hover{background:#2a1808;}
+.s-cta{margin-top:14px;}
 .srow{padding:9px 0;border-bottom:1px solid #1f1f1f;}.srow:last-child{border:none;}
 .sname{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:2px;}
 .sdesc{font-size:11.5px;color:#777;line-height:1.5;}
 .field{margin-bottom:9px;}
-.flabel{display:block;font-size:9.5px;color:#444;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+.flabel{display:block;font-size:9.5px;color:#666;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
 .finput{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:7px;color:#fff;font-size:12.5px;padding:9px 11px;outline:none;font-family:'Segoe UI',sans-serif;transition:border-color .2s;resize:none;}
-.finput:focus{border-color:#e07818;}.finput::placeholder{color:#252525;}
+.finput:focus{border-color:#e07818;}.finput::placeholder{color:#4a4a4a;}
 .btn-send{width:100%;background:linear-gradient(135deg,#7a3a00,#e07818);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:600;padding:12px;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;margin-top:2px;}
 .btn-send:hover{opacity:.88;}
-.c-info{font-size:10px;color:#2a2a2a;text-align:center;margin-top:12px;line-height:2;}
+.c-info{font-size:10px;color:#5a5a5a;text-align:center;margin-top:12px;line-height:2;}
 .info-item{padding:10px 0;border-bottom:1px solid #1f1f1f;}.info-item:last-child{border:none;}
-.info-key{font-size:9px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.info-key{font-size:9px;color:#5a5a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
 /* ── NOISE LEFT PANEL (no header, no ✕) ── */
 #nclpanel .panel-body{padding:12px 12px 10px;overflow-y:auto;}
 .nc-sec{margin-bottom:10px;}
@@ -130,7 +141,7 @@ input[type=range]{width:100%;height:3px;appearance:none;background:#222;border-r
 .nc-rat-text p.rat-title{font-size:21px;font-weight:300;color:#e0e0e0;line-height:1.3;margin-bottom:14px;}
 .nc-rat-text p:last-child{margin-bottom:0;}
 .nc-rat-text em{color:#888;font-style:italic;}
-.site-footer{flex-shrink:0;width:380px;padding-top:6px;text-align:center;font-family:'Segoe UI',sans-serif;font-size:9px;color:#333;letter-spacing:.3px;line-height:1.8;pointer-events:none;}
+.site-footer{flex-shrink:0;width:380px;padding-top:6px;text-align:center;font-family:'Segoe UI',sans-serif;font-size:9px;color:#5e5e5e;letter-spacing:.3px;line-height:1.8;pointer-events:none;}
 @media(max-width:640px){
   /* Mobile: hide SEÑAL/RUIDO toggle, push lang toggle right */
   .snr-toggle{display:none;}
@@ -174,8 +185,8 @@ input[type=range]{width:100%;height:3px;appearance:none;background:#222;border-r
       <div class="side-panel left-panel" id="lpanel">
         <div class="panel-header"><div class="panel-title" data-es="CONTACTO" data-en="CONTACT">CONTACTO</div><button class="btn-icon" onclick="closeL()">✕</button></div>
         <div class="panel-body">
-          <div class="field"><label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label><input class="finput" id="cf-name" type="text" placeholder="Tu nombre"/></div>
-          <div class="field"><label class="flabel" data-es="CORREO" data-en="EMAIL">CORREO</label><input class="finput" id="cf-email" type="email" placeholder="tu@correo.com"/></div>
+          <div class="field"><label class="flabel" data-es="NOMBRE" data-en="NAME">NOMBRE</label><input class="finput" id="cf-name" type="text" placeholder="Tu nombre" data-es="Tu nombre" data-en="Your name"/></div>
+          <div class="field"><label class="flabel" data-es="CORREO" data-en="EMAIL">CORREO</label><input class="finput" id="cf-email" type="email" placeholder="tu@correo.com" data-es="tu@correo.com" data-en="you@email.com"/></div>
           <div class="field"><label class="flabel" data-es="MENSAJE" data-en="MESSAGE">MENSAJE</label><textarea class="finput" id="cf-msg" rows="4" placeholder="..."></textarea></div>
           <button class="btn-send" id="cf-btn" onclick="sendContact()" data-es="Enviar Mensaje →" data-en="Send Message →">Enviar Mensaje →</button>
           <div id="cf-status" style="font-size:11px;text-align:center;margin-top:8px;min-height:16px;"></div>
@@ -209,6 +220,7 @@ input[type=range]{width:100%;height:3px;appearance:none;background:#222;border-r
             <div class="srow"><div class="sname" data-es="Radar Customizado" data-en="Custom Radar">Radar Customizado</div><div class="sdesc slabel" data-es="<em>Lo que importa a tu negocio, leído con tus criterios.</em>" data-en="<em>What matters to your business, read through your criteria.</em>"><em>Lo que importa a tu negocio, leído con tus criterios.</em></div><div class="sdesc sshort" data-es="Las reglas, las licitaciones y el mercado cambian cada semana. Nadie en el equipo tiene tiempo de leerlo todo." data-en="Rules, tenders and markets change every week. No one on the team has time to read it all.">Las reglas, las licitaciones y el mercado cambian cada semana. Nadie en el equipo tiene tiempo de leerlo todo.</div><div class="sdesc slong" data-es="Las reglas, las licitaciones y el mercado cambian cada semana. Nadie en el equipo tiene tiempo de leerlo todo. Configuramos un agente de IA que vigila las fuentes que tú elijas (gacetas oficiales, portales de compras públicas, prensa sectorial), detecta lo que toca a tu negocio y lo evalúa con una matriz de criterios definida junto a tu equipo. Cada hallazgo llega como un informe breve, con referencia al texto que lo sustenta, y queda en una biblioteca consultable. Es la misma arquitectura de Liberalmente y Compita." data-en="Rules, tenders and markets change every week. No one on the team has time to read it all. We set up an AI agent that watches the sources you choose (official gazettes, public procurement portals, industry press), detects what affects your business and evaluates it against a criteria matrix defined with your team. Each finding arrives as a short report, referencing the text behind it, and is stored in a searchable library. It is the same architecture behind Liberalmente and Compita.">Las reglas, las licitaciones y el mercado cambian cada semana. Nadie en el equipo tiene tiempo de leerlo todo.</div><div class="sclients" style="display:none;"><span data-es="Casos:" data-en="Cases:">Casos:</span><a href="https://liberalmente.app" target="_blank">Liberalmente</a><a href="https://compita.umbusk.com" target="_blank">Compita</a></div><span class="smore" onclick="togSrow(event,this)">+</span></div>
             <div class="srow"><div class="sname" data-es="Chatbot Funcional" data-en="Functional Chatbot">Chatbot Funcional</div><div class="sdesc slabel" data-es="Agente de IA para tu sitio web. Listo en 4–6 semanas." data-en="AI agent for your website. Ready in 4–6 weeks."><em>Agente de IA para tu sitio web.</em></div><div class="sdesc sshort" data-es="Configuramos un agente de IA entrenado con la información específica de tu negocio." data-en="We configure an AI agent trained with your business-specific information.">Configuramos un agente de IA entrenado con la información de tu negocio.</div><div class="sdesc slong" data-es="Configuramos un agente de IA entrenado con la información específica de tu negocio: productos, servicios, preguntas frecuentes, políticas. En 4–6 semanas tienes un prototipo funcional desplegado." data-en="We configure an AI agent trained with your business-specific information. In 4–6 weeks you have a deployed functional prototype.">Texto largo.</div><div class="sclients" style="display:none;"><span data-es="Clientes:" data-en="Clients:">Clientes:</span><a href="https://www.formacionsmart.com" target="_blank">Formación Smart</a><a href="https://www.venturaglobal.com/en/" target="_blank">Ventura Global</a><a href="https://bibliofep.fundacionempresaspolar.org" target="_blank">BiblioFEP</a></div><span class="smore" onclick="togSrow(event,this)">+</span></div>
             <div class="srow"><div class="sname" data-es="Prototipo a la Medida" data-en="Custom Prototype">Prototipo a la Medida</div><div class="sdesc slabel" data-es="Tienes una idea. Nosotros la hacemos tocar tierra." data-en="You have an idea. We make it land."><em>Tienes una idea. Nosotros la hacemos tocar tierra.</em></div><div class="sdesc sshort" data-es="No todo cabe en una categoría. Las mejores ideas son las que no tienen nombre todavía." data-en="Not everything fits a category. The best ideas don't have a name yet.">No todo cabe en una categoría.</div><div class="sdesc slong" data-es="Las mejores ideas son las que no tienen nombre todavía. Exploramos contigo, definimos el alcance, diseñamos el prototipo y lo construimos con IA. Con intuición, imaginación, emoción y sentido." data-en="The best ideas don't have a name yet. We explore with you, define the scope, design the prototype and build it with AI. With intuition, imagination, emotion and sense.">Texto largo.</div><span class="smore" onclick="togSrow(event,this)">+</span></div>
+            <button class="btn-send s-cta" onclick="openContact()" data-es="Conversemos →" data-en="Let&#39;s talk →">Conversemos →</button>
           </div>
         </div>
       </div>
@@ -319,7 +331,7 @@ input[type=range]{width:100%;height:3px;appearance:none;background:#222;border-r
 
     </div><!-- /noiseCard -->
    </div><!-- /cardsSlide -->
-   <div class="site-footer">vibe-coded by Umbusk y Claude AI de Anthropic<br>© 2026 Umbusk, LLC · Todos los derechos reservados</div>
+   <div class="site-footer" data-es="vibe-coded by Umbusk y Claude AI de Anthropic<br>© 2026 Umbusk, LLC · Todos los derechos reservados" data-en="vibe-coded by Umbusk and Claude AI from Anthropic<br>© 2026 Umbusk, LLC · All rights reserved">vibe-coded by Umbusk y Claude AI de Anthropic<br>© 2026 Umbusk, LLC · Todos los derechos reservados</div>
   </div>
 </div>
 
@@ -358,7 +370,7 @@ const SLIDE_L='translateX(calc(-100vw - 500px))';
 const SLIDE_R='translateX(calc(100vw + 500px))';
 
 function setL(l,btn){
-  lang=l;
+  lang=l;document.documentElement.lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById(renderMode==='playground'?'btnNoise':'btnSig').classList.add('active');
@@ -406,6 +418,7 @@ function sendContact(){
 function togSrow(e,btn){e.preventDefault();e.stopPropagation();btn.textContent=btn.closest('.srow').classList.toggle('open')?'−':'+';}
 function togCard(e,btn){e.preventDefault();e.stopPropagation();btn.textContent=btn.closest('.pcard').classList.toggle('open')?'−':'+';}
 function togL(){document.getElementById('lpanel').classList.toggle('open');}
+function openContact(){if(window.innerWidth<=640)closeR();document.getElementById('lpanel').classList.add('open');setTimeout(()=>{const n=document.getElementById('cf-name');if(n)n.focus({preventScroll:true});},280);}
 function closeL(){document.getElementById('lpanel').classList.remove('open');}
 function togR(){document.getElementById('rpanel').classList.toggle('open');}
 function closeR(){document.getElementById('rpanel').classList.remove('open');}
